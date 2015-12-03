@@ -50,7 +50,7 @@ class ClusterEnsemble():
     def _richness_to_mass(self):
         """Calculate M_200 for simple power-law scaling relation
         (with default parameters from arXiv:1409.3571)."""
-        self.m200 = self._massrich_norm * (self.n200 ** self._massrich_slope)
+        self.m200 = self._massrich_norm * ((self.n200/20.) ** self._massrich_slope)
         self._df['m200'] = pd.Series(self.m200, index = self._df.index)
         self._update_dependant_variables()
 
@@ -75,7 +75,7 @@ class ClusterEnsemble():
         #what else depends on z or m or?
     
     def massrich_parameters(self):
-        print "\nMass-Richness Power Law: M200 = norm * N200^slope"
+        print "\nMass-Richness Power Law: M200 = norm * (N200 / 20) ^ slope"
         print "   norm:", self._massrich_norm
         print "   slope:", self._massrich_slope
         
@@ -102,8 +102,15 @@ class ClusterEnsemble():
         """Use c(M) from Dutton & Maccio 2014."""
         self.c200 = calc_c200(self.z,self.m200)
         self._df['c200'] = pd.Series(self.c200, index = self._df.index)
+        self._delta_c()
         
     def _rs(self):
         """Cluster scale radius."""
         self.rs = self.r200 / self.c200
         self._df['rs'] = pd.Series(self.rs, index = self._df.index)
+
+    def _delta_c(self):
+        top = (200./3.)*self.c200**3.
+        bottom = np.log(1.+self.c200)-(self.c200/(1.+self.c200))
+        self.delta_c = top/bottom
+        self._df['delta_c'] = pd.Series(self.delta_c, index = self._df.index)
