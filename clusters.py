@@ -43,14 +43,18 @@ class Clusters():
         if richness.shape[0] == self.number:
             self.n200 = richness
             self._df['n200'] = pd.Series(self.n200, index = self._df.index)
-            self._update_depends_on_richness()
+            self._richness_to_mass()
         else:
             raise ValueError("Input richness array must be same \
             length as current cluster ensemble.")
-            
-    def _update_depends_on_richness(self):
-        self._richness_to_mass()
-            
+
+    def _richness_to_mass(self):
+        """Calculate M_200 for simple power-law scaling relation
+        (with default parameters from arXiv:1409.3571)."""
+        self.m200 = self._massrich_norm * (self.n200 ** self._massrich_slope)
+        self._df['m200'] = pd.Series(self.m200, index = self._df.index)
+        self._update_dependant_variables()
+
     def update_z(self, redshifts):
         self.z = redshifts
         self._df['z'] = pd.Series(self.z, index = self._df.index)
@@ -63,13 +67,6 @@ class Clusters():
         self._rs()
         #what else depends on z or m or?
     
-    def _richness_to_mass(self):
-        """Calculate M_200 for simple power-law scaling relation
-        (with default parameters from arXiv:1409.3571)."""
-        self.m200 = self._massrich_norm * (self.n200 ** self._massrich_slope)
-        self._df['m200'] = pd.Series(self.m200, index = self._df.index)
-        self._update_dependant_variables()
-
     def massrich_parameters(self):
         print "\nMass-Richness Power Law: M200 = norm * N200^slope"
         print "   norm:", self._massrich_norm
