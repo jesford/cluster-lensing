@@ -5,8 +5,6 @@ import pandas as pd
 from astropy.cosmology import Planck13 as cosmo
 from astropy import units
 
-import sys
-sys.path.insert(1,'/Users/jesford/astrophysics/cofm') #temporary path adjust
 from cofm import c_DuttonMaccio as calc_c200
 
 try:
@@ -121,3 +119,4 @@ class ClusterEnsemble():
         bottom = np.log(1.+self.c200)-(self.c200/(1.+self.c200))
         self.delta_c = top/bottom
         self._df['delta_c'] = pd.Series(self.delta_c, index = self._df.index)
+
