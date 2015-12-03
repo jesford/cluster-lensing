@@ -1,3 +1,5 @@
+from __future__ import absolute_import, division, print_function
+
 import numpy as np
 import pandas as pd
 from astropy.cosmology import Planck13 as cosmo
@@ -30,7 +32,7 @@ class ClusterEnsemble():
         self.number = redshifts.shape[0]
         self.z = redshifts
         self._rho_crit = cosmo.critical_density(self.z)
-        self._massrich_norm = 2.7*10**13
+        self._massrich_norm = 2.7*10**13 * units.Msun 
         self._massrich_slope = 1.4
         self._df = pd.DataFrame(self.z, columns=['z'])
               
@@ -75,27 +77,32 @@ class ClusterEnsemble():
         #what else depends on z or m or?
     
     def massrich_parameters(self):
-        print "\nMass-Richness Power Law: M200 = norm * (N200 / 20) ^ slope"
-        print "   norm:", self._massrich_norm
-        print "   slope:", self._massrich_slope
+        print("\nMass-Richness Power Law: M200 = norm * (N200 / 20) ^ slope")
+        print("   norm:", self._massrich_norm)
+        print("   slope:", self._massrich_slope)
         
     def update_massrichrelation(self, norm = None, slope = None):
         if norm != None:
-            self._massrich_norm = norm
+            if type(norm) == float:
+                self._massrich_norm = norm * units.Msun
+            else:
+                raise TypeError("Input norm must be of type float, in units \
+                of solar mass.")
         if slope != None:
             self._massrich_slope = slope
         self._richness_to_mass()
     
     def show(self, notebook = notebook_display):
-        print "\nCluster Ensemble:"
+        print("\nCluster Ensemble:")
         if notebook == True:
             display(self._df)
         elif notebook == False:
-            print self._df
+            print(self._df)
         self.massrich_parameters()
 
     def _r200(self):
-        self.r200 = (3.*self.m200 / (800.*np.pi*self._rho_crit))**(1./3.)
+        radius_200 = (3.*self.m200 / (800.*np.pi*self._rho_crit))**(1./3.)
+        self.r200 = radius_200.to(units.Mpc)
         self._df['r200'] = pd.Series(self.r200, index = self._df.index)
         
     def _c200(self):
