@@ -19,7 +19,7 @@ h = cosmo.H0.value
 Om_M = cosmo.Om0
 Om_L = 1. - Om_M
 
-class Clusters():
+class ClusterEnsemble():
     """Ensemble of galaxy clusters and their properties."""
     def __init__(self, redshifts):
         if type(redshifts) != np.ndarray:
@@ -86,7 +86,7 @@ class Clusters():
             self._massrich_slope = slope
         self._richness_to_mass()
     
-    def view(self, notebook = notebook_display):
+    def show(self, notebook = notebook_display):
         print "\nCluster Ensemble:"
         if notebook == True:
             display(self._df)
