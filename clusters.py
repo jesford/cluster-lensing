@@ -33,8 +33,7 @@ class Clusters():
         self._massrich_norm = 2.7*10**13
         self._massrich_slope = 1.4
         self._df = pd.DataFrame(self.z, columns=['z'])
-        
-        
+              
     def update_richness(self, richness):
         if type(richness) != np.ndarray:
             richness = np.array(richness)
@@ -56,10 +55,18 @@ class Clusters():
         self._update_dependant_variables()
 
     def update_z(self, redshifts):
-        self.z = redshifts
-        self._df['z'] = pd.Series(self.z, index = self._df.index)
-        self._rho_crit = cosmo.critical_density(self.z)
-        self._update_dependant_variables()
+        if type(redshifts) != np.ndarray:
+            redshifts = np.array(redshifts)
+        if redshifts.ndim != 1:
+            raise ValueError("Input richness array must have 1 dimension.")
+        if redshifts.shape[0] == self.number:
+            self.z = redshifts
+            self._df['z'] = pd.Series(self.z, index = self._df.index)
+            self._rho_crit = cosmo.critical_density(self.z)
+            self._update_dependant_variables()
+        else:
+            raise ValueError("Input redshifts array must be same \
+            length as current cluster ensemble.")
         
     def _update_dependant_variables(self):
         self._r200()
