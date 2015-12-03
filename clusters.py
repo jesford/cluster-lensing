@@ -5,7 +5,7 @@ from astropy import units
 
 import sys
 sys.path.insert(1,'/Users/jesford/astrophysics/cofm') #temporary path adjust
-from cofm import c_DuttonMaccio
+from cofm import c_DuttonMaccio as calc_c200
 
 try:
     from IPython.display import display
@@ -100,7 +100,7 @@ class ClusterEnsemble():
         
     def _c200(self):
         """Use c(M) from Dutton & Maccio 2014."""
-        self.c200 = c_DuttonMaccio(self.z,self.m200)
+        self.c200 = calc_c200(self.z,self.m200)
         self._df['c200'] = pd.Series(self.c200, index = self._df.index)
         
     def _rs(self):
