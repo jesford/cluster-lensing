@@ -11,10 +11,10 @@ ClusterEnsemble() allows you to easily build up a nicely
 formatted table (a pandas dataframe) of cluster attributes, and
 automatically generates parameters that depend on each other. It uses
 a customizable powerlaw mass-richness scaling relation to convert richness
-$N$<sub>200</sub> to mass $M$<sub>200</sub>, and to generate other parameters.
+N<sub>200</sub> to mass M<sub>200</sub>, and to generate other parameters.
 
-The calc_nfw() method calculates the NFW profiles for $\Sigma(r)$ and
-$\Delta\Sigma(r)$, which are useful for fitting weak lensing shear or
+The calc_nfw() method calculates the NFW profiles for Sigma(r) and
+DeltaSigma(r), which are useful for fitting weak lensing shear or
 magnification profiles. Optionally, it will calculate the **miscentered**
 profiles, given an offset parameter describing the width of the
 Gaussian miscentering offset distribution. See, for example, 
