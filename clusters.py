@@ -26,6 +26,8 @@ class ClusterEnsemble():
             redshifts = np.array(redshifts)
         if redshifts.ndim != 1:
             raise ValueError("Input redshift array must have 1 dimension.")
+        if np.sum(redshifts < 0.) > 0:
+            raise ValueError("Redshifts cannot be negative.")
         self.describe = "Ensemble of galaxy clusters and their properties."
         self.number = redshifts.shape[0]
         self.z = redshifts
@@ -65,6 +67,8 @@ class ClusterEnsemble():
         elif arr.shape[0] != self.number:
             raise ValueError("Input array must be same length as current \
                               cluster ensemble.")
+        if np.sum(arr < 0.) > 0:
+            raise ValueError("Input array values cannot be negative.")
         else:
             return arr
 
