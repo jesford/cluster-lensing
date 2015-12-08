@@ -1,11 +1,11 @@
 import numpy as np
 from numpy.testing import assert_equal, assert_allclose, assert_raises
-from astropy.cosmology import Planck13 as cosmo
 
 from clusters import ClusterEnsemble
 
 
 #------ TOY DATA FOR TESTING --------------
+# note: some of this depends on cosmology & c(M) relation.
 toy_data_z = np.array([0.05,1.0])
 toy_data_n200 = np.array([[10,10] ,[20,20], [200.,200.], [0.,0.]])
 toy_data_m200 = np.array([[1.02310868, 1.02310868],
@@ -96,4 +96,73 @@ def test_wrong_length_update_MNrelation():
     assert_raises(TypeError, c.update_massrichrelation, norm=[1.5e14,2.e13,2.5e-2])
 
 def test_update_slope():
-    pass
+    c = ClusterEnsemble(toy_data_z)
+    c.update_richness([10,20])
+    slope_before = c._massrich_slope
+    slope_after = 2.
+    m_before = c.m200
+    c.update_massrichrelation(slope = slope_after)
+    m_after = c.m200
+    assert_equal(m_before[1], m_after[1])
+    assert_equal(m_before[0]/m_after[0], (0.5**slope_before)/(0.5**slope_after))
+
+def test_update_norm():
+    c = ClusterEnsemble(toy_data_z)
+    c.update_richness([10,20])
+    norm_before = c._massrich_norm.value
+    norm_after = 2.*norm_before
+    m_before = c.m200
+    c.update_massrichrelation(norm = norm_after)
+    m_after = c.m200
+    assert_equal(m_before/m_after, np.array([norm_before/norm_after]*2))
+
+
+#------ TOY DATA FOR TESTING NFW ----------
+
+toy_data_rbins = np.array([0.1, 0.26591479, 0.70710678, 1.88030155, 5.])
+
+toy_data_sigma = np.array([[[6.16767240e+01, 1.39187020e+01, 2.44680800e+00,
+                            3.78634000e-01, 5.54660000e-02],
+                            [7.96846330e+01, 1.78510170e+01, 3.12497300e+00,
+                             4.82659000e-01, 7.06500000e-02]],
+                            [[1.27435338e+02, 3.33162080e+01, 6.41061600e+00,
+                              1.03540100e+00, 1.54387000e-01],
+                              [1.66959114e+02, 4.29022790e+01, 8.16254600e+00,
+                               1.31108200e+00, 1.95039000e-01]],
+                            [[878.183118, 390.919853, 120.077149,
+                              25.927817, 4.446582], [1260.051922, 536.749041,
+                            156.886111, 32.628563, 5.483696]],
+                            [np.empty(5)*np.nan, np.empty(5)*np.nan]])
+
+toy_data_deltasigma = np.array([[[65.309234, 26.372108, 7.617568,
+                                  1.757773, 0.353567],
+                                  [85.577146, 34.252247, 9.830038,
+                                   2.259187, 0.453313]],
+                                [[103.741612, 49.563345, 16.319782,
+                                  4.094266, 0.866397],
+                                [139.948531, 65.608588, 21.268782,
+                                 5.281821, 1.11081]],
+                                 [[314.797102, 245.516172, 138.665076,
+                                   53.057064, 14.742152],
+                                 [483.0335, 364.353901, 195.78759,
+                                  71.457397, 19.210098]], 
+                                [np.empty(5)*np.nan, np.empty(5)*np.nan]])
+
+
+
+#------------------------------------------     
+    
+def test_nfw_centered():
+    c = ClusterEnsemble(toy_data_z)
+
+    def _check_sigma(i,j):
+        assert_allclose(c.sigma_nfw[j].value, toy_data_sigma[i,j])
+    def _check_deltasigma(i,j):
+        assert_allclose(c.deltasigma_nfw[j].value, toy_data_deltasigma[i,j])
+
+    for i, n200 in enumerate(toy_data_n200):
+        c.update_richness(n200)
+        c.calc_nfw(toy_data_rbins)
+        for j in range(c.z.shape[0]):
+            yield _check_sigma, i, j
+            yield _check_deltasigma, i, j
