@@ -19,7 +19,7 @@ h = cosmo.H0.value
 Om_M = cosmo.Om0
 Om_L = 1. - Om_M
 
-class ClusterEnsemble():
+class ClusterEnsemble(object):
     """Ensemble of galaxy clusters and their properties."""
     def __init__(self, redshifts):
         if type(redshifts) != np.ndarray:
@@ -93,8 +93,12 @@ class ClusterEnsemble():
                 raise TypeError("Input norm must be of type float, in units \
                 of solar mass.")
         if slope is not None:
-            self._massrich_slope = slope
-        self._richness_to_mass()
+            if type(slope) == float:
+                self._massrich_slope = slope
+            else:
+                raise TypeError("Input slope must be of type float.")
+        if hasattr(self, 'n200'):
+            self._richness_to_mass()
     
     def show(self, notebook = notebook_display):
         """Display table of cluster properties."""

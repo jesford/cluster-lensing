@@ -90,5 +90,10 @@ def test_wrong_length_z():
     for z in redshifts:
         assert_raises(ValueError, c.update_z, z)
     
+def test_wrong_length_update_MNrelation():
+    c = ClusterEnsemble(toy_data_z)
+    assert_raises(TypeError, c.update_massrichrelation, slope=[1.5,2.,2.5])
+    assert_raises(TypeError, c.update_massrichrelation, norm=[1.5e14,2.e13,2.5e-2])
 
-        
+def test_update_slope():
+    pass
