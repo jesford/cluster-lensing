@@ -133,7 +133,7 @@ class ClusterEnsemble(object):
         self.delta_c = top/bottom
         self._df['delta_c'] = pd.Series(self.delta_c, index = self._df.index)
 
-    def calc_nfw(self, rbins, offsets = None):
+    def calc_nfw(self, rbins, offsets = None, pure_python = False):
         """Calculates Sigma and DeltaSigma NFW profiles of each cluster."""
         if offsets is None:
             self._sigoffset = np.zeros(self.number)*units.Mpc
@@ -142,24 +142,43 @@ class ClusterEnsemble(object):
 
         self.rbins = rbins * units.Mpc
 
-        #--------
-        #the old way
-        smdout = np.transpose(np.vstack(([self.rs],
-                                         [self.delta_c],
-                                         [self._rho_crit.to(units.Msun/
+        if pure_python == False:
+            #--------
+            #the old way
+            smdout = np.transpose(np.vstack(([self.rs],
+                                            [self.delta_c],
+                                            [self._rho_crit.to(units.Msun/
                                                             units.pc**3)],
-                                         [self._sigoffset])))
-        np.savetxt('smd_in1.dat', np.transpose(self.rbins), fmt='%15.8g')
-        np.savetxt('smd_in2.dat', smdout, fmt='%15.8g')
-        os.system('./smd_nfw')    #c program does the calculations
-        sigma_nfw = np.loadtxt('sigma.dat') 
-        deltasigma_nfw = np.loadtxt('deltasigma.dat')
-        os.system('rm -f smd_in1.dat')
-        os.system('rm -f smd_in2.dat')
-        os.system('rm -f sigma.dat')
-        os.system('rm -f deltasigma.dat')
-        #--------
+                                            [self._sigoffset])))
+            np.savetxt('smd_in1.dat', np.transpose(self.rbins), fmt='%15.8g')
+            np.savetxt('smd_in2.dat', smdout, fmt='%15.8g')
+            os.system('./smd_nfw')    #c program does the calculations
+            sigma_nfw = np.loadtxt('sigma.dat') 
+            deltasigma_nfw = np.loadtxt('deltasigma.dat')
+            os.system('rm -f smd_in1.dat')
+            os.system('rm -f smd_in2.dat')
+            os.system('rm -f sigma.dat')
+            os.system('rm -f deltasigma.dat')
+            #--------
+        else:
+            # mimicing c program read/write for now...
+            # once tested, will replace with passing of parameters
+            smdout = np.transpose(np.vstack(([self.rs],
+                                            [self.delta_c],
+                                            [self._rho_crit.to(units.Msun/
+                                                            units.pc**3)],
+                                            [self._sigoffset])))
+            np.savetxt('smd_in1.dat', np.transpose(self.rbins), fmt='%15.8g')
+            np.savetxt('smd_in2.dat', smdout, fmt='%15.8g')
+            os.system('python ../smd_nfw/smd_nfw.py') 
+            sigma_nfw = np.loadtxt('sigma_PYTHON.dat') 
+            deltasigma_nfw = np.loadtxt('deltasigma_PYTHON.dat')
+            os.system('rm -f smd_in1.dat')
+            os.system('rm -f smd_in2.dat')
+            #os.system('rm -f sigma_PYTHON.dat')
+            #os.system('rm -f deltasigma_PYTHON.dat')
 
+            
         if offsets is None:
             self.sigma_nfw = sigma_nfw * units.Msun/(units.pc**2)
             self.deltasigma_nfw = deltasigma_nfw * units.Msun/(units.pc**2)
