@@ -15,10 +15,6 @@ try:
 except:
     notebook_display = False
 
-#default parameters
-h = cosmo.H0.value
-Om_M = cosmo.Om0
-Om_L = 1. - Om_M
 
 class ClusterEnsemble(object):
     """Ensemble of galaxy clusters and their properties."""
