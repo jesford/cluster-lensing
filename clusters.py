@@ -7,6 +7,7 @@ from astropy import units
 import os
 
 from cofm import c_DuttonMaccio as calc_c200
+from smd_nfw import SurfaceMassDensity
 
 try:
     from IPython.display import display
@@ -133,7 +134,7 @@ class ClusterEnsemble(object):
         self.delta_c = top/bottom
         self._df['delta_c'] = pd.Series(self.delta_c, index = self._df.index)
 
-    def calc_nfw(self, rbins, offsets = None, pure_python = False):
+    def calc_nfw(self, rbins, offsets = None, use_c = True):
         """Calculates Sigma and DeltaSigma NFW profiles of each cluster."""
         if offsets is None:
             self._sigoffset = np.zeros(self.number)*units.Mpc
@@ -142,9 +143,9 @@ class ClusterEnsemble(object):
 
         self.rbins = rbins * units.Mpc
 
-        if pure_python == False:
+        if use_c:
             #--------
-            #the old way
+            #the old c way
             smdout = np.transpose(np.vstack(([self.rs],
                                             [self.delta_c],
                                             [self._rho_crit.to(units.Msun/
@@ -160,30 +161,29 @@ class ClusterEnsemble(object):
             os.system('rm -f sigma.dat')
             os.system('rm -f deltasigma.dat')
             #--------
-        else:
-            # mimicing c program read/write for now...
-            # once tested, will replace with passing of parameters
-            smdout = np.transpose(np.vstack(([self.rs],
-                                            [self.delta_c],
-                                            [self._rho_crit.to(units.Msun/
-                                                            units.pc**3)],
-                                            [self._sigoffset])))
-            np.savetxt('smd_in1.dat', np.transpose(self.rbins), fmt='%15.8g')
-            np.savetxt('smd_in2.dat', smdout, fmt='%15.8g')
-            os.system('python ../smd_nfw/smd_nfw.py') 
-            sigma_nfw = np.loadtxt('sigma_PYTHON.dat') 
-            deltasigma_nfw = np.loadtxt('deltasigma_PYTHON.dat')
-            os.system('rm -f smd_in1.dat')
-            os.system('rm -f smd_in2.dat')
-            #os.system('rm -f sigma_PYTHON.dat')
-            #os.system('rm -f deltasigma_PYTHON.dat')
 
+            if offsets is None:
+                self.sigma_nfw = sigma_nfw * units.Msun/(units.pc**2)
+                self.deltasigma_nfw = deltasigma_nfw * units.Msun/(units.pc**2)
+            else:
+                self.sigma_offset = sigma_nfw * units.Msun/(units.pc**2)
+                self.deltasigma_offset = deltasigma_nfw * units.Msun/(units.pc**2)
             
-        if offsets is None:
-            self.sigma_nfw = sigma_nfw * units.Msun/(units.pc**2)
-            self.deltasigma_nfw = deltasigma_nfw * units.Msun/(units.pc**2)
         else:
-            self.sigma_offset = sigma_nfw * units.Msun/(units.pc**2)
-            self.deltasigma_offset = deltasigma_nfw * units.Msun/(units.pc**2)
+            #the python way
+            smd = SurfaceMassDensity(self.rs,
+                                     self.delta_c,
+                                     self._rho_crit.to(units.Msun/units.pc**2/
+                                                       units.Mpc),
+                                     sig_offset = self._sigoffset,
+                                     rbins = self.rbins)
+            if offsets is None:           
+                self.sigma_nfw = smd.sigma_nfw()
+                self.deltasigma_nfw = smd.deltasigma_nfw()
+            else:
+                #self.sigma_offset = smd.sigma_nfw()
+                #self.deltasigma_offset = smd.deltasigma_nfw()
+                raise ValueError("Python does not yet calculate offset profiles. Use the c option.\n")
+            
 
 
