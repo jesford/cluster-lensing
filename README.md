@@ -29,6 +29,7 @@ Running the ClusterEnsemble() module requires you to additionally
 download the code for doing
 [concentration-mass relationships](https://github.com/jesford/cofm)
 and for calculating the
-[NFW profiles](https://github.com/jesford/smd_nfw). In the future the
-latter of these will be entirely revamped (its currently implemented in
-c), so check back later for updates.
+[NFW profiles](https://github.com/jesford/smd-nfw). The
+latter of these is currently being entirely revamped (it was
+previously only implemented in
+c, and we are adding a python option), so check back later for updates.
