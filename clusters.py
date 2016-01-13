@@ -49,7 +49,7 @@ class ClusterEnsemble(object):
     def n200(self):
         """Cluster richness values."""
         if self._n200 is None:
-            print('n200 has not yet been initialized.')
+            raise AttributeError('n200 has not yet been initialized.')
         else:
             return self._n200
 
@@ -69,7 +69,8 @@ class ClusterEnsemble(object):
     def _richness_to_mass(self):
         #Calculates M_200 for simple power-law scaling relation
         #(with default parameters from arXiv:1409.3571)
-        self._m200 = self._massrich_norm * ((self._n200/20.) ** self._massrich_slope)
+        self._m200 = self._massrich_norm * ((self._n200/20.) **
+                                            self._massrich_slope)
         self._df['m200'] = pd.Series(self._m200, index = self._df.index)
         self._update_dependant_variables()
 
@@ -86,7 +87,8 @@ class ClusterEnsemble(object):
         self._Dang_l = cosmo.angular_diameter_distance(self._z)
         self._df['z'] = pd.Series(self._z, index = self._df.index)
         self._rho_crit = cosmo.critical_density(self._z)
-        self._update_dependant_variables()        
+        if self._n200 is not None:
+            self._update_dependant_variables()        
         
     #def update_z(self, redshifts):
     #    """Changes the values of the cluster z's and z-dependant variables."""
@@ -106,7 +108,10 @@ class ClusterEnsemble(object):
 
     @property
     def m200(self):
-        return self._m200
+        if self._m200 is None:
+            raise AttributeError('Attribute has not yet been initialized.')
+        else:
+            return self._m200
 
     @property
     def dataframe(self):
@@ -173,19 +178,31 @@ class ClusterEnsemble(object):
 
     @property
     def r200(self):
-        return self._r200
+        if self._r200 is None:
+            raise AttributeError('Attribute has not yet been initialized.')
+        else:
+            return self._r200
     
     @property
     def c200(self):
-        return self._c200
+        if self._c200 is None:
+            raise AttributeError('Attribute has not yet been initialized.')
+        else:
+            return self._c200
     
     @property
     def rs(self):
-        return self._rs
+        if self._rs is None:
+            raise AttributeError('Attribute has not yet been initialized.')
+        else:
+            return self._rs
 
     @property
     def delta_c(self):
-        return self._deltac
+        if self._deltac is None:
+            raise AttributeError('Attribute has not yet been initialized.')
+        else:
+            return self._deltac
         
     def _calculate_r200(self):
         #calculate r200 from m200
