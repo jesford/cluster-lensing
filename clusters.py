@@ -27,34 +27,92 @@ class ClusterEnsemble(object):
             raise ValueError("Redshifts cannot be negative.")
         self.describe = "Ensemble of galaxy clusters and their properties."
         self.number = redshifts.shape[0]
-        self.z = redshifts
-        self._rho_crit = cosmo.critical_density(self.z)
+        self._z = redshifts
+        self._rho_crit = cosmo.critical_density(self._z)
         self._massrich_norm = 2.7*10**13 * units.Msun 
         self._massrich_slope = 1.4
-        self._df = pd.DataFrame(self.z, columns=['z'])
-        self.Dang_l = cosmo.angular_diameter_distance(self.z) 
-              
-    def update_richness(self, richness):
-        """Creates/updates values of cluster N200s & dependant variables."""
-        self.n200 = self._check_input_array(richness)
-        self._df['n200'] = pd.Series(self.n200, index = self._df.index)
+        self._df = pd.DataFrame(self._z, columns=['z'])
+        self._Dang_l = cosmo.angular_diameter_distance(self._z)
+
+        #QUESTION: better way? these "need" to be initialized to something
+        # now that they all have @property functions making them accessible
+        # to the user before they have been created... how to hide from user
+        # until they have meaning? is approach for @property n200 advisable?
+        self._m200 = None
+        self._n200 = None
+        self._r200 = None
+        self._rs = None
+        self._c200 = None
+        self._deltac = None
+        
+    @property
+    def n200(self):
+        """Cluster richness values."""
+        if self._n200 is None:
+            print('n200 has not yet been initialized.')
+        else:
+            return self._n200
+
+    @n200.setter
+    def n200(self, richness):
+        #Creates/updates values of cluster N200s & dependant variables.
+        self._n200 = self._check_input_array(richness)
+        self._df['n200'] = pd.Series(self._n200, index = self._df.index)
         self._richness_to_mass()
+                              
+    #def update_richness(self, richness):
+    #    """Creates/updates values of cluster N200s & dependant variables."""
+    #    self.n200 = self._check_input_array(richness)
+    #    self._df['n200'] = pd.Series(self.n200, index = self._df.index)
+    #    self._richness_to_mass()
 
     def _richness_to_mass(self):
         #Calculates M_200 for simple power-law scaling relation
         #(with default parameters from arXiv:1409.3571)
-        self.m200 = self._massrich_norm * ((self.n200/20.) ** self._massrich_slope)
-        self._df['m200'] = pd.Series(self.m200, index = self._df.index)
+        self._m200 = self._massrich_norm * ((self._n200/20.) ** self._massrich_slope)
+        self._df['m200'] = pd.Series(self._m200, index = self._df.index)
         self._update_dependant_variables()
 
-    def update_z(self, redshifts):
-        """Changes the values of the cluster z's and z-dependant variables."""
-        self.z = self._check_input_array(redshifts)
-        self.Dang_l = cosmo.angular_diameter_distance(self.z)
-        self._df['z'] = pd.Series(self.z, index = self._df.index)
-        self._rho_crit = cosmo.critical_density(self.z)
-        self._update_dependant_variables()
 
+    @property
+    def z(self):
+        """Cluster redshifts."""
+        return self._z
+
+    @z.setter
+    def z(self, redshifts):
+        #Changes the values of the cluster z's and z-dependant variables.
+        self._z = self._check_input_array(redshifts)
+        self._Dang_l = cosmo.angular_diameter_distance(self._z)
+        self._df['z'] = pd.Series(self._z, index = self._df.index)
+        self._rho_crit = cosmo.critical_density(self._z)
+        self._update_dependant_variables()        
+        
+    #def update_z(self, redshifts):
+    #    """Changes the values of the cluster z's and z-dependant variables."""
+    #    self.z = self._check_input_array(redshifts)
+    #    self.Dang_l = cosmo.angular_diameter_distance(self.z)
+    #    self._df['z'] = pd.Series(self.z, index = self._df.index)
+    #    self._rho_crit = cosmo.critical_density(self.z)
+    #    self._update_dependant_variables()
+
+    
+    #note: user can access Dang_l and m200, but not modify them... attempting
+    # to will automatically raise an AttributeError (because of @property).
+        
+    @property
+    def Dang_l(self):
+        return self._Dang_l
+
+    @property
+    def m200(self):
+        return self._m200
+
+    @property
+    def dataframe(self):
+        return self._df
+
+    
     def _check_input_array(self, arr):
         #confirm input array matches size/type of clusters
         if type(arr) != np.ndarray:
@@ -70,10 +128,15 @@ class ClusterEnsemble(object):
             return arr
 
     def _update_dependant_variables(self):
-        self._r200()
-        self._c200()
-        self._rs()
+        self._calculate_r200()
+        self._calculate_c200()
+        self._calculate_rs()
         #what else depends on z or m or?
+
+    # QUESTION: better design for following two functions?
+    # could have a @property, @setter for each of norm and slope,
+    # but what if user wants to modify both? would end up making
+    # two calls to _richness_to_mass()... maybe thats no big deal?
     
     def massrich_parameters(self):
         """Print values of M200-N200 scaling relation parameters."""
@@ -96,7 +159,9 @@ class ClusterEnsemble(object):
                 raise TypeError("Input slope must be of type float.")
         if hasattr(self, 'n200'):
             self._richness_to_mass()
-    
+
+    #not needed? now that dataframe attribute is available?
+    # but this also prints mass-rich parameters...
     def show(self, notebook = notebook_display):
         """Display table of cluster properties."""
         print("\nCluster Ensemble:")
@@ -106,29 +171,45 @@ class ClusterEnsemble(object):
             print(self._df)
         self.massrich_parameters()
 
-    def _r200(self):
-        #calculate r200 from m200
-        radius_200 = (3.*self.m200 / (800.*np.pi*self._rho_crit))**(1./3.)
-        self.r200 = radius_200.to(units.Mpc)
-        self._df['r200'] = pd.Series(self.r200, index = self._df.index)
-        
-    def _c200(self):
-        #calculate c200 from m200 and z (using cofm.py)
-        self.c200 = calc_c200(self.z,self.m200)
-        self._df['c200'] = pd.Series(self.c200, index = self._df.index)
-        self._delta_c()
-        
-    def _rs(self):
-        #cluster scale radius
-        self.rs = self.r200 / self.c200
-        self._df['rs'] = pd.Series(self.rs, index = self._df.index)
+    @property
+    def r200(self):
+        return self._r200
+    
+    @property
+    def c200(self):
+        return self._c200
+    
+    @property
+    def rs(self):
+        return self._rs
 
-    def _delta_c(self):
+    @property
+    def delta_c(self):
+        return self._deltac
+        
+    def _calculate_r200(self):
+        #calculate r200 from m200
+        radius_200 = (3.*self._m200 / (800.*np.pi*self._rho_crit))**(1./3.)
+        self._r200 = radius_200.to(units.Mpc)
+        self._df['r200'] = pd.Series(self._r200, index = self._df.index)
+        
+    def _calculate_c200(self):
+        #calculate c200 from m200 and z (using cofm.py)
+        self._c200 = calc_c200(self._z,self._m200)
+        self._df['c200'] = pd.Series(self._c200, index = self._df.index)
+        self._calculate_deltac()
+        
+    def _calculate_rs(self):
+        #cluster scale radius
+        self._rs = self._r200 / self._c200
+        self._df['rs'] = pd.Series(self._rs, index = self._df.index)
+
+    def _calculate_deltac(self):
         #calculate concentration parameter from c200
-        top = (200./3.)*self.c200**3.
-        bottom = np.log(1.+self.c200)-(self.c200/(1.+self.c200))
-        self.delta_c = top/bottom
-        self._df['delta_c'] = pd.Series(self.delta_c, index = self._df.index)
+        top = (200./3.)*self._c200**3.
+        bottom = np.log(1.+self._c200)-(self._c200/(1.+self._c200))
+        self._deltac = top/bottom
+        self._df['delta_c'] = pd.Series(self._deltac, index = self._df.index)
 
     def calc_nfw(self, rbins, offsets = None, use_c = True):
         """Calculates Sigma and DeltaSigma NFW profiles of each cluster."""
