@@ -60,7 +60,7 @@ def test_update_richness():
         assert_allclose(toy_data_deltac[i], c.delta_c)
         
     for i, n200 in enumerate(toy_data_n200):
-        c.update_richness(n200)
+        c.n200 = n200
         yield _check_n_and_m, i
         yield _check_radii, i
         yield _check_c200, i
@@ -75,20 +75,26 @@ def test_negative_z():
 def test_negative_n200():
     c = ClusterEnsemble(toy_data_z)
     richness = np.array([[-1.,-999.], [30.,-10.]])
+    def set_n200(val):
+        c.n200 = val
     for n in richness:
-        assert_raises(ValueError, c.update_richness, n)
+        assert_raises(ValueError, set_n200, n)
 
 def test_wrong_length_richness():
     c = ClusterEnsemble(toy_data_z)
     richness = [np.ones(3), np.arange(4), np.arange(5)+20.]
+    def set_n200(val):
+        c.n200 = val
     for n in richness:
-        assert_raises(ValueError, c.update_richness, n)
+        assert_raises(ValueError, set_n200, n)
 
 def test_wrong_length_z():
     c = ClusterEnsemble(toy_data_z)
     redshifts = [np.ones(3), np.arange(4), np.arange(5)+20.]
+    def set_z(val):
+        c.z = val
     for z in redshifts:
-        assert_raises(ValueError, c.update_z, z)
+        assert_raises(ValueError, set_z, z)
     
 def test_wrong_length_update_MNrelation():
     c = ClusterEnsemble(toy_data_z)
@@ -97,7 +103,7 @@ def test_wrong_length_update_MNrelation():
 
 def test_update_slope():
     c = ClusterEnsemble(toy_data_z)
-    c.update_richness([10,20])
+    c.n200 = [10,20]
     slope_before = c._massrich_slope
     slope_after = 2.
     m_before = c.m200
@@ -108,7 +114,7 @@ def test_update_slope():
 
 def test_update_norm():
     c = ClusterEnsemble(toy_data_z)
-    c.update_richness([10,20])
+    c.n200 = [10,20]
     norm_before = c._massrich_norm.value
     norm_after = 2.*norm_before
     m_before = c.m200
@@ -161,7 +167,7 @@ def test_nfw_centered():
         assert_allclose(c.deltasigma_nfw[j].value, toy_data_deltasigma[i,j])
 
     for i, n200 in enumerate(toy_data_n200):
-        c.update_richness(n200)
+        c.n200 = n200
         c.calc_nfw(toy_data_rbins)
         for j in range(c.z.shape[0]):
             yield _check_sigma, i, j
