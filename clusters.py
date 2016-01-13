@@ -33,11 +33,6 @@ class ClusterEnsemble(object):
         self._massrich_slope = 1.4
         self._df = pd.DataFrame(self._z, columns=['z'])
         self._Dang_l = cosmo.angular_diameter_distance(self._z)
-
-        #QUESTION: better way? these "need" to be initialized to something
-        # now that they all have @property functions making them accessible
-        # to the user before they have been created... how to hide from user
-        # until they have meaning? is approach for @property n200 advisable?
         self._m200 = None
         self._n200 = None
         self._r200 = None
@@ -59,13 +54,8 @@ class ClusterEnsemble(object):
         self._n200 = self._check_input_array(richness)
         self._df['n200'] = pd.Series(self._n200, index = self._df.index)
         self._richness_to_mass()
-                              
-    #def update_richness(self, richness):
-    #    """Creates/updates values of cluster N200s & dependant variables."""
-    #    self.n200 = self._check_input_array(richness)
-    #    self._df['n200'] = pd.Series(self.n200, index = self._df.index)
-    #    self._richness_to_mass()
 
+        
     def _richness_to_mass(self):
         #Calculates M_200 for simple power-law scaling relation
         #(with default parameters from arXiv:1409.3571)
@@ -90,17 +80,8 @@ class ClusterEnsemble(object):
         if self._n200 is not None:
             self._update_dependant_variables()        
         
-    #def update_z(self, redshifts):
-    #    """Changes the values of the cluster z's and z-dependant variables."""
-    #    self.z = self._check_input_array(redshifts)
-    #    self.Dang_l = cosmo.angular_diameter_distance(self.z)
-    #    self._df['z'] = pd.Series(self.z, index = self._df.index)
-    #    self._rho_crit = cosmo.critical_density(self.z)
-    #    self._update_dependant_variables()
-
-    
-    #note: user can access Dang_l and m200, but not modify them... attempting
-    # to will automatically raise an AttributeError (because of @property).
+    #note: user can access, but not modify, functions that are ONLY decorated
+    # as properties; attempting to modify them will raise an AttributeError
         
     @property
     def Dang_l(self):
@@ -138,6 +119,7 @@ class ClusterEnsemble(object):
         self._calculate_rs()
         #what else depends on z or m or?
 
+        
     # QUESTION: better design for following two functions?
     # could have a @property, @setter for each of norm and slope,
     # but what if user wants to modify both? would end up making
@@ -165,8 +147,6 @@ class ClusterEnsemble(object):
         if hasattr(self, 'n200'):
             self._richness_to_mass()
 
-    #not needed? now that dataframe attribute is available?
-    # but this also prints mass-rich parameters...
     def show(self, notebook = notebook_display):
         """Display table of cluster properties."""
         print("\nCluster Ensemble:")
