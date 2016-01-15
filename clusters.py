@@ -257,7 +257,8 @@ class ClusterEnsemble(object):
             else:
                 #self.sigma_offset = smd.sigma_nfw()
                 #self.deltasigma_offset = smd.deltasigma_nfw()
-                raise ValueError("Python does not yet calculate offset profiles. Use the c option.\n")
-            
+                #raise ValueError("Python does not yet calculate offset profiles. Use the c option.\n")
+                self.sigma_nfw = smd.sigma_nfw(offsets=self._sigoffset)
+                #TO DO: passing offsets is redundant with instantiation line 252
 
 
