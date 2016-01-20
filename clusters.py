@@ -215,7 +215,8 @@ class ClusterEnsemble(object):
         else:
             self._sigoffset = self._check_input_array(offsets)*units.Mpc
 
-        self.rbins = rbins * units.Mpc
+        self.rbins = _check_input(rbins, units.Mpc)
+        #self.rbins = rbins * units.Mpc
 
         if use_c:
             #--------
@@ -260,5 +261,32 @@ class ClusterEnsemble(object):
                 #raise ValueError("Python does not yet calculate offset profiles. Use the c option.\n")
                 self.sigma_nfw = smd.sigma_nfw(offsets=self._sigoffset)
                 #TO DO: passing offsets is redundant with instantiation line 252
+                # I think it should just be in instantiation, since thats where you
+                # would be changing mass-related inputs in modeling...
 
 
+                
+def _check_input(input, expected_units):
+    #check units
+    if hasattr(input, 'unit'):
+        if input.unit != expected_units:
+            raise ValueError('Expecting input units of ' + str(expected_units))
+        else:
+            output = input.value
+    else:
+        output = input
+        
+    output = _check_array_or_list(output) * expected_units
+        
+    return output
+
+def _check_array_or_list(input):
+    #check its list or array
+    if type(input) != np.ndarray:
+        if type(input) == list:
+            output = np.array(input)
+        else:
+            raise TypeError('Expecting input type as ndarray or list.')
+    else:
+        output = input
+    return output
