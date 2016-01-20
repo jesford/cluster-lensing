@@ -227,12 +227,9 @@ class ClusterEnsemble(object):
             os.system('rm -f deltasigma.dat')
             #--------
 
-            if offsets is None:
-                self.sigma_nfw = sigma_nfw * units.Msun/(units.pc**2)
-                self.deltasigma_nfw = deltasigma_nfw * units.Msun/(units.pc**2)
-            else:
-                self.sigma_offset = sigma_nfw * units.Msun/(units.pc**2)
-                self.deltasigma_offset = deltasigma_nfw * units.Msun/(units.pc**2)
+            #if offsets is None:
+            self.sigma_nfw = sigma_nfw * units.Msun/(units.pc**2)
+            self.deltasigma_nfw = deltasigma_nfw * units.Msun/(units.pc**2)
             
         else:
             #the python way
@@ -242,17 +239,13 @@ class ClusterEnsemble(object):
                                                        units.Mpc),
                                      sig_offset = self._sigoffset,
                                      rbins = self.rbins)
+            
+            self.sigma_nfw = smd.sigma_nfw()
             if offsets is None:           
-                self.sigma_nfw = smd.sigma_nfw()
-                self.deltasigma_nfw = smd.deltasigma_nfw()
-            else:
-                #self.sigma_offset = smd.sigma_nfw()
-                #self.deltasigma_offset = smd.deltasigma_nfw()
+                self.deltasigma_nfw = smd.deltasigma_nfw() #not yet implemented for offsets
+            #else:
                 #raise ValueError("Python does not yet calculate offset profiles. Use the c option.\n")
-                self.sigma_nfw = smd.sigma_nfw(offsets=self._sigoffset)
-                #TO DO: passing offsets is redundant with instantiation line 252
-                # I think it should just be in instantiation, since thats where you
-                # would be changing mass-related inputs in modeling...
+
 
 
                 
