@@ -89,3 +89,18 @@ def test_input_single_values():
                   sig_offset = sig_off[0], rbins = rbinarray)
     assert_raises(TypeError, SurfaceMassDensity, r_s, delta_c, rho_c,
                   sig_offset = sig_off, rbins = rbinarray[0])
+
+    
+def test_incompatible_lengths():
+
+    assert_raises(ValueError, SurfaceMassDensity, r_s[0:2], delta_c, rho_c,
+                  sig_offset = sig_off, rbins = rbinarray)
+    
+    assert_raises(ValueError, SurfaceMassDensity, r_s, delta_c[0:2], rho_c,
+                  sig_offset = sig_off, rbins = rbinarray)
+
+    assert_raises(ValueError, SurfaceMassDensity, r_s, delta_c, rho_c[0:2],
+                  sig_offset = sig_off[0:2], rbins = rbinarray)
+
+    assert_raises(ValueError, SurfaceMassDensity, r_s, delta_c, rho_c,
+                  sig_offset = sig_off[0:2], rbins = rbinarray)
