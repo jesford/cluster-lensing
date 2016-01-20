@@ -52,7 +52,8 @@ class ClusterEnsemble(object):
     @n200.setter
     def n200(self, richness):
         #Creates/updates values of cluster N200s & dependant variables.
-        self._n200 = self._check_input_array(richness)
+        self._n200 = utils.check_units_and_type(richness, None,
+                                                num = self.number)
         self._df['n200'] = pd.Series(self._n200, index = self._df.index)
         self._richness_to_mass()
 
@@ -74,7 +75,8 @@ class ClusterEnsemble(object):
     @z.setter
     def z(self, redshifts):
         #Changes the values of the cluster z's and z-dependant variables.
-        self._z = self._check_input_array(redshifts)
+        self._z = utils.check_units_and_type(redshifts, None,
+                                             num = self.number)
         self._Dang_l = cosmo.angular_diameter_distance(self._z)
         self._df['z'] = pd.Series(self._z, index = self._df.index)
         self._rho_crit = cosmo.critical_density(self._z)
@@ -100,19 +102,19 @@ class ClusterEnsemble(object):
         return self._df
 
     
-    def _check_input_array(self, arr):
+    #def _check_input_array(self, arr):
         #confirm input array matches size/type of clusters
-        if type(arr) != np.ndarray:
-            arr = np.array(arr)
-        if arr.ndim != 1:
-            raise ValueError("Input array must have 1 dimension.")
-        elif arr.shape[0] != self.number:
-            raise ValueError("Input array must be same length as current \
-                              cluster ensemble.")
-        if np.sum(arr < 0.) > 0:
-            raise ValueError("Input array values cannot be negative.")
-        else:
-            return arr
+    #    if type(arr) != np.ndarray:
+    #        arr = np.array(arr)
+    #    if arr.ndim != 1:
+    #        raise ValueError("Input array must have 1 dimension.")
+    #    elif arr.shape[0] != self.number:
+    #        raise ValueError("Input array must be same length as current \
+    #                          cluster ensemble.")
+    #    if np.sum(arr < 0.) > 0:
+    #        raise ValueError("Input array values cannot be negative.")
+    #    else:
+    #        return arr
 
     def _update_dependant_variables(self):
         self._calculate_r200()
@@ -214,10 +216,11 @@ class ClusterEnsemble(object):
         if offsets is None:
             self._sigoffset = np.zeros(self.number)*units.Mpc
         else:
-            self._sigoffset = self._check_input_array(offsets)*units.Mpc
+            self._sigoffset = utils.check_units_and_type(offsets, units.Mpc,
+                                                         num = self.number)
 
-        self.rbins = utils.check_input(rbins, units.Mpc)
-        #self.rbins = rbins * units.Mpc
+        self.rbins = utils.check_units_and_type(rbins, units.Mpc)
+
 
         if use_c:
             #--------
