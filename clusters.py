@@ -101,20 +101,6 @@ class ClusterEnsemble(object):
     def dataframe(self):
         return self._df
 
-    
-    #def _check_input_array(self, arr):
-        #confirm input array matches size/type of clusters
-    #    if type(arr) != np.ndarray:
-    #        arr = np.array(arr)
-    #    if arr.ndim != 1:
-    #        raise ValueError("Input array must have 1 dimension.")
-    #    elif arr.shape[0] != self.number:
-    #        raise ValueError("Input array must be same length as current \
-    #                          cluster ensemble.")
-    #    if np.sum(arr < 0.) > 0:
-    #        raise ValueError("Input array values cannot be negative.")
-    #    else:
-    #        return arr
 
     def _update_dependant_variables(self):
         self._calculate_r200()
