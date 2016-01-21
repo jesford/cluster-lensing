@@ -127,6 +127,8 @@ def test_update_norm():
 
 toy_data_rbins = np.array([0.1, 0.26591479, 0.70710678, 1.88030155, 5.])
 
+toy_data_offset = np.array([0.1,0.1])
+
 toy_data_sigma = np.array([[[6.16767240e+01, 1.39187020e+01, 2.44680800e+00,
                             3.78634000e-01, 5.54660000e-02],
                             [7.96846330e+01, 1.78510170e+01, 3.12497300e+00,
@@ -172,3 +174,31 @@ def test_nfw_centered():
         for j in range(c.z.shape[0]):
             yield _check_sigma, i, j
             yield _check_deltasigma, i, j
+
+
+
+#------------------------------------------
+
+def test_for_infs_in_miscentered_c_calc():
+    c = ClusterEnsemble(toy_data_z)
+
+    def _check_sigma_off(arr):
+        if np.isnan(arr.sum()):
+            raise ValueError('sigma_off result contains NaN', arr)
+        if np.isinf(arr.sum()):
+            raise ValueError('sigma_off result contains Inf', arr)
+
+    def _check_deltasigma_off(arr):
+        if np.isnan(arr.sum()):
+            raise ValueError('sigma_off result contains NaN', arr)
+        if np.isinf(arr.sum()):
+            raise ValueError('sigma_off result contains Inf', arr) 
+
+    #last element in toy_data is n200=0 -> NaN (skip for this check)
+    for n200 in toy_data_n200[:-1]:
+        c.n200 = n200
+        c.calc_nfw(toy_data_rbins, offsets = toy_data_offset)
+        for i in range(c.z.shape[0]):
+            yield _check_sigma_off, c.sigma_nfw[i].value
+            yield _check_deltasigma_off, c.deltasigma_nfw[i].value
+ 
