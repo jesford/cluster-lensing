@@ -197,7 +197,8 @@ class ClusterEnsemble(object):
         self._deltac = top/bottom
         self._df['delta_c'] = pd.Series(self._deltac, index = self._df.index)
 
-    def calc_nfw(self, rbins, offsets = None, use_c = True):
+    def calc_nfw(self, rbins, offsets = None, use_c = True,
+                 epsabs=0.1, epsrel=0.1):
         """Calculates Sigma and DeltaSigma NFW profiles of each cluster."""
         if offsets is None:
             self._sigoffset = np.zeros(self.number)*units.Mpc
@@ -240,7 +241,10 @@ class ClusterEnsemble(object):
                                      sig_offset = self._sigoffset,
                                      rbins = self.rbins)
             
-            self.sigma_nfw = smd.sigma_nfw()
+            #optionally specify integration tolerances
+            self.sigma_nfw = smd.sigma_nfw(epsabs=epsabs, epsrel=epsrel) 
+            #self.sigma_nfw = smd.sigma_nfw()
+            
             if offsets is None:           
                 self.deltasigma_nfw = smd.deltasigma_nfw() #not yet implemented for offsets
             #else:
