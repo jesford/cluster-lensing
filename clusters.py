@@ -1,3 +1,9 @@
+"""This is the docstring for the clusters module. It can span many lines, and needs to be
+updated with actually useful info. See this useful documentation site:
+
+https://github.com/numpy/numpy/blob/master/doc/HOWTO_DOCUMENT.rst.txt
+"""
+
 from __future__ import absolute_import, division, print_function
 
 import numpy as np
@@ -20,6 +26,27 @@ except:
 class ClusterEnsemble(object):
     """Ensemble of galaxy clusters and their properties."""
     def __init__(self, redshifts):
+        """ Initialize a ClusterEnsemble object
+        
+        Parameters
+        ----------
+        z : Numpy 1D array or list
+            Redshifts for each cluster in the sample.
+
+        Attributes
+        ----------
+        z : Numpy 1D array
+            Cluster redshifts.
+        n200 : Numpy 1D array
+            Cluster richness.
+        m200: Numpy 1D array, with astropy.units of Msun
+            Cluster masses in solar masses.
+        Dang_l: Numpy 1D array, with astropy.units of Mpc
+            Angular diameter distances from z=0 to z, in units of Mpc.
+        dataframe: Pandas DataFrame
+            Cluster information in tabular form.
+        
+        """
         if type(redshifts) != np.ndarray:
             redshifts = np.array(redshifts)
         if redshifts.ndim != 1:
