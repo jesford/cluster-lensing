@@ -32,20 +32,44 @@ class ClusterEnsemble(object):
         ----------
         z : Numpy 1D array or list
             Redshifts for each cluster in the sample.
+        
 
         Attributes
         ----------
-        z : Numpy 1D array
+        z : Numpy 1D array or numpy.ndarray?
             Cluster redshifts.
         n200 : Numpy 1D array
             Cluster richness.
-        m200: Numpy 1D array, with astropy.units of Msun
-            Cluster masses in solar masses.
-        Dang_l: Numpy 1D array, with astropy.units of Mpc
+        m200 : Numpy 1D array, with astropy.units of Msun...
+               or astropy.units.quantity.Quantity?
+            Cluster masses in units of solar masses.
+        c200 : Numpy 1D array
+            Cluster concentration parameters.
+        delta_c : Numpy 1D array
+            Characteristic overdensities of the cluster halos.
+        r200 : Numpy 1D array, with astropy.units of Mpc
+            Cluster radii in units of Mpc.
+        rs : Numpy 1D array, with astropy.units of Mpc
+            Cluster scale radii in units of Mpc.            
+        Dang_l : Numpy 1D array, with astropy.units of Mpc
             Angular diameter distances from z=0 to z, in units of Mpc.
-        dataframe: Pandas DataFrame
+        dataframe : pandas.core.frame.DataFrame
             Cluster information in tabular form.
+        describe : str
+            Short description of the ClusterEnsemble object.
+        number : int
+            Number of clusters in the sample.
         
+        
+        Methods
+        ----------
+        show(notebook=True)
+            Display table of cluster information and mass-richness
+            scaling relaton in use.
+        calc_nfw(rbins, offsets=None, use_c=True, epsabs=0.1,
+                 epsrel=0.1)
+            Generate Sigma and DeltaSigma NFW profiles for each cluster,
+            optionally with miscentering offsets included.
         """
         if type(redshifts) != np.ndarray:
             redshifts = np.array(redshifts)
@@ -140,7 +164,8 @@ class ClusterEnsemble(object):
     # could have a @property, @setter for each of norm and slope,
     # but what if user wants to modify both? would end up making
     # two calls to _richness_to_mass()... maybe thats no big deal?
-    
+
+    @property
     def massrich_parameters(self):
         """Print values of M200-N200 scaling relation parameters."""
         print("\nMass-Richness Power Law: M200 = norm * (N200 / 20) ^ slope")
