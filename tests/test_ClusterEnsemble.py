@@ -98,8 +98,12 @@ def test_wrong_length_z():
     
 def test_wrong_length_update_MNrelation():
     c = ClusterEnsemble(toy_data_z)
-    assert_raises(TypeError, c.update_massrichrelation, slope=[1.5,2.,2.5])
-    assert_raises(TypeError, c.update_massrichrelation, norm=[1.5e14,2.e13,2.5e-2])
+    def set_slope(val):
+        c.massrich_slope = val
+    def set_norm(val):
+        c.massrich_norm = val
+    assert_raises(TypeError, set_slope, slope=[1.5,2.,2.5])
+    assert_raises(TypeError, set_norm, norm=[1.5e14,2.e13,2.5e-2])
 
 def test_update_slope():
     c = ClusterEnsemble(toy_data_z)
@@ -107,7 +111,7 @@ def test_update_slope():
     slope_before = c._massrich_slope
     slope_after = 2.
     m_before = c.m200
-    c.update_massrichrelation(slope = slope_after)
+    c.massrich_slope = slope_after
     m_after = c.m200
     assert_equal(m_before[1], m_after[1])
     assert_equal(m_before[0]/m_after[0], (0.5**slope_before)/(0.5**slope_after))
@@ -118,7 +122,7 @@ def test_update_norm():
     norm_before = c._massrich_norm.value
     norm_after = 2.*norm_before
     m_before = c.m200
-    c.update_massrichrelation(norm = norm_after)
+    c.massrich_norm = norm_after
     m_after = c.m200
     assert_equal(m_before/m_after, np.array([norm_before/norm_after]*2))
 
