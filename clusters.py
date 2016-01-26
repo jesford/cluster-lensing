@@ -160,11 +160,35 @@ class ClusterEnsemble(object):
         #what else depends on z or m or?
 
         
-    # QUESTION: better design for following two functions?
-    # could have a @property, @setter for each of norm and slope,
-    # but what if user wants to modify both? would end up making
-    # two calls to _richness_to_mass()... maybe thats no big deal?
+    @property
+    def massrich_norm(self):
+        """Normalization of Mass-Richness relation:
+        M200 = norm * (N200 / 20) ^ slope."""
+        return self._massrich_norm
 
+    @massrich_norm.setter
+    def massrich_norm(self, norm):
+        self._massrich_norm = utils.check_units_and_type(norm, units.Msun,
+                                                         is_scalar = True)
+        if hasattr(self, 'n200'):
+            self._richness_to_mass()
+        
+    @property
+    def massrich_slope(self):
+        """Slope of Mass-Richness relation:
+        M200 = norm * (N200 / 20) ^ slope."""
+        return self._massrich_slope
+
+    @massrich_slope.setter
+    def massrich_slope(self, slope):
+        if type(slope) == float:
+            self._massrich_slope = slope
+        else:
+            raise TypeError('Expecting input type as float')
+        if hasattr(self, 'n200'):
+            self._richness_to_mass()
+
+    #TO DO: should this be a property or not??
     @property
     def massrich_parameters(self):
         """Print values of M200-N200 scaling relation parameters."""
@@ -172,22 +196,7 @@ class ClusterEnsemble(object):
         print("   norm:", self._massrich_norm)
         print("   slope:", self._massrich_slope)
         
-    def update_massrichrelation(self, norm = None, slope = None):
-        """Updates scaling relation parameters & dependant variables."""
-        if norm is not None:
-            if type(norm) == float:
-                self._massrich_norm = norm * units.Msun
-            else:
-                raise TypeError("Input norm must be of type float, in units \
-                of solar mass.")
-        if slope is not None:
-            if type(slope) == float:
-                self._massrich_slope = slope
-            else:
-                raise TypeError("Input slope must be of type float.")
-        if hasattr(self, 'n200'):
-            self._richness_to_mass()
-
+    #TO DO: should this be a property or not??
     def show(self, notebook = notebook_display):
         """Display table of cluster properties."""
         print("\nCluster Ensemble:")
@@ -195,7 +204,7 @@ class ClusterEnsemble(object):
             display(self._df)
         elif notebook == False:
             print(self._df)
-        self.massrich_parameters()
+        self.massrich_parameters
 
     @property
     def r200(self):
