@@ -1,7 +1,7 @@
 import numpy as np
 from astropy import units
 
-def check_units_and_type(input, expected_units, num = None):
+def check_units_and_type(input, expected_units, num = None, is_scalar = False):
     #check units
     if hasattr(input, 'unit'):
         if expected_units is None:
@@ -13,8 +13,11 @@ def check_units_and_type(input, expected_units, num = None):
         
     else:
         dimensionless = input
-        
-    dimensionfull = check_array_or_list(dimensionless)
+
+    if is_scalar == False:
+        dimensionfull = check_array_or_list(dimensionless)
+    else:
+        dimensionfull = dimensionless #just a scalar
 
     if expected_units is not None:
         dimensionfull = dimensionfull * expected_units
