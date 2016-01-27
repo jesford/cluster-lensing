@@ -1,8 +1,18 @@
-"""This is the docstring for the clusters module. It can span many lines, and needs to be
-updated with actually useful info. See this useful documentation site:
+"""Galaxy Cluster Ensemble Calculations.
 
-https://github.com/numpy/numpy/blob/master/doc/HOWTO_DOCUMENT.rst.txt
+Cluster mass-richness and mass-concentration scaling relations, and NFW
+halo profiles for weak lensing shear and magnification, including the 
+effects of cluster miscentering offsets.
+
+This framework calculates properties and profiles for every individual
+cluster, storing the data in tabular form. This is useful for fitting
+measured stacked weak lensing profiles, e.g. when you want to account for
+the full redshift, mass, and/or centroid offset distributions, and avoid
+fitting a single average mass at a single effective redshift.
 """
+
+#Useful documentation site:
+#https://github.com/numpy/numpy/blob/master/doc/HOWTO_DOCUMENT.rst.txt
 
 from __future__ import absolute_import, division, print_function
 
@@ -189,7 +199,6 @@ class ClusterEnsemble(object):
             self._richness_to_mass()
 
     #TO DO: should this be a property or not??
-    @property
     def massrich_parameters(self):
         """Print values of M200-N200 scaling relation parameters."""
         print("\nMass-Richness Power Law: M200 = norm * (N200 / 20) ^ slope")
@@ -204,7 +213,7 @@ class ClusterEnsemble(object):
             display(self._df)
         elif notebook == False:
             print(self._df)
-        self.massrich_parameters
+        self.massrich_parameters()
 
     @property
     def r200(self):
