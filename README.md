@@ -5,7 +5,7 @@ fitting weak lensing shear or magnification profiles.
 
 Currently, the focus of this repository is on the ClusterEnsemble()
 class in clusters.py. See a demo of what it can do in the provided
-notebook: [demo_ClusterEnsemble.ipynb](https://github.com/jesford/wl-profile/blob/master/demo_ClusterEnsemble.ipynb).
+notebook: [demo.ipynb](https://github.com/jesford/wl-profile/blob/master/demo.ipynb).
 
 ClusterEnsemble() allows you to easily build up a nicely
 formatted table (a pandas dataframe) of cluster attributes, and
