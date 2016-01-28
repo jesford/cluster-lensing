@@ -2,8 +2,31 @@ import numpy as np
 from astropy import units
 
 def check_units_and_type(input, expected_units, num = None, is_scalar = False):
-    #check units
-    if hasattr(input, 'unit'):
+    """Check whether variable has expected units and type.
+
+    If input does not have units and expected units is not None, then the
+    output will be assigned those units. If input has units that conflict
+    with expected units a ValueError will be raised.
+    
+    Parameters
+    ----------
+    input : anything
+        Variable that will be checked for units and type.
+    expected_units : astropy.units or None
+        Unit expected for input.
+    num : int, optional
+        Length expected for input, if it is an array.
+    is_scalar : bool, optional
+        Sets whether the input is a scalar quantity. Default is False for
+        array inputs; set is_scalar = True to check scalar units only.
+
+    Returns
+    ----------
+    Numpy 1D array or float, with astropy.units
+        Returns the input array or scalar with expected units, unless a
+        conflict of units or array length occurs, which raise errors.
+    """
+    if hasattr(input, 'unit'):    #check units
         if expected_units is None:
             raise ValueError('Expecting dimensionless input')
         elif input.unit != expected_units:
@@ -14,14 +37,17 @@ def check_units_and_type(input, expected_units, num = None, is_scalar = False):
     else:
         dimensionless = input
 
+    #check its a 1D array and/or convert list to array
     if is_scalar == False:
         dimensionfull = check_array_or_list(dimensionless)
     else:
-        dimensionfull = dimensionless #just a scalar
+        dimensionfull = dimensionless
 
+    #include units if appropriate
     if expected_units is not None:
         dimensionfull = dimensionfull * expected_units
 
+    #check array length if appropriate
     if num is not None:
         check_input_size(dimensionfull, num)
         
@@ -29,7 +55,7 @@ def check_units_and_type(input, expected_units, num = None, is_scalar = False):
 
 
 def check_array_or_list(input):
-    #check its list or array
+    """Return 1D array, if input can be converted and elements are >=0."""
     if type(input) != np.ndarray:
         if type(input) == list:
             output = np.array(input)
@@ -48,6 +74,7 @@ def check_array_or_list(input):
 
 
 def check_input_size(array, num):
+    """Check that an array has the expected number of elements."""
     if array.shape[0] != num:
         raise ValueError('Input arrays must have the same length (the \
                           number of clusters).')
