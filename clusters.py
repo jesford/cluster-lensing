@@ -360,8 +360,9 @@ class ClusterEnsemble(object):
                  epsabs=0.1, epsrel=0.1):
         """Calculates Sigma and DeltaSigma profiles.
 
-        Generates the surface mass density (Sigma) and differential surface
-        mass density (DeltaSigma) profiles of each cluster, assuming a
+        Generates the surface mass density (sigma_nfw attribute of parent
+        object) and differential surface mass density (deltasigma_nfw
+        attribute of parent object) profiles of each cluster, assuming a
         spherical NFW model. Optionally includes the effect of cluster
         miscentering offsets.
         
