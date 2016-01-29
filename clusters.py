@@ -34,77 +34,77 @@ except:
 
 
 class ClusterEnsemble(object):
-    """Ensemble of galaxy clusters and their properties."""
+    """Ensemble of galaxy clusters and their properties.
+
+    The ClusterEnsemble object contains parameters and calculated
+    values for every individual cluster in a sample. Initializing with
+    a collection of redshifts z will fix the number of clusters
+    described by the object. Setting the n200 values will then populate
+    the object with the full set of available attributes (except for
+    the NFW profiles). The values of z, n200, massrich_norm, and
+    massrich_slope can be altered and these changes will propogate to
+    the other (dependent) attributes.
+
+    In order to generate the attributes containing the NFW halo
+    profiles, sigma_nfw and deltasigma_nfw, pass the desired radial
+    bins (and additional optional parameters) to the calc_nfw method.
+
+    Parameters
+    ----------
+    z : Numpy 1D array or list
+        Redshifts for each cluster in the sample.
+
+    Attributes
+    ----------
+    z : Numpy 1D array or numpy.ndarray?
+        Cluster redshifts.
+    n200 : Numpy 1D array
+        Cluster richness.
+    m200 : Numpy 1D array, with astropy.units of Msun?
+           or astropy.units.quantity.Quantity?
+        Cluster masses in units of solar masses.
+    c200 : Numpy 1D array
+        Cluster concentration parameters.
+    delta_c : Numpy 1D array
+        Characteristic overdensities of the cluster halos.
+    r200 : Numpy 1D array, with astropy.units of Mpc
+        Cluster radii in units of Mpc.
+    rs : Numpy 1D array, with astropy.units of Mpc
+        Cluster scale radii in units of Mpc.            
+    Dang_l : Numpy 1D array, with astropy.units of Mpc
+        Angular diameter distances from z=0 to z, in units of Mpc.
+    dataframe : pandas.core.frame.DataFrame
+        Cluster information in tabular form.
+    massrich_norm : float, with astropy.units of Msun
+        Normalization of mass-richness relation, in units of Msun.
+        Default value is 2.7e+13 Msun.
+    massrich_slope : float
+        Slope of mass-richness relation. Default value is 1.4.
+    describe : str
+        Short description of the ClusterEnsemble object.
+    number : int
+        Number of clusters in the sample.
+    sigma_nfw : Numpy 1D array, with astropy.units of Msun/pc/pc
+        Surface mass density of every cluster. Generated for each
+        element of rbins by running calc_nfw(rbins) method.
+    deltasigma_nfw : Numpy 1D array, with astropy.units of Msun/pc/pc
+        Differential surface mass density of every cluster. Generated
+        for each element of rbins by running calc_nfw(rbins) method.
+
+    Methods
+    ----------
+    calc_nfw(rbins, offsets=None, use_c=True, epsabs=0.1, epsrel=0.1)
+        Generate Sigma and DeltaSigma NFW profiles for each cluster,
+        optionally with miscentering offsets included.
+    show(notebook=True)
+        Display table of cluster information and mass-richness
+        scaling relaton in use.
+    massrich_parameters()
+        Print a string showing the mass-richness scaling relation and
+        current values of the normalization and slope.
+    """
     def __init__(self, redshifts):
-        """ Initialize a ClusterEnsemble object
-
-        The ClusterEnsemble object contains parameters and calculated
-        values for every individual cluster in a sample. Initializing with
-        a collection of redshifts z will fix the number of clusters
-        described by the object. Setting the n200 values will then populate
-        the object with the full set of available attributes (except for
-        the NFW profiles). The values of z, n200, massrich_norm, and
-        massrich_slope can be altered and these changes will propogate to
-        the other (dependent) attributes.
-
-        In order to generate the attributes containing the NFW halo
-        profiles, sigma_nfw and deltasigma_nfw, pass the desired radial
-        bins (and additional optional parameters) to the calc_nfw method.
-        
-        Parameters
-        ----------
-        z : Numpy 1D array or list
-            Redshifts for each cluster in the sample.
-        
-        Attributes
-        ----------
-        z : Numpy 1D array or numpy.ndarray?
-            Cluster redshifts.
-        n200 : Numpy 1D array
-            Cluster richness.
-        m200 : Numpy 1D array, with astropy.units of Msun?
-               or astropy.units.quantity.Quantity?
-            Cluster masses in units of solar masses.
-        c200 : Numpy 1D array
-            Cluster concentration parameters.
-        delta_c : Numpy 1D array
-            Characteristic overdensities of the cluster halos.
-        r200 : Numpy 1D array, with astropy.units of Mpc
-            Cluster radii in units of Mpc.
-        rs : Numpy 1D array, with astropy.units of Mpc
-            Cluster scale radii in units of Mpc.            
-        Dang_l : Numpy 1D array, with astropy.units of Mpc
-            Angular diameter distances from z=0 to z, in units of Mpc.
-        dataframe : pandas.core.frame.DataFrame
-            Cluster information in tabular form.
-        massrich_norm : float, with astropy.units of Msun
-            Normalization of mass-richness relation, in units of Msun.
-            Default value is 2.7e+13 Msun.
-        massrich_slope : float
-            Slope of mass-richness relation. Default value is 1.4.
-        describe : str
-            Short description of the ClusterEnsemble object.
-        number : int
-            Number of clusters in the sample.
-        sigma_nfw : Numpy 1D array, with astropy.units of Msun/pc/pc
-            Surface mass density of every cluster. Generated for each
-            element of rbins by running calc_nfw(rbins) method.
-        deltasigma_nfw : Numpy 1D array, with astropy.units of Msun/pc/pc
-            Differential surface mass density of every cluster. Generated
-            for each element of rbins by running calc_nfw(rbins) method.
-        
-        Methods
-        ----------
-        calc_nfw(rbins, offsets=None, use_c=True, epsabs=0.1, epsrel=0.1)
-            Generate Sigma and DeltaSigma NFW profiles for each cluster,
-            optionally with miscentering offsets included.
-        show(notebook=True)
-            Display table of cluster information and mass-richness
-            scaling relaton in use.
-        massrich_parameters()
-            Print a string showing the mass-richness scaling relation and
-            current values of the normalization and slope.
-        """
+        """ Initialize a ClusterEnsemble object"""
         if type(redshifts) != np.ndarray:
             redshifts = np.array(redshifts)
         if redshifts.ndim != 1:
