@@ -133,9 +133,8 @@ class ClusterEnsemble(object):
     def n200(self):
         """Cluster richness values.
 
-        :getter: Returns cluster richness values
-        :getter type: ndarray
-        
+        :property: Returns cluster richness values
+        :property type: ndarray
         :setter: Sets cluster richness values
         :setter type: array_like
         """
@@ -166,9 +165,10 @@ class ClusterEnsemble(object):
     def z(self):
         """Cluster redshifts.
 
-        :getter: Returns cluster redshifts
+        :property: Returns cluster redshifts
+        :property type: ndarray
         :setter: Sets cluster redshifts
-        :type: Numpy 1D array
+        :setter type: array_like
         """
         return self._z
 
@@ -182,16 +182,13 @@ class ClusterEnsemble(object):
         self._rho_crit = cosmo.critical_density(self._z)
         if self._n200 is not None:
             self._update_dependant_variables()        
-        
-    #note: user can access, but not modify, functions that are ONLY decorated
-    # as properties; attempting to modify them will raise an AttributeError
-        
+                
     @property
     def Dang_l(self):
         """Angular diameter distances to clusters.
 
-        :getter: Returns distances
-        :type: Numpy 1D array, in astropy.units of Mpc
+        :property: Returns distances in Mpc
+        :type: Quantity (1D ndarray, with astropy.units of Mpc)
         """
         return self._Dang_l
 
@@ -203,8 +200,8 @@ class ClusterEnsemble(object):
         using the mass-richness scaling relation specified by the
         parameters massrich_norm and massrich_slope.
 
-        :getter: Returns distances
-        :type: Numpy 1D array, in astropy.units of Mpc
+        :property: Returns cluster masses in Msun
+        :type: Quantity (1D ndarray, with astropy.units of Msun)
         """
         if self._m200 is None:
             raise AttributeError('Attribute has not yet been initialized.')
@@ -215,7 +212,7 @@ class ClusterEnsemble(object):
     def dataframe(self):
         """Pandas DataFrame of cluster properties.
 
-        :getter: Returns DataFrame
+        :property: Returns DataFrame
         :type: pandas.core.frame.DataFrame
         """
         return self._df
@@ -233,9 +230,10 @@ class ClusterEnsemble(object):
         """Normalization of Mass-Richness relation:
         M200 = norm * (N200 / 20) ^ slope.
 
-        :getter: Returns normalization
-        :setter: Sets normalization
-        :type: float, in astropy.units of Msun
+        :property: Returns normalization in Msun
+        :property type: Quantity (float, with astropy.units of Msun)
+        :setter: Sets normalization in Msun
+        :setter type: float (optionally in astropy.units of Msun)
         """
         return self._massrich_norm
 
@@ -251,9 +249,10 @@ class ClusterEnsemble(object):
         """Slope of Mass-Richness relation:
         M200 = norm * (N200 / 20) ^ slope.
 
-        :getter: Returns slope
+        :property: Returns slope
+        :property type: float
         :setter: Sets slope
-        :type: float
+        :setter type: float
         """
         return self._massrich_slope
 
@@ -288,8 +287,8 @@ class ClusterEnsemble(object):
         r200 is the cluster radius within which the mean density is 200
         times the critical energy density of the universe at that z.
 
-        :getter: Returns r200
-        :type: Numpy 1D array, in astropy.units of Mpc
+        :property: Returns r200 in Mpc
+        :type: Quantity (1D ndarray, in astropy.units of Mpc)
         """
         if self._r200 is None:
             raise AttributeError('Attribute has not yet been initialized.')
@@ -303,8 +302,8 @@ class ClusterEnsemble(object):
         c200 is calculated from m200 and z using the mass-concentration
         relation of Dutton & Maccio 2015. Note that c200 = r200/rs.
 
-        :getter: Returns c200
-        :type: Numpy 1D array
+        :property: Returns c200
+        :type: ndarray
         """
         if self._c200 is None:
             raise AttributeError('Attribute has not yet been initialized.')
@@ -315,8 +314,8 @@ class ClusterEnsemble(object):
     def rs(self):
         """Cluster scale radii.
 
-        :getter: Returns scale radius
-        :type: Numpy 1D array, in astropy.units of Mpc
+        :property: Returns scale radius in Mpc
+        :type: Quantity (1D ndarray, in astropy.units of Mpc)
         """
         if self._rs is None:
             raise AttributeError('Attribute has not yet been initialized.')
@@ -327,8 +326,8 @@ class ClusterEnsemble(object):
     def delta_c(self):
         """Characteristic overdensities of the cluster halos.
 
-        :getter: Returns characteristic overdensity
-        :type: Numpy 1D array
+        :property: Returns characteristic overdensity
+        :type: ndarray
         """        
         if self._deltac is None:
             raise AttributeError('Attribute has not yet been initialized.')
