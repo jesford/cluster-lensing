@@ -11,19 +11,20 @@ def check_units_and_type(input, expected_units, num = None,
     
     Parameters
     ----------
-    input : anything
-        Variable that will be checked for units and type.
+    input : array_like or float
+        Variable that will be checked for units and type. Variable should
+        be 1D or scalar.
     expected_units : astropy.units or None
         Unit expected for input.
     num : int, optional
-        Length expected for input, if it is an array.
+        Length expected for input, if it is an array or list.
     is_scalar : bool, optional
         Sets whether the input is a scalar quantity. Default is False for
-        array inputs; set is_scalar = True to check scalar units only.
+        array_like inputs; set is_scalar=True to check scalar units only.
 
     Returns
     ----------
-    Numpy 1D array or float, with astropy.units
+    ndarray or float, with astropy.units
         Returns the input array or scalar with expected units, unless a
         conflict of units or array length occurs, which raise errors.
     """
@@ -56,7 +57,8 @@ def check_units_and_type(input, expected_units, num = None,
 
 
 def check_array_or_list(input):
-    """Return 1D array, if input can be converted and elements are >=0."""
+    """Return 1D ndarray, if input can be converted and elements are
+    non-negative."""
     if type(input) != np.ndarray:
         if type(input) == list:
             output = np.array(input)
