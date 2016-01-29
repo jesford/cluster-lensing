@@ -51,45 +51,49 @@ class ClusterEnsemble(object):
 
     Parameters
     ----------
-    z : Numpy 1D array or list
-        Redshifts for each cluster in the sample.
+    z : array_like
+        Redshifts for each cluster in the sample. Should be 1D.
 
     Attributes
     ----------
-    z : Numpy 1D array or numpy.ndarray?
-        Cluster redshifts.
-    n200 : Numpy 1D array
-        Cluster richness.
-    m200 : Numpy 1D array, with astropy.units of Msun?
-           or astropy.units.quantity.Quantity?
-        Cluster masses in units of solar masses.
-    c200 : Numpy 1D array
+    z : ndarray
+        Cluster redshifts. Setter function available.
+    n200 : ndarray
+        Cluster richness. Setter function available.
+    m200 : Quantity
+        Cluster masses (1D ndarray) with astropy.units of Msun.
+    c200 : ndarray
         Cluster concentration parameters.
-    delta_c : Numpy 1D array
+    delta_c : ndarray
         Characteristic overdensities of the cluster halos.
-    r200 : Numpy 1D array, with astropy.units of Mpc
-        Cluster radii in units of Mpc.
-    rs : Numpy 1D array, with astropy.units of Mpc
-        Cluster scale radii in units of Mpc.            
-    Dang_l : Numpy 1D array, with astropy.units of Mpc
-        Angular diameter distances from z=0 to z, in units of Mpc.
-    dataframe : pandas.core.frame.DataFrame
-        Cluster information in tabular form.
-    massrich_norm : float, with astropy.units of Msun
-        Normalization of mass-richness relation, in units of Msun.
-        Default value is 2.7e+13 Msun.
+    r200 : Quantity
+        Cluster radii (1D ndarray) with astropy.units of Mpc.
+    rs : Quantity
+        Cluster scale radii (1D ndarray) with astropy.units of Mpc.            
+    Dang_l : Quantity
+        Angular diameter distances from z=0 to z, (1D ndarray) with
+        astropy.units of Mpc.
+    dataframe : DataFrame
+        Cluster information in tabular form (Pandas DataFrame).
+    massrich_norm : Quantity
+        Normalization of mass-richness relation, (scalar) with
+        astropy.units of Msun. Default value is 2.7e+13 Msun. Setter
+        function available.
     massrich_slope : float
-        Slope of mass-richness relation. Default value is 1.4.
+        Slope of mass-richness relation. Default value is 1.4. Setter
+        function available.
     describe : str
         Short description of the ClusterEnsemble object.
     number : int
         Number of clusters in the sample.
-    sigma_nfw : Numpy 1D array, with astropy.units of Msun/pc/pc
-        Surface mass density of every cluster. Generated for each
-        element of rbins by running calc_nfw(rbins) method.
-    deltasigma_nfw : Numpy 1D array, with astropy.units of Msun/pc/pc
-        Differential surface mass density of every cluster. Generated
-        for each element of rbins by running calc_nfw(rbins) method.
+    sigma_nfw : Quantity
+        Surface mass density of every cluster, (1D ndarray) with
+        astropy.units of Msun/pc/pc. Generated for each element of rbins
+        by running calc_nfw(rbins) method.
+    deltasigma_nfw : Quantity
+        Differential surface mass density of every cluster, (1D ndarray)
+        with astropy.units of Msun/pc/pc. Generated for each element of
+        rbins by running calc_nfw(rbins) method.
 
     Methods
     ----------
@@ -104,7 +108,6 @@ class ClusterEnsemble(object):
         current values of the normalization and slope.
     """
     def __init__(self, redshifts):
-        """ Initialize a ClusterEnsemble object"""
         if type(redshifts) != np.ndarray:
             redshifts = np.array(redshifts)
         if redshifts.ndim != 1:
@@ -131,8 +134,10 @@ class ClusterEnsemble(object):
         """Cluster richness values.
 
         :getter: Returns cluster richness values
+        :getter type: ndarray
+        
         :setter: Sets cluster richness values
-        :type: Numpy 1D array
+        :setter type: array_like
         """
         if self._n200 is None:
             raise AttributeError('n200 has not yet been initialized.')
@@ -261,14 +266,12 @@ class ClusterEnsemble(object):
         if hasattr(self, 'n200'):
             self._richness_to_mass()
 
-    #TO DO: should this be a property or not??
     def massrich_parameters(self):
         """Print values of M200-N200 scaling relation parameters."""
         print("\nMass-Richness Power Law: M200 = norm * (N200 / 20) ^ slope")
         print("   norm:", self._massrich_norm)
         print("   slope:", self._massrich_slope)
         
-    #TO DO: should this be a property or not??
     def show(self, notebook = notebook_display):
         """Display cluster properties and scaling relation parameters."""
         print("\nCluster Ensemble:")
@@ -368,11 +371,13 @@ class ClusterEnsemble(object):
         
         Parameters
         ----------
-        rbins : Numpy 1D array or list, optionally in astropy.units of Mpc
-            Radial bins (in Mpc) for calculating cluster profiles.
-        offsets : Numpy 1D array or list, optional
-            Parameter describing the width of the Gaussian distribution of
-            miscentering offsets.
+        rbins : array_like
+            Radial bins (in Mpc) for calculating cluster profiles. Should
+            be 1D, optionally with astropy.units of Mpc.
+        offsets : array_like, optional
+            Parameter describing the width (in Mpc) of the Gaussian
+            distribution of miscentering offsets. Should be 1D, optionally
+            with astropy.units of Mpc.
         use_c : bool, optional    
             Sets whether to use the faster c implementation of calculation
             (use_c=True, default), or the Python version (use_c=False).
