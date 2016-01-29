@@ -2,7 +2,7 @@ import numpy as np
 from astropy.cosmology import Planck13 as cosmo
 
 #default parameters
-h = cosmo.H0.value
+h = cosmo.h
 Om_M = cosmo.Om0
 Om_L = 1. - Om_M
 
