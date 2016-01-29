@@ -1,7 +1,8 @@
 import numpy as np
 from astropy import units
 
-def check_units_and_type(input, expected_units, num = None, is_scalar = False):
+def check_units_and_type(input, expected_units, num = None,
+                         is_scalar = False):
     """Check whether variable has expected units and type.
 
     If input does not have units and expected units is not None, then the
