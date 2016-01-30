@@ -69,7 +69,7 @@ class ClusterEnsemble(object):
     r200 : Quantity
         Cluster radii (1D ndarray) with astropy.units of Mpc.
     rs : Quantity
-        Cluster scale radii (1D ndarray) with astropy.units of Mpc.            
+        Cluster scale radii (1D ndarray) with astropy.units of Mpc.
     Dang_l : Quantity
         Angular diameter distances from z=0 to z, (1D ndarray) with
         astropy.units of Mpc.
@@ -150,17 +150,51 @@ class ClusterEnsemble(object):
                                                 num = self.number)
         self._df['n200'] = pd.Series(self._n200, index = self._df.index)
         self._richness_to_mass()
+        self._update_dependant_variables()
 
-        
+    @property
+    def m200(self):
+        """Cluster masses.
+
+        Mass interior to a sphere of radius r200, calculated from n200
+        using the mass-richness scaling relation specified by the
+        parameters massrich_norm and massrich_slope.
+
+        :property: Returns cluster masses in Msun
+        :type: Quantity (1D ndarray, with astropy.units of Msun)
+        :setter: Sets cluster mass values in Msun
+        :setter type: array_like        
+        """
+        if self._m200 is None:
+            raise AttributeError('Attribute has not yet been initialized.')
+        else:
+            return self._m200
+
+    @m200.setter
+    def m200(self, mass):
+        #Creates/updates values of cluster M200s & dependant variables.
+        self._m200 = utils.check_units_and_type(mass, units.Msun,
+                                                num = self.number)
+        self._df['m200'] = pd.Series(self._m200, index = self._df.index)
+        self._mass_to_richness()
+        self._update_dependant_variables()
+        #TO DO: test above
+                
     def _richness_to_mass(self):
         #Calculates M_200 for simple power-law scaling relation
         #(with default parameters from arXiv:1409.3571)
         self._m200 = self._massrich_norm * ((self._n200/20.) **
                                             self._massrich_slope)
         self._df['m200'] = pd.Series(self._m200, index = self._df.index)
-        self._update_dependant_variables()
-
-
+        
+    def _mass_to_richness(self):
+        #Calculates N_200 for simple power-law scaling relation.
+        #Inverse of _richness_to_mass() function.
+        self._n200 = 20. * (self._m200 /
+                            self._massrich_norm)**(1./self._massrich_slope)
+        self._df['n200'] = pd.Series(self._n200, index = self._df.index)
+        #TO DO: test above
+        
     @property
     def z(self):
         """Cluster redshifts.
@@ -182,7 +216,13 @@ class ClusterEnsemble(object):
         self._rho_crit = cosmo.critical_density(self._z)
         if self._n200 is not None:
             self._update_dependant_variables()        
-                
+
+    def _update_dependant_variables(self):
+        self._calculate_r200()
+        self._calculate_c200()
+        self._calculate_rs()
+        #what else depends on z or m or?
+                            
     @property
     def Dang_l(self):
         """Angular diameter distances to clusters.
@@ -190,24 +230,8 @@ class ClusterEnsemble(object):
         :property: Returns distances in Mpc
         :type: Quantity (1D ndarray, with astropy.units of Mpc)
         """
-        return self._Dang_l
-
-    @property
-    def m200(self):
-        """Cluster masses.
-
-        Mass interior to a sphere of radius r200, calculated from n200
-        using the mass-richness scaling relation specified by the
-        parameters massrich_norm and massrich_slope.
-
-        :property: Returns cluster masses in Msun
-        :type: Quantity (1D ndarray, with astropy.units of Msun)
-        """
-        if self._m200 is None:
-            raise AttributeError('Attribute has not yet been initialized.')
-        else:
-            return self._m200
-
+        return self._Dang_l        
+        
     @property
     def dataframe(self):
         """Pandas DataFrame of cluster properties.
@@ -216,15 +240,7 @@ class ClusterEnsemble(object):
         :type: pandas.core.frame.DataFrame
         """
         return self._df
-
-
-    def _update_dependant_variables(self):
-        self._calculate_r200()
-        self._calculate_c200()
-        self._calculate_rs()
-        #what else depends on z or m or?
-
-        
+       
     @property
     def massrich_norm(self):
         """Normalization of Mass-Richness relation:
@@ -238,11 +254,17 @@ class ClusterEnsemble(object):
         return self._massrich_norm
 
     @massrich_norm.setter
-    def massrich_norm(self, norm):
+    def massrich_norm(self, norm, rich_to_mass = True):
         self._massrich_norm = utils.check_units_and_type(norm, units.Msun,
                                                          is_scalar = True)
+        #default behavior is to take current n200 -> m200
+        # with new scaling relation
         if hasattr(self, 'n200'):
-            self._richness_to_mass()
+            if rich_to_mass == True:
+                self._richness_to_mass()
+            else:
+                self._mass_to_richness()
+        #TO DO: test above
         
     @property
     def massrich_slope(self):
@@ -257,13 +279,19 @@ class ClusterEnsemble(object):
         return self._massrich_slope
 
     @massrich_slope.setter
-    def massrich_slope(self, slope):
+    def massrich_slope(self, slope, rich_to_mass = True):
         if type(slope) == float:
             self._massrich_slope = slope
         else:
             raise TypeError('Expecting input type as float')
+        #default behavior is to take current n200 -> m200
+        # with new scaling relation
         if hasattr(self, 'n200'):
-            self._richness_to_mass()
+            if rich_to_mass == True:
+                self._richness_to_mass()
+            else:
+                self._mass_to_richness()
+        #TO DO: test above
 
     def massrich_parameters(self):
         """Print values of M200-N200 scaling relation parameters."""
