@@ -6,7 +6,7 @@ import halobias
 
 def test_Mnl_z0():
     z = 0.
-    h = cosmo.H0.value
+    h = cosmo.h
 
     def _check_bias_z0(m,ans):
         b = halobias.bias(m,z)
