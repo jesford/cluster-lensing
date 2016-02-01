@@ -188,7 +188,6 @@ class ClusterEnsemble(object):
         self._df['m200'] = pd.Series(self._m200, index = self._df.index)
         self._mass_to_richness()
         self._update_dependant_variables()
-        #TO DO: test above
                 
     def _richness_to_mass(self):
         #Calculates M_200 for simple power-law scaling relation
@@ -200,10 +199,11 @@ class ClusterEnsemble(object):
     def _mass_to_richness(self):
         #Calculates N_200 for simple power-law scaling relation.
         #Inverse of _richness_to_mass() function.
-        self._n200 = 20. * (self._m200 /
-                            self._massrich_norm)**(1./self._massrich_slope)
+        n200 = 20. * (self._m200 /
+                      self._massrich_norm)**(1. / self._massrich_slope)
+        #note: units cancel but n200 is still a Quantity
+        self._n200 = n200.value
         self._df['n200'] = pd.Series(self._n200, index = self._df.index)
-        #TO DO: test above
         
     @property
     def z(self):
