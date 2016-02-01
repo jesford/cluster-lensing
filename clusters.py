@@ -133,6 +133,13 @@ class ClusterEnsemble(object):
     def n200(self):
         """Cluster richness values.
 
+        If n200 is set directly, then mass m200 is calculated from n200
+        using the mass-richness scaling relation specified by the
+        parameters massrich_norm and massrich_slope. If m200 is set
+        directly, then n200 is calculated from m200 using the same scaling
+        relation. Changes to n200 will propagate to all mass-dependant
+        variables.
+
         :property: Returns cluster richness values
         :property type: ndarray
         :setter: Sets cluster richness values
@@ -156,9 +163,12 @@ class ClusterEnsemble(object):
     def m200(self):
         """Cluster masses.
 
-        Mass interior to a sphere of radius r200, calculated from n200
-        using the mass-richness scaling relation specified by the
-        parameters massrich_norm and massrich_slope.
+        Mass interior to a sphere of radius r200. If m200 is set directly,
+        then richness n200 is calculated from m200 using the mass-richness
+        scaling relation specified by the parameters massrich_norm and
+        massrich_slope. If n200 is set directly, then m200 is calculated
+        from n200 using the same scaling relation. Changes to m200 will
+        propagate to all mass-dependant variables.
 
         :property: Returns cluster masses in Msun
         :type: Quantity (1D ndarray, with astropy.units of Msun)
@@ -219,7 +229,7 @@ class ClusterEnsemble(object):
 
     def _update_dependant_variables(self):
         self._calculate_r200()
-        self._calculate_c200()
+        self._calculate_concentrations()
         self._calculate_rs()
         #what else depends on z or m or?
                             
@@ -368,7 +378,7 @@ class ClusterEnsemble(object):
         self._r200 = radius_200.to(units.Mpc)
         self._df['r200'] = pd.Series(self._r200, index = self._df.index)
         
-    def _calculate_c200(self):
+    def _calculate_concentrations(self):
         #calculate c200 from m200 and z (using cofm.py)
         self._c200 = calc_c200(self._z,self._m200)
         self._df['c200'] = pd.Series(self._c200, index = self._df.index)
