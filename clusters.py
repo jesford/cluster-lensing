@@ -157,7 +157,6 @@ class ClusterEnsemble(object):
                                                 num = self.number)
         self._df['n200'] = pd.Series(self._n200, index = self._df.index)
         self._richness_to_mass()
-        self._update_dependant_variables()
 
     @property
     def m200(self):
@@ -187,7 +186,6 @@ class ClusterEnsemble(object):
                                                 num = self.number)
         self._df['m200'] = pd.Series(self._m200, index = self._df.index)
         self._mass_to_richness()
-        self._update_dependant_variables()
                 
     def _richness_to_mass(self):
         #Calculates M_200 for simple power-law scaling relation
@@ -195,6 +193,7 @@ class ClusterEnsemble(object):
         self._m200 = self._massrich_norm * ((self._n200/20.) **
                                             self._massrich_slope)
         self._df['m200'] = pd.Series(self._m200, index = self._df.index)
+        self._update_dependant_variables()
         
     def _mass_to_richness(self):
         #Calculates N_200 for simple power-law scaling relation.
@@ -204,6 +203,7 @@ class ClusterEnsemble(object):
         #note: units cancel but n200 is still a Quantity
         self._n200 = n200.value
         self._df['n200'] = pd.Series(self._n200, index = self._df.index)
+        self._update_dependant_variables()
         
     @property
     def z(self):
@@ -258,7 +258,9 @@ class ClusterEnsemble(object):
         M200 = norm * (N200 / 20) ^ slope.
 
         Changes to massrich_norm will propagate to all mass-dependant
-        variables.
+        variables. (This will take current n200 values and convert them to
+        m200; in order to retain original values of m200, save them in a
+        temporary variable and reset them after this change).
 
         :property: Returns normalization in Msun
         :property type: Quantity (float, with astropy.units of Msun)
@@ -268,17 +270,12 @@ class ClusterEnsemble(object):
         return self._massrich_norm
 
     @massrich_norm.setter
-    def massrich_norm(self, norm, rich_to_mass = True):
+    def massrich_norm(self, norm):
         self._massrich_norm = utils.check_units_and_type(norm, units.Msun,
                                                          is_scalar = True)
-        #default behavior is to take current n200 -> m200
-        # with new scaling relation
+        #behavior is to convert current n200 -> new m200
         if hasattr(self, 'n200'):
-            if rich_to_mass == True:
-                self._richness_to_mass()
-            else:
-                self._mass_to_richness()
-        #TO DO: test above
+            self._richness_to_mass()
         
     @property
     def massrich_slope(self):
@@ -287,7 +284,9 @@ class ClusterEnsemble(object):
         M200 = norm * (N200 / 20) ^ slope.
 
         Changes to massrich_slope will propagate to all mass-dependant
-        variables.
+        variables. (This will take current n200 values and convert them to
+        m200; in order to retain original values of m200, save them in a
+        temporary variable and reset them after this change).
 
         :property: Returns slope
         :property type: float
@@ -297,19 +296,14 @@ class ClusterEnsemble(object):
         return self._massrich_slope
 
     @massrich_slope.setter
-    def massrich_slope(self, slope, rich_to_mass = True):
+    def massrich_slope(self, slope):
         if type(slope) == float:
             self._massrich_slope = slope
         else:
             raise TypeError('Expecting input type as float')
-        #default behavior is to take current n200 -> m200
-        # with new scaling relation
+        #behavior is to convert current n200 -> new m200
         if hasattr(self, 'n200'):
-            if rich_to_mass == True:
-                self._richness_to_mass()
-            else:
-                self._mass_to_richness()
-        #TO DO: test above
+            self._richness_to_mass()
 
     def massrich_parameters(self):
         """Print values of M200-N200 scaling relation parameters."""
