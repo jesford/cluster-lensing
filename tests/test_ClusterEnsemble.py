@@ -65,6 +65,35 @@ def test_update_richness():
         yield _check_radii, i
         yield _check_c200, i
         yield _check_delta_c, i
+
+
+def test_update_mass():
+    c = ClusterEnsemble(toy_data_z)
+
+    def _check_n_and_m(i):
+        assert_equal(c.m200.value, toy_data_m200[i])
+        assert_allclose(c.n200, toy_data_n200[i])
+        
+    def _check_radii(i):
+        assert_allclose(c.r200.value, toy_data_r200[i])
+        assert_allclose(c.rs.value, toy_data_rs[i])
+        
+    def _check_c200(i):
+        assert_allclose(toy_data_c200[i], c.c200)
+        if c.c200 is np.real:
+            assert_allclose(toy_data_r200[i]/toy_data_rs[i], c.c200)
+        else:
+            assert(toy_data_r200[i]/toy_data_rs[i] is not np.real)            
+        
+    def _check_delta_c(i):
+        assert_allclose(toy_data_deltac[i], c.delta_c)
+        
+    for i, m200 in enumerate(toy_data_m200):
+        c.m200 = m200
+        yield _check_n_and_m, i
+        yield _check_radii, i
+        yield _check_c200, i
+        yield _check_delta_c, i
         
 
 def test_negative_z():
