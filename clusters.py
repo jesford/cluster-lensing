@@ -254,7 +254,11 @@ class ClusterEnsemble(object):
     @property
     def massrich_norm(self):
         """Normalization of Mass-Richness relation:
+
         M200 = norm * (N200 / 20) ^ slope.
+
+        Changes to massrich_norm will propagate to all mass-dependant
+        variables.
 
         :property: Returns normalization in Msun
         :property type: Quantity (float, with astropy.units of Msun)
@@ -279,7 +283,11 @@ class ClusterEnsemble(object):
     @property
     def massrich_slope(self):
         """Slope of Mass-Richness relation:
+
         M200 = norm * (N200 / 20) ^ slope.
+
+        Changes to massrich_slope will propagate to all mass-dependant
+        variables.
 
         :property: Returns slope
         :property type: float
