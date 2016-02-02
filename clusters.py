@@ -462,11 +462,11 @@ class ClusterEnsemble(object):
                                      self.delta_c,
                                      self._rho_crit.to(units.Msun/units.pc**2/
                                                        units.Mpc),
-                                     sig_offset = self._sigoffset,
+                                     offsets = self._sigoffset,
                                      rbins = self.rbins)
             
             #optionally specify integration tolerances
-            self.sigma_nfw = smd.sigma_nfw(epsabs=epsabs, epsrel=epsrel) 
+            self.sigma_nfw = smd.sigma_nfw() #epsabs=epsabs, epsrel=epsrel) 
             #self.sigma_nfw = smd.sigma_nfw()
             
             if offsets is None:           
