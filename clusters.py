@@ -18,7 +18,6 @@ from __future__ import absolute_import, division, print_function
 
 import numpy as np
 import pandas as pd
-from astropy.cosmology import Planck13 as cosmo
 from astropy import units
 import os
 
@@ -107,13 +106,26 @@ class ClusterEnsemble(object):
         Print a string showing the mass-richness scaling relation and
         current values of the normalization and slope.
     """
-    def __init__(self, redshifts):
+    def __init__(self, redshifts, cosmology='Planck13'):
         if type(redshifts) != np.ndarray:
             redshifts = np.array(redshifts)
         if redshifts.ndim != 1:
             raise ValueError("Input redshift array must have 1 dimension.")
         if np.sum(redshifts < 0.) > 0:
             raise ValueError("Redshifts cannot be negative.")
+        
+        if cosmology == 'Planck13':
+            from astropy.cosmology import Planck13 as cosmo
+        elif cosmology == 'WMAP9':
+            from astropy.cosmology import WMAP9 as cosmo
+        elif cosmology == 'WMAP7':
+            from astropy.cosmology import WMAP7 as cosmo
+        elif cosmology == 'WMAP5':
+            from astropy.cosmology import WMAP5 as cosmo
+        else:
+            raise ValueError('Input cosmology must be one of: \
+                              Planck13, WMAP9, WMAP7, WMAP5.')
+            
         self.describe = "Ensemble of galaxy clusters and their properties."
         self.number = redshifts.shape[0]
         self._z = redshifts
