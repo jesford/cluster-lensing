@@ -369,7 +369,8 @@ class ClusterEnsemble(object):
         """Cluster concentration parameters.
 
         c200 is calculated from m200 and z using the mass-concentration
-        relation of Dutton & Maccio 2015. Note that c200 = r200/rs.
+        relation specified when ClusterEnsemble object was created (default
+        is relation from Dutton & Maccio 2015). Note that c200 = r200/rs.
 
         :property: Returns c200
         :type: ndarray
