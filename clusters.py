@@ -51,41 +51,20 @@ class ClusterEnsemble(object):
     ----------
     z : array_like
         Redshifts for each cluster in the sample. Should be 1D.
-    cosmology : str, optional
-        Cosmology to use in calculations, default 'Planck13'. Other choices
-        are 'WMAP9', 'WMAP7', and 'WMAP5'.
-    cm : str, optional
-        Concentration-mass relation to use, default 'DuttonMaccio'. Other
-        choices are 'Prada' and 'Duffy'.
         
     Attributes
     ----------
-    z : ndarray
-        Cluster redshifts. Setter function available.
-    n200 : ndarray
-        Cluster richness. Setter function available.
-    m200 : Quantity
-        Cluster masses (1D ndarray) with astropy.units of Msun.
-    c200 : ndarray
-        Cluster concentration parameters.
-    delta_c : ndarray
-        Characteristic overdensities of the cluster halos.
-    r200 : Quantity
-        Cluster radii (1D ndarray) with astropy.units of Mpc.
-    rs : Quantity
-        Cluster scale radii (1D ndarray) with astropy.units of Mpc.
-    Dang_l : Quantity
-        Angular diameter distances from z=0 to z, (1D ndarray) with
-        astropy.units of Mpc.
-    dataframe : DataFrame
-        Cluster information in tabular form (Pandas DataFrame).
-    massrich_norm : Quantity
-        Normalization of mass-richness relation, (scalar) with
-        astropy.units of Msun. Default value is 2.7e+13 Msun. Setter
-        function available.
-    massrich_slope : float
-        Slope of mass-richness relation. Default value is 1.4. Setter
-        function available.
+    z
+    n200
+    m200
+    c200
+    delta_c
+    r200
+    rs
+    Dang_l
+    dataframe
+    massrich_norm
+    massrich_slope
     describe : str
         Short description of the ClusterEnsemble object.
     number : int
@@ -110,6 +89,15 @@ class ClusterEnsemble(object):
     massrich_parameters()
         Print a string showing the mass-richness scaling relation and
         current values of the normalization and slope.
+
+    Other Parameters
+    ----------------
+    cosmology : str, optional
+        Cosmology to use in calculations, default 'Planck13'. Other choices
+        are 'WMAP9', 'WMAP7', and 'WMAP5'.
+    cm : str, optional
+        Concentration-mass relation to use, default 'DuttonMaccio'. Other
+        choices are 'Prada' and 'Duffy'.
     """
     def __init__(self, redshifts, cosmology='Planck13', cm='DuttonMaccio'):
         if type(redshifts) != np.ndarray:
@@ -199,9 +187,11 @@ class ClusterEnsemble(object):
         propagate to all mass-dependant variables.
 
         :property: Returns cluster masses in Msun
-        :type: Quantity (1D ndarray, with astropy.units of Msun)
+        :property type: Quantity
+            1D ndarray, with astropy.units of Msun.
         :setter: Sets cluster mass values in Msun
-        :setter type: array_like        
+        :setter type: array_like
+            Should be 1D array or list, optionally with units.
         """
         if self._m200 is None:
             raise AttributeError('Attribute has not yet been initialized.')
@@ -292,7 +282,8 @@ class ClusterEnsemble(object):
         temporary variable and reset them after this change).
 
         :property: Returns normalization in Msun
-        :property type: Quantity (float, with astropy.units of Msun)
+        :property type: Quantity
+            float, with astropy.units of Msun. Default is 2.7e+13 Msun.
         :setter: Sets normalization in Msun
         :setter type: float (optionally in astropy.units of Msun)
         """
@@ -319,6 +310,7 @@ class ClusterEnsemble(object):
 
         :property: Returns slope
         :property type: float
+            Default value is 1.4.
         :setter: Sets slope
         :setter type: float
         """
