@@ -21,7 +21,6 @@ import pandas as pd
 from astropy import units
 import os
 
-from cofm import c_DuttonMaccio as calc_c200
 from smd_nfw import SurfaceMassDensity
 import utils
 
@@ -53,9 +52,12 @@ class ClusterEnsemble(object):
     z : array_like
         Redshifts for each cluster in the sample. Should be 1D.
     cosmology : str, optional
-        Cosmology to use in calculations, default 'Planck13'. Other
-        choices are 'WMAP9', 'WMAP7', and 'WMAP5'. 
-
+        Cosmology to use in calculations, default 'Planck13'. Other choices
+        are 'WMAP9', 'WMAP7', and 'WMAP5'.
+    cm : str, optional
+        Concentration-mass relation to use, default 'DuttonMaccio'. Other
+        choices are 'Prada' and 'Duffy'.
+        
     Attributes
     ----------
     z : ndarray
@@ -109,7 +111,7 @@ class ClusterEnsemble(object):
         Print a string showing the mass-richness scaling relation and
         current values of the normalization and slope.
     """
-    def __init__(self, redshifts, cosmology='Planck13'):
+    def __init__(self, redshifts, cosmology='Planck13', cm='DuttonMaccio'):
         if type(redshifts) != np.ndarray:
             redshifts = np.array(redshifts)
         if redshifts.ndim != 1:
@@ -128,7 +130,19 @@ class ClusterEnsemble(object):
         else:
             raise ValueError('Input cosmology must be one of: \
                               Planck13, WMAP9, WMAP7, WMAP5.')
-            
+        self._cosmo = cosmo
+
+        if cm == 'DuttonMaccio':
+            from cofm import c_DuttonMaccio as calc_c200
+        elif cm == 'Prada':
+            from cofm import c_Prada as calc_c200
+        elif cm == 'Duffy':
+            from cofm import c_Duffy as calc_c200
+        else:
+            raise ValueError('Input concentration-mass relation must be \
+                              one of: DuttonMaccio, Prada, Duffy.')
+        self._calc_c200 = calc_c200
+        
         self.describe = "Ensemble of galaxy clusters and their properties."
         self.number = redshifts.shape[0]
         self._z = redshifts
@@ -236,9 +250,9 @@ class ClusterEnsemble(object):
         #Changes the values of the cluster z's and z-dependant variables.
         self._z = utils.check_units_and_type(redshifts, None,
                                              num = self.number)
-        self._Dang_l = cosmo.angular_diameter_distance(self._z)
+        self._Dang_l = self._cosmo.angular_diameter_distance(self._z)
         self._df['z'] = pd.Series(self._z, index = self._df.index)
-        self._rho_crit = cosmo.critical_density(self._z)
+        self._rho_crit = self._cosmo.critical_density(self._z)
         if self._n200 is not None:
             self._update_dependant_variables()        
 
@@ -397,7 +411,7 @@ class ClusterEnsemble(object):
         
     def _calculate_concentrations(self):
         #calculate c200 from m200 and z (using cofm.py)
-        self._c200 = calc_c200(self._z,self._m200)
+        self._c200 = self._calc_c200(self._z,self._m200)
         self._df['c200'] = pd.Series(self._c200, index = self._df.index)
         self._calculate_deltac()
         
