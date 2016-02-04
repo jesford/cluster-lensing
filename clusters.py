@@ -52,6 +52,9 @@ class ClusterEnsemble(object):
     ----------
     z : array_like
         Redshifts for each cluster in the sample. Should be 1D.
+    cosmology : str, optional
+        Cosmology to use in calculations, default 'Planck13'. Other
+        choices are 'WMAP9', 'WMAP7', and 'WMAP5'. 
 
     Attributes
     ----------
