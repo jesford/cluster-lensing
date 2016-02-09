@@ -6,6 +6,36 @@ from smd_nfw import SurfaceMassDensity
 
 
 #------------------------------------------------------------------------------
+#test midpoint integration
+
+from smd_nfw import midpoint
+
+def test_midpoint_linear():
+    x = np.linspace(0,10,10)
+    y = x
+    integral = midpoint(y,x=x)
+    assert_allclose(integral, 50.)
+    
+    dx = float(x[1]-x[0])
+    print('dx', dx)
+    integral2 = midpoint(y,dx=dx)
+    assert_allclose(integral2, 50.)
+
+def test_midpoint_linear_neg():
+    x = np.linspace(4,10,6)
+    y = -1.*x
+    integral = midpoint(y,x=x)
+    assert_allclose(integral, -42.)    
+
+def test_midpoint_quadratic():
+    x = np.linspace(0,10,100)
+    y = x**2
+    integral = midpoint(y,x=x)
+    # exact integral would be 333.3333...
+    # but midpoint should yield approx 333.3503
+    assert_allclose(integral, 333.35, atol=0.01)
+
+#------------------------------------------------------------------------------
 #test units of inputs
 
 ncl = 3
