@@ -1,14 +1,13 @@
 import numpy as np
-from astropy import units
 
-def check_units_and_type(input, expected_units, num = None,
-                         is_scalar = False):
+
+def check_units_and_type(input, expected_units, num=None, is_scalar=False):
     """Check whether variable has expected units and type.
 
     If input does not have units and expected units is not None, then the
     output will be assigned those units. If input has units that conflict
     with expected units a ValueError will be raised.
-    
+
     Parameters
     ----------
     input : array_like or float
@@ -28,31 +27,31 @@ def check_units_and_type(input, expected_units, num = None,
         Returns the input array or scalar with expected units, unless a
         conflict of units or array length occurs, which raise errors.
     """
-    if hasattr(input, 'unit'):    #check units
+    if hasattr(input, 'unit'):    # check units
         if expected_units is None:
             raise ValueError('Expecting dimensionless input')
         elif input.unit != expected_units:
             raise ValueError('Expecting input units of ' + str(expected_units))
         else:
             dimensionless = input.value
-        
+
     else:
         dimensionless = input
 
-    #check its a 1D array and/or convert list to array
-    if is_scalar == False:
+    # check its a 1D array and/or convert list to array
+    if is_scalar is False:
         dimensionfull = check_array_or_list(dimensionless)
     else:
         dimensionfull = dimensionless
 
-    #include units if appropriate
+    # include units if appropriate
     if expected_units is not None:
         dimensionfull = dimensionfull * expected_units
 
-    #check array length if appropriate
+    # check array length if appropriate
     if num is not None:
         check_input_size(dimensionfull, num)
-        
+
     return dimensionfull
 
 
@@ -69,10 +68,10 @@ def check_array_or_list(input):
 
     if output.ndim != 1:
         raise ValueError('Input array must have 1 dimension.')
-    
+
     if np.sum(output < 0.) > 0:
             raise ValueError("Input array values cannot be negative.")
-    
+
     return output
 
 
@@ -81,5 +80,3 @@ def check_input_size(array, num):
     if array.shape[0] != num:
         raise ValueError('Input arrays must have the same length (the \
                           number of clusters).')
-
-
