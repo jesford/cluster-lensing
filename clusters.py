@@ -487,16 +487,6 @@ class ClusterEnsemble(object):
                                      offsets = self._sigoffset,
                                      rbins = self.rbins)
             
-            #optionally specify integration tolerances
-            self.sigma_nfw = smd.sigma_nfw() #epsabs=epsabs, epsrel=epsrel) 
-            #self.sigma_nfw = smd.sigma_nfw()
-            
-            if offsets is None:           
-                self.deltasigma_nfw = smd.deltasigma_nfw() #not yet implemented for offsets
-            #else:
-                #raise ValueError("Python does not yet calculate offset profiles. Use the c option.\n")
-
-
-
-                
+            self.sigma_nfw = smd.sigma_nfw()
+            self.deltasigma_nfw = smd.deltasigma_nfw()
 
