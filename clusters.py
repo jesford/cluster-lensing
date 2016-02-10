@@ -450,14 +450,13 @@ class ClusterEnsemble(object):
 
         self.rbins = utils.check_units_and_type(rbins, units.Mpc)
 
-        rhoc4output = self._rho_crit.to(units.Msun / units.pc**3)
-
         if use_c:
+            rhoc4c = self._rho_crit.to(units.Msun / units.pc**3)
             # --------
             # the old c way
             smdout = np.transpose(np.vstack(([self.rs],
                                             [self.delta_c],
-                                            [rhoc4output],
+                                            [rhoc4c],
                                             [self._sigoffset])))
             np.savetxt('smd_in1.dat', np.transpose(self.rbins), fmt='%15.8g')
             np.savetxt('smd_in2.dat', smdout, fmt='%15.8g')
@@ -475,9 +474,10 @@ class ClusterEnsemble(object):
 
         else:
             # the python way
+            rhoc4py = self._rho_crit.to(units.Msun/units.pc**2/units.Mpc)
             smd = SurfaceMassDensity(self.rs,
                                      self.delta_c,
-                                     rhoc4output,
+                                     rhoc4py,
                                      offsets=self._sigoffset,
                                      rbins=self.rbins)
 
