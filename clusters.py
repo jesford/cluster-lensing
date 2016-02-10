@@ -1,7 +1,7 @@
 """Galaxy Cluster Ensemble Calculations.
 
 Cluster mass-richness and mass-concentration scaling relations, and NFW
-halo profiles for weak lensing shear and magnification, including the 
+halo profiles for weak lensing shear and magnification, including the
 effects of cluster miscentering offsets.
 
 This framework calculates properties and profiles for every individual
@@ -10,9 +10,6 @@ measured stacked weak lensing profiles, e.g. when you want to account for
 the full redshift, mass, and/or centroid offset distributions, and avoid
 fitting a single average mass at a single effective redshift.
 """
-
-#Useful documentation site:
-#https://github.com/numpy/numpy/blob/master/doc/HOWTO_DOCUMENT.rst.txt
 
 from __future__ import absolute_import, division, print_function
 
@@ -51,7 +48,7 @@ class ClusterEnsemble(object):
     ----------
     z : array_like
         Redshifts for each cluster in the sample. Should be 1D.
-        
+
     Attributes
     ----------
     z
@@ -106,7 +103,7 @@ class ClusterEnsemble(object):
             raise ValueError("Input redshift array must have 1 dimension.")
         if np.sum(redshifts < 0.) > 0:
             raise ValueError("Redshifts cannot be negative.")
-        
+
         if cosmology == 'Planck13':
             from astropy.cosmology import Planck13 as cosmo
         elif cosmology == 'WMAP9':
@@ -130,12 +127,12 @@ class ClusterEnsemble(object):
             raise ValueError('Input concentration-mass relation must be \
                               one of: DuttonMaccio, Prada, Duffy.')
         self._calc_c200 = calc_c200
-        
+
         self.describe = "Ensemble of galaxy clusters and their properties."
         self.number = redshifts.shape[0]
         self._z = redshifts
         self._rho_crit = cosmo.critical_density(self._z)
-        self._massrich_norm = 2.7*10**13 * units.Msun 
+        self._massrich_norm = 2.7 * (10**13) * units.Msun
         self._massrich_slope = 1.4
         self._df = pd.DataFrame(self._z, columns=['z'])
         self._Dang_l = cosmo.angular_diameter_distance(self._z)
@@ -145,7 +142,7 @@ class ClusterEnsemble(object):
         self._rs = None
         self._c200 = None
         self._deltac = None
-        
+
     @property
     def n200(self):
         """Cluster richness values.
@@ -169,10 +166,10 @@ class ClusterEnsemble(object):
 
     @n200.setter
     def n200(self, richness):
-        #Creates/updates values of cluster N200s & dependant variables.
+        # Creates/updates values of cluster N200s & dependant variables.
         self._n200 = utils.check_units_and_type(richness, None,
-                                                num = self.number)
-        self._df['n200'] = pd.Series(self._n200, index = self._df.index)
+                                                num=self.number)
+        self._df['n200'] = pd.Series(self._n200, index=self._df.index)
         self._richness_to_mass()
 
     @property
@@ -200,30 +197,30 @@ class ClusterEnsemble(object):
 
     @m200.setter
     def m200(self, mass):
-        #Creates/updates values of cluster M200s & dependant variables.
+        # Creates/updates values of cluster M200s & dependant variables.
         self._m200 = utils.check_units_and_type(mass, units.Msun,
-                                                num = self.number)
-        self._df['m200'] = pd.Series(self._m200, index = self._df.index)
+                                                num=self.number)
+        self._df['m200'] = pd.Series(self._m200, index=self._df.index)
         self._mass_to_richness()
-                
+
     def _richness_to_mass(self):
-        #Calculates M_200 for simple power-law scaling relation
-        #(with default parameters from arXiv:1409.3571)
-        self._m200 = self._massrich_norm * ((self._n200/20.) **
+        # Calculates M_200 for simple power-law scaling relation
+        # (with default parameters from arXiv:1409.3571)
+        self._m200 = self._massrich_norm * ((self._n200 / 20.) **
                                             self._massrich_slope)
-        self._df['m200'] = pd.Series(self._m200, index = self._df.index)
+        self._df['m200'] = pd.Series(self._m200, index=self._df.index)
         self._update_dependant_variables()
-        
+
     def _mass_to_richness(self):
-        #Calculates N_200 for simple power-law scaling relation.
-        #Inverse of _richness_to_mass() function.
+        # Calculates N_200 for simple power-law scaling relation.
+        # Inverse of _richness_to_mass() function.
         n200 = 20. * (self._m200 /
                       self._massrich_norm)**(1. / self._massrich_slope)
-        #note: units cancel but n200 is still a Quantity
+        # note: units cancel but n200 is still a Quantity
         self._n200 = n200.value
-        self._df['n200'] = pd.Series(self._n200, index = self._df.index)
+        self._df['n200'] = pd.Series(self._n200, index=self._df.index)
         self._update_dependant_variables()
-        
+
     @property
     def z(self):
         """Cluster redshifts.
@@ -237,21 +234,20 @@ class ClusterEnsemble(object):
 
     @z.setter
     def z(self, redshifts):
-        #Changes the values of the cluster z's and z-dependant variables.
-        self._z = utils.check_units_and_type(redshifts, None,
-                                             num = self.number)
+        # Changes the values of the cluster z's and z-dependant variables.
+        self._z = utils.check_units_and_type(redshifts, None, num=self.number)
         self._Dang_l = self._cosmo.angular_diameter_distance(self._z)
-        self._df['z'] = pd.Series(self._z, index = self._df.index)
+        self._df['z'] = pd.Series(self._z, index=self._df.index)
         self._rho_crit = self._cosmo.critical_density(self._z)
         if self._n200 is not None:
-            self._update_dependant_variables()        
+            self._update_dependant_variables()
 
     def _update_dependant_variables(self):
         self._calculate_r200()
         self._calculate_concentrations()
         self._calculate_rs()
-        #what else depends on z or m or?
-                            
+        # what else depends on z or m or?
+
     @property
     def Dang_l(self):
         """Angular diameter distances to clusters.
@@ -259,8 +255,8 @@ class ClusterEnsemble(object):
         :property: Returns distances in Mpc
         :type: Quantity (1D ndarray, with astropy.units of Mpc)
         """
-        return self._Dang_l        
-        
+        return self._Dang_l
+
     @property
     def dataframe(self):
         """Pandas DataFrame of cluster properties.
@@ -269,7 +265,7 @@ class ClusterEnsemble(object):
         :type: pandas.core.frame.DataFrame
         """
         return self._df
-       
+
     @property
     def massrich_norm(self):
         """Normalization of Mass-Richness relation:
@@ -292,11 +288,11 @@ class ClusterEnsemble(object):
     @massrich_norm.setter
     def massrich_norm(self, norm):
         self._massrich_norm = utils.check_units_and_type(norm, units.Msun,
-                                                         is_scalar = True)
-        #behavior is to convert current n200 -> new m200
+                                                         is_scalar=True)
+        # behavior is to convert current n200 -> new m200
         if hasattr(self, 'n200'):
             self._richness_to_mass()
-        
+
     @property
     def massrich_slope(self):
         """Slope of Mass-Richness relation:
@@ -322,7 +318,7 @@ class ClusterEnsemble(object):
             self._massrich_slope = slope
         else:
             raise TypeError('Expecting input type as float')
-        #behavior is to convert current n200 -> new m200
+        # behavior is to convert current n200 -> new m200
         if hasattr(self, 'n200'):
             self._richness_to_mass()
 
@@ -331,13 +327,13 @@ class ClusterEnsemble(object):
         print("\nMass-Richness Power Law: M200 = norm * (N200 / 20) ^ slope")
         print("   norm:", self._massrich_norm)
         print("   slope:", self._massrich_slope)
-        
-    def show(self, notebook = notebook_display):
+
+    def show(self, notebook=notebook_display):
         """Display cluster properties and scaling relation parameters."""
         print("\nCluster Ensemble:")
-        if notebook == True:
+        if notebook is True:
             display(self._df)
-        elif notebook == False:
+        elif notebook is False:
             print(self._df)
         self.massrich_parameters()
 
@@ -355,7 +351,7 @@ class ClusterEnsemble(object):
             raise AttributeError('Attribute has not yet been initialized.')
         else:
             return self._r200
-    
+
     @property
     def c200(self):
         """Cluster concentration parameters.
@@ -371,7 +367,7 @@ class ClusterEnsemble(object):
             raise AttributeError('Attribute has not yet been initialized.')
         else:
             return self._c200
-    
+
     @property
     def rs(self):
         """Cluster scale radii.
@@ -390,38 +386,38 @@ class ClusterEnsemble(object):
 
         :property: Returns characteristic overdensity
         :type: ndarray
-        """        
+        """
         if self._deltac is None:
             raise AttributeError('Attribute has not yet been initialized.')
         else:
             return self._deltac
-        
+
     def _calculate_r200(self):
-        #calculate r200 from m200
-        radius_200 = (3.*self._m200 / (800.*np.pi*self._rho_crit))**(1./3.)
+        # calculate r200 from m200
+        radius_200 = (3. * self._m200 / (800. * np.pi *
+                                         self._rho_crit))**(1. / 3.)
         self._r200 = radius_200.to(units.Mpc)
-        self._df['r200'] = pd.Series(self._r200, index = self._df.index)
-        
+        self._df['r200'] = pd.Series(self._r200, index=self._df.index)
+
     def _calculate_concentrations(self):
-        #calculate c200 from m200 and z (using cofm.py)
-        self._c200 = self._calc_c200(self._z,self._m200)
-        self._df['c200'] = pd.Series(self._c200, index = self._df.index)
+        # calculate c200 from m200 and z (using cofm.py)
+        self._c200 = self._calc_c200(self._z, self._m200)
+        self._df['c200'] = pd.Series(self._c200, index=self._df.index)
         self._calculate_deltac()
-        
+
     def _calculate_rs(self):
-        #cluster scale radius
+        # cluster scale radius
         self._rs = self._r200 / self._c200
-        self._df['rs'] = pd.Series(self._rs, index = self._df.index)
+        self._df['rs'] = pd.Series(self._rs, index=self._df.index)
 
     def _calculate_deltac(self):
-        #calculate concentration parameter from c200
-        top = (200./3.)*self._c200**3.
-        bottom = np.log(1.+self._c200)-(self._c200/(1.+self._c200))
-        self._deltac = top/bottom
-        self._df['delta_c'] = pd.Series(self._deltac, index = self._df.index)
+        # calculate concentration parameter from c200
+        top = (200. / 3.) * self._c200**3.
+        bottom = np.log(1. + self._c200) - (self._c200 / (1. + self._c200))
+        self._deltac = top / bottom
+        self._df['delta_c'] = pd.Series(self._deltac, index=self._df.index)
 
-    def calc_nfw(self, rbins, offsets = None, use_c = True,
-                 epsabs=0.1, epsrel=0.1):
+    def calc_nfw(self, rbins, offsets=None, use_c=True):
         """Calculates Sigma and DeltaSigma profiles.
 
         Generates the surface mass density (sigma_nfw attribute of parent
@@ -429,7 +425,7 @@ class ClusterEnsemble(object):
         attribute of parent object) profiles of each cluster, assuming a
         spherical NFW model. Optionally includes the effect of cluster
         miscentering offsets.
-        
+
         Parameters
         ----------
         rbins : array_like
@@ -439,7 +435,7 @@ class ClusterEnsemble(object):
             Parameter describing the width (in Mpc) of the Gaussian
             distribution of miscentering offsets. Should be 1D, optionally
             with astropy.units of Mpc.
-        use_c : bool, optional    
+        use_c : bool, optional
             Sets whether to use the faster c implementation of calculation
             (use_c=True, default), or the Python version (use_c=False).
         epsabs, epsrel : float, optional
@@ -447,46 +443,43 @@ class ClusterEnsemble(object):
             Python implementation of the miscentering calculations.
         """
         if offsets is None:
-            self._sigoffset = np.zeros(self.number)*units.Mpc
+            self._sigoffset = np.zeros(self.number) * units.Mpc
         else:
             self._sigoffset = utils.check_units_and_type(offsets, units.Mpc,
-                                                         num = self.number)
+                                                         num=self.number)
 
         self.rbins = utils.check_units_and_type(rbins, units.Mpc)
 
+        rhoc4output = self._rho_crit.to(units.Msun / units.pc**3)
 
         if use_c:
-            #--------
-            #the old c way
+            # --------
+            # the old c way
             smdout = np.transpose(np.vstack(([self.rs],
                                             [self.delta_c],
-                                            [self._rho_crit.to(units.Msun/
-                                                            units.pc**3)],
+                                            [rhoc4output],
                                             [self._sigoffset])))
             np.savetxt('smd_in1.dat', np.transpose(self.rbins), fmt='%15.8g')
             np.savetxt('smd_in2.dat', smdout, fmt='%15.8g')
-            os.system('./smd_nfw')    #c program does the calculations
-            sigma_nfw = np.loadtxt('sigma.dat') 
+            os.system('./smd_nfw')    # c program does the calculations
+            sigma_nfw = np.loadtxt('sigma.dat')
             deltasigma_nfw = np.loadtxt('deltasigma.dat')
             os.system('rm -f smd_in1.dat')
             os.system('rm -f smd_in2.dat')
             os.system('rm -f sigma.dat')
             os.system('rm -f deltasigma.dat')
-            #--------
+            # --------
 
-            #if offsets is None:
-            self.sigma_nfw = sigma_nfw * units.Msun/(units.pc**2)
-            self.deltasigma_nfw = deltasigma_nfw * units.Msun/(units.pc**2)
-            
+            self.sigma_nfw = sigma_nfw * units.Msun / (units.pc**2)
+            self.deltasigma_nfw = deltasigma_nfw * units.Msun / (units.pc**2)
+
         else:
-            #the python way
+            # the python way
             smd = SurfaceMassDensity(self.rs,
                                      self.delta_c,
-                                     self._rho_crit.to(units.Msun/units.pc**2/
-                                                       units.Mpc),
-                                     offsets = self._sigoffset,
-                                     rbins = self.rbins)
-            
+                                     rhoc4output,
+                                     offsets=self._sigoffset,
+                                     rbins=self.rbins)
+
             self.sigma_nfw = smd.sigma_nfw()
             self.deltasigma_nfw = smd.deltasigma_nfw()
-
