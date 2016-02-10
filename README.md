@@ -31,5 +31,7 @@ download the code for doing
 and for calculating the
 [NFW profiles](https://github.com/jesford/smd-nfw). The
 latter of these is currently being entirely revamped (it was
-previously only implemented in
-c, and we are adding a python option), so check back later for updates.
+previously only implemented in C, has recently been translated to
+Python, but still has some issues to work out). Soon the scattered
+bits and pieces will be collected into an organized package, so check
+back later for updates.
