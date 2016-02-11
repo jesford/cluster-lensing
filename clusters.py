@@ -474,7 +474,7 @@ class ClusterEnsemble(object):
 
         else:
             # the python way
-            rhoc4py = self._rho_crit.to(units.Msun/units.pc**2/units.Mpc)
+            rhoc4py = self._rho_crit.to(units.Msun / units.pc**2 / units.Mpc)
             smd = SurfaceMassDensity(self.rs,
                                      self.delta_c,
                                      rhoc4py,
