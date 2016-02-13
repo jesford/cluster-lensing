@@ -1,4 +1,7 @@
-"""Add the module level docstring..."""
+"""NFW profiles for shear and magnification.
+
+Surface mass density and differential surface mass density calculations for NFW dark matter halos, with and without the effects of miscentering offsets.
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -134,7 +137,7 @@ class SurfaceMassDensity(object):
 
     See Also
     ----------
-    ClusterEnsemble : parameters and profiles for a sample of clusters.
+    ClusterEnsemble : Parameters and profiles for a sample of clusters.
         This class provides an interface to SurfaceMassDensity, and tracks
         a DataFrame of parameters as well as nfw profiles for many clusters
         at once, only requiring the user to specify cluster z and richness,
