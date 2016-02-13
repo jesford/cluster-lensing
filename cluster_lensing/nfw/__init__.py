@@ -1,1 +1,1 @@
-from .nfw import *
+from .nfw import *  # noqa

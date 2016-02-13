@@ -1,1 +1,1 @@
-from . import clusters, nfw
+from . import clusters, nfw  # noqa
