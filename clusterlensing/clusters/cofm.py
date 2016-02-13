@@ -11,11 +11,10 @@ from astropy.cosmology import Planck13 as cosmo
 h = cosmo.h
 Om_M = cosmo.Om0
 Om_L = 1. - Om_M
-H0 = (100. * h) * 10**3  # [m/s/Mpc]
 
 
-def test_Inputs(z, m):
-
+def check_inputs(z, m):
+    """Check inputs are arrays of same length or array and a scalar."""
     try:
         nz = len(z)
     except TypeError:
@@ -47,13 +46,18 @@ def c_Prada(z, m, h=h, Om_M=Om_M, Om_L=Om_L):
     ----------
     z : float or array_like
         Redshift(s) of halos.
-
     m : float or array_like
         Mass(es) of halos (m200 definition), in units of solar masses.
+    h : float, optional
+        Hubble parameter. Default is from Planck13.
+    Om_M : float, optional
+        Matter density parameter. Default is from Planck13.
+    Om_L : float, optional
+        Cosmological constant density parameter. Default is from Planck13.
 
     Returns
     ----------
-    numpy.ndarray
+    ndarray
         Concentration values (c200) for halos.
 
     Notes
@@ -72,8 +76,7 @@ def c_Prada(z, m, h=h, Om_M=Om_M, Om_L=Om_L):
     423, Issue 4, pp. 3018-3030, 2012.
     """
 
-    # check compatibility of inputs, convert to numpy arrays if necessary
-    z, m = test_Inputs(z, m)
+    z, m = check_inputs(z, m)
 
     # EQ 13
     x = (1. / (1. + z)) * (Om_L / Om_M)**(1. / 3.)
@@ -139,13 +142,14 @@ def c_DuttonMaccio(z, m, h=h):
     ----------
     z : float or array_like
         Redshift(s) of halos.
-
     m : float or array_like
         Mass(es) of halos (m200 definition), in units of solar masses.
+    h : float, optional
+        Hubble parameter. Default is from Planck13.
 
     Returns
     ----------
-    numpy.ndarray
+    ndarray
         Concentration values (c200) for halos.
 
     References
@@ -158,8 +162,7 @@ def c_DuttonMaccio(z, m, h=h):
     p.3359-3374, 2014.
     """
 
-    # check compatibility of inputs, convert to numpy arrays if necessary
-    z, m = test_Inputs(z, m)
+    z, m = check_inputs(z, m)
 
     a = 0.52 + 0.385 * np.exp(-0.617 * (z**1.21))  # EQ 10
     b = -0.101 + 0.026 * z                         # EQ 11
@@ -178,13 +181,14 @@ def c_Duffy(z, m, h=h):
     ----------
     z : float or array_like
         Redshift(s) of halos.
-
     m : float or array_like
         Mass(es) of halos (m200 definition), in units of solar masses.
+    h : float, optional
+        Hubble parameter. Default is from Planck13.
 
     Returns
     ----------
-    numpy.ndarray
+    ndarray
         Concentration values (c200) for halos.
 
     References
@@ -202,8 +206,7 @@ def c_Duffy(z, m, h=h):
     -0.084,-0.47) in Table 1 of Duffy et al. (2008).
     """
 
-    # check compatibility of inputs, convert to numpy arrays if necessary
-    z, m = test_Inputs(z, m)
+    z, m = check_inputs(z, m)
 
     M_pivot = 2.e12 / h  # [M_solar]
 
