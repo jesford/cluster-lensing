@@ -18,7 +18,7 @@ import pandas as pd
 from astropy import units
 import os
 
-from smd_nfw import SurfaceMassDensity
+from nfw import SurfaceMassDensity
 import cofm
 import utils
 

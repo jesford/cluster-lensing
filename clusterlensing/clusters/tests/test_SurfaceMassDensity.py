@@ -2,13 +2,13 @@ import numpy as np
 from numpy.testing import assert_equal, assert_allclose, assert_raises
 from astropy import units
 
-from smd_nfw import SurfaceMassDensity
+from nfw import SurfaceMassDensity
 
 
 # ----------------------------
 # test midpoint integration
 
-from smd_nfw import midpoint
+from nfw import midpoint
 
 
 def test_midpoint_linear():
