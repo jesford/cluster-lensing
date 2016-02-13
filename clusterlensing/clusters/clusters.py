@@ -19,6 +19,7 @@ from astropy import units
 import os
 
 from smd_nfw import SurfaceMassDensity
+import cofm
 import utils
 
 try:
@@ -118,15 +119,14 @@ class ClusterEnsemble(object):
         self._cosmo = cosmo
 
         if cm == 'DuttonMaccio':
-            from cofm import c_DuttonMaccio as calc_c200
+            self._cm = 'DuttonMaccio'
         elif cm == 'Prada':
-            from cofm import c_Prada as calc_c200
+            self._cm = 'Prada'
         elif cm == 'Duffy':
-            from cofm import c_Duffy as calc_c200
+            self._cm = 'Duffy'
         else:
             raise ValueError('Input concentration-mass relation must be \
                               one of: DuttonMaccio, Prada, Duffy.')
-        self._calc_c200 = calc_c200
 
         self.describe = "Ensemble of galaxy clusters and their properties."
         self.number = redshifts.shape[0]
@@ -400,8 +400,17 @@ class ClusterEnsemble(object):
         self._df['r200'] = pd.Series(self._r200, index=self._df.index)
 
     def _calculate_concentrations(self):
-        # calculate c200 from m200 and z (using cofm.py)
-        self._c200 = self._calc_c200(self._z, self._m200)
+        if self._cm == 'DuttonMaccio':
+            self._c200 = cofm.c_DuttonMaccio(self._z, self._m200, h=0.7)
+            #, h=self._cosmo.h)
+        elif self._cm == 'Prada':
+            self._c200 = cofm.c_Prada(self._z, self._m200, h=0.7,
+                                      Om_M=0.3, Om_L=0.7)
+            #, h=self._cosmo.h, Om_M=self._cosmo.Om0, Om_L=1-self._cosmo.Om0)
+        elif self._cm == 'Duffy':
+            self._c200 = cofm.c_Duffy(self._z, self._m200, h=0.7)
+            #, h=self._cosmo.h)
+            
         self._df['c200'] = pd.Series(self._c200, index=self._df.index)
         self._calculate_deltac()
 
