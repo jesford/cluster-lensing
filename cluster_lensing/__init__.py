@@ -1,2 +1,2 @@
-from . import clusters, nfw, cofm  # noqa
-__all__ = ["clusters", "nfw", "cofm"]
+from . import clusters, nfw  # noqa
+#__all__ = ["clusters", "nfw", "cofm"]
