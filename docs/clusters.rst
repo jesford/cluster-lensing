@@ -1,7 +1,7 @@
 clusters module
 ===============
 
-.. automodule:: clusters
+.. automodule:: clusterlensing.clusters
     :members:
     :undoc-members:
     :show-inheritance:

@@ -1,7 +1,7 @@
 cofm module
 ===============
 
-.. automodule:: cofm
+.. automodule:: clusterlensing.cofm
     :members:
     :undoc-members:
     :show-inheritance:

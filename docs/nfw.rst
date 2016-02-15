@@ -1,7 +1,7 @@
 nfw module
 ===============
 
-.. automodule:: nfw
+.. automodule:: clusterlensing.nfw
     :members:
     :undoc-members:
     :show-inheritance:

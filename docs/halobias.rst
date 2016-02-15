@@ -1,7 +1,7 @@
 halobias module
 ===============
 
-.. automodule:: halobias
+.. automodule:: clusterlensing.halobias
     :members:
     :undoc-members:
     :show-inheritance:
