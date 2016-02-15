@@ -1,4 +1,6 @@
-from . import *   # noqa
-#from .clusters import ClusterEnsemble, cofm, halobias
-#from .nfw import SurfaceMassDensity
+from .clusters import ClusterEnsemble
+from .nfw import SurfaceMassDensity
+import cofm
+import halobias
+#from . import *   # noqa
 #__all__ = ["clusters", "nfw", "cofm"]
