@@ -2,7 +2,7 @@ import numpy as np
 from numpy.testing import assert_allclose
 from astropy.cosmology import Planck13 as cosmo
 
-import halobias
+from clusterlensing.halobias import bias
 
 
 def test_Mnl_z0():
@@ -10,7 +10,7 @@ def test_Mnl_z0():
     h = cosmo.h
 
     def _check_bias_z0(m, ans):
-        b = halobias.bias(m, z)
+        b = bias(m, z)
         assert_allclose(b, ans)
 
     # integer multiples of non-linear mass

@@ -18,9 +18,9 @@ import pandas as pd
 from astropy import units
 import os
 
-from nfw import SurfaceMassDensity
-import cofm
-import utils
+from clusterlensing.nfw import SurfaceMassDensity
+from clusterlensing import cofm
+from clusterlensing import utils
 
 try:
     from IPython.display import display

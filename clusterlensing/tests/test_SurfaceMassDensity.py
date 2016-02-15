@@ -2,13 +2,11 @@ import numpy as np
 from numpy.testing import assert_equal, assert_allclose, assert_raises
 from astropy import units
 
-from nfw import SurfaceMassDensity
+from clusterlensing.nfw import SurfaceMassDensity, midpoint
 
 
 # ----------------------------
 # test midpoint integration
-
-from nfw import midpoint
 
 
 def test_midpoint_linear():

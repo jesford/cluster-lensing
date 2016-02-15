@@ -12,7 +12,7 @@ from scipy.integrate import simps
 #romb, cumtrapz
 #quad, dblquad
 
-import utils
+from clusterlensing import utils
 
 
 def midpoint(y, x=None, dx=1., axis=-1):
