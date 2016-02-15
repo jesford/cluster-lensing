@@ -2,7 +2,7 @@ Tutorial
 ========
 
 A complete walkthrough of all the functionality and tools available in this project
-is provided in this Jupyter Notebook: `demo.ipynb <https://github.com/jesford/cluster-lensing/blob/master/demo.ipynb>`_.
+is provided in this Jupyter Notebook: `demo.ipynb <https://github.com/jesford/clusterlensing/blob/master/demo.ipynb>`_.
 
 A simple example use case is as follows. Suppose you want the
 differential surface mass density :math:`\Delta\Sigma(r)` profiles for
@@ -11,7 +11,7 @@ a handful of galaxy clusters. Lets say they are at redshifts :math:`z
 \times 10^{15}`,  :math:`5 \times 10^{14}`, and :math:`2 \times
 10^{14} M_{\odot}`, respectively.
 
-After installing the :py:obj:`cluster-lensing` package, all we have to do is:
+After installing the :py:obj:`clusterlensing` package, all we have to do is:
 
 .. code-block:: python
 		
@@ -52,9 +52,9 @@ offset distribution.
     11.85804354    9.47045213    7.76873388    6.50334115]] solMass / pc2
 
 The above example illustrates a really simple use case, but
-:py:obj:`cluster-lensing` provides far more functionality. You can specify
+:py:obj:`clusterlensing` provides far more functionality. You can specify
 cosmologies and mass-concentration relations to use for the NFW
 calculations. Additionally, if you don't have mass estimates at all,
 you can empoy a built-in (or customizeable) mass-richness scaling
 relation to easily convert richness estimates into masses. Be sure to
-check out the `Jupyter Notebook demonstration <https://github.com/jesford/cluster-lensing/blob/master/demo.ipynb>`_ of these tools.
+check out the `Jupyter Notebook demonstration <https://github.com/jesford/clusterlensing/blob/master/demo.ipynb>`_ of these tools.
