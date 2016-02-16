@@ -248,7 +248,7 @@ def test_nfw_ccalc_centered():
 
     for i, n200 in enumerate(toy_data_n200):
         c.n200 = n200
-        c.calc_nfw(toy_data_rbins)
+        c.calc_nfw(toy_data_rbins, use_c=True)
         for j in range(c.z.shape[0]):
             yield _check_sigma, i, j
             yield _check_deltasigma, i, j
@@ -266,7 +266,7 @@ def test_nfw_ccalc_offset():
 
     for i, n200 in enumerate(toy_data_n200):
         c.n200 = n200
-        c.calc_nfw(toy_data_rbins, offsets=toy_data_offset)
+        c.calc_nfw(toy_data_rbins, offsets=toy_data_offset, use_c=True)
         for j in range(c.z.shape[0]):
             yield _check_sigma, i, j
             yield _check_deltasigma, i, j
@@ -288,7 +288,7 @@ def test_nfw_centered():
 
     for i, n200 in enumerate(toy_data_n200):
         c.n200 = n200
-        c.calc_nfw(toy_data_rbins, use_c=False)
+        c.calc_nfw(toy_data_rbins)
         for j in range(c.z.shape[0]):
             yield _check_sigma, i, j
             yield _check_deltasigma, i, j
@@ -310,7 +310,7 @@ def test_nfw_offset():
 
     for i, n200 in enumerate(toy_data_n200[:-1]):
         c.n200 = n200
-        c.calc_nfw(toy_data_rbins, offsets=toy_data_offset, use_c=False)
+        c.calc_nfw(toy_data_rbins, offsets=toy_data_offset)
         for j in range(c.z.shape[0]):
             yield _check_sigma, i, j
             #yield _check_deltasigma, i, j
@@ -337,7 +337,7 @@ def test_for_infs_in_miscentered_c_calc():
     # last element in toy_data is n200=0 -> NaN (skip for this check)
     for n200 in toy_data_n200[:-1]:
         c.n200 = n200
-        c.calc_nfw(toy_data_rbins, offsets=toy_data_offset)
+        c.calc_nfw(toy_data_rbins, offsets=toy_data_offset, use_c=True)
         for i in range(c.z.shape[0]):
             yield _check_sigma_off, c.sigma_nfw[i].value
             yield _check_deltasigma_off, c.deltasigma_nfw[i].value

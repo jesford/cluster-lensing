@@ -426,7 +426,7 @@ class ClusterEnsemble(object):
         self._deltac = top / bottom
         self._df['delta_c'] = pd.Series(self._deltac, index=self._df.index)
 
-    def calc_nfw(self, rbins, offsets=None, use_c=True):
+    def calc_nfw(self, rbins, offsets=None, use_c=False):
         """Calculates Sigma and DeltaSigma profiles.
 
         Generates the surface mass density (sigma_nfw attribute of parent
@@ -445,11 +445,8 @@ class ClusterEnsemble(object):
             distribution of miscentering offsets. Should be 1D, optionally
             with astropy.units of Mpc.
         use_c : bool, optional
-            Sets whether to use the faster c implementation of calculation
-            (use_c=True, default), or the Python version (use_c=False).
-        epsabs, epsrel : float, optional
-            Absolute and relative tolerances of the integration in the
-            Python implementation of the miscentering calculations.
+            Sets whether to use the Python implementation of calculation
+            (use_c=False, default), or the legacy c version (use_c=True).
         """
         if offsets is None:
             self._sigoffset = np.zeros(self.number) * units.Mpc
