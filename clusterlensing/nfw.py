@@ -315,6 +315,7 @@ class SurfaceMassDensity(object):
 
         return finalsigma
 
+    #TODO: remove mp option (and midpoint function & uses of it) before release
     def deltasigma_nfw(self, mp=False):
         """Calculate NFW differential surface mass density profile.
 
@@ -396,17 +397,27 @@ class SurfaceMassDensity(object):
             # want to integrate from 0->min(rbins) for delta_sigma(min(rbins))
             r_extended = np.hstack([r_inner, original_rbins])
 
-            # TO DO?
-            # METHOD 3: try using log bins across full range 0->max(rbins)
-            # for sigma_sm_extended, instead of inner + midpoints
-            #prec = 50
-            #r_ext_log = np.logspace(np.log10(1.e-10),
-            #                        np.log10(np.max(original_rbins)),
-            #                        num = prec)
-            #r_extended = r_ext_log
 
-            #print('r_extended\n', r_extended)
+            method3 = True
+            if method3:
+                # METHOD 3: try using LINEAR bins across full range 0->max(rbins)
+                # but denser for r < rmin
+                # LINEAR converges way faster than log for inner binning!
+                inner_prec = 20
+                innermost_sampling = 1.e-10 #anything below 1e-5 is fine
+                r_inner = np.linspace(innermost_sampling,
+                                      original_rbins.min(),
+                                      endpoint=False, num=inner_prec)                
+                outer_prec = 3 * self._nbins #2 or 3 times is fine
+                r_outer = np.linspace(original_rbins.min(),
+                                      original_rbins.max(),
+                                      endpoint=False, num = outer_prec+1)[1:]           
+                r_ext_unordered = np.concatenate([r_inner, r_outer, original_rbins])
+                r_extended = np.sort(r_ext_unordered)
+                #print('r_extended\n', r_extended)
 
+
+            
             # set temporary extended rbins, nbins, x, rs_dc_rcrit array
             self._rbins = r_extended * units.Mpc
             self._nbins = self._rbins.shape[0]
@@ -425,8 +436,15 @@ class SurfaceMassDensity(object):
                                              original_rbins.shape[0]])
 
             for i, r in enumerate(original_rbins):
-                x = r_extended[0:(i+numR_inner+1)]
-                y = sigma_sm_extended[:, 0:(i+numR_inner+1)] * x
+                if not method3:
+                    index_of_rbin = i + numR_inner #method2
+                    #print('method2')
+                else:
+                    index_of_rbin = np.where(r_extended == r)[0][0] #method3
+                    #print('method3')
+                x = r_extended[0:index_of_rbin+1]
+                #print('max(x)', x.max())
+                y = sigma_sm_extended[:, 0:index_of_rbin+1] * x
 
                 if mp is True:
                     integral = midpoint(y, x=x, axis=-1)
