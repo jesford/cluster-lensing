@@ -7,67 +7,9 @@ from __future__ import absolute_import, division, print_function
 
 import numpy as np
 from astropy import units
-from scipy.interpolate import interp1d
 from scipy.integrate import simps
-#romb, cumtrapz
-#quad, dblquad
 
 from clusterlensing import utils
-
-
-def midpoint(y, x=None, dx=1., axis=-1):
-    """Integrate using the midpoint rule.
-
-    Parameters
-    ----------
-    y : ndarray
-        Array to be integrated.
-    x : ndarray, optional
-        If given, points at which `y` is sampled.
-    dx : float, optional
-        Spacing of integration points along axis of `y`. Only used when
-        `x` is None. Default is 1.
-    axis : int, optional
-        Axis along which to integrate. Default is the last axis.
-
-    Returns
-    ----------
-    ndarray
-        Result of integrating along an axis of y.
-
-    Notes
-    ----------
-    If x is given, its first and last value are the start and end of the
-    integration region (as opposed to the midpoints of integration bins).
-    """
-    if x is None:
-        if type(dx) != float:
-            raise ValueError('type(dx) must be float.')
-        else:
-            # length of dx_array should be number of y intervals
-            dx_array = np.ones(y.shape[axis]-1)*dx
-    elif x.shape[0] != y.shape[axis]:
-        raise ValueError('x and y have incompatible shapes.')
-    else:
-        dx_array = x[1:] - x[:-1]
-
-    try:
-        xm = (x[1:] + x[:-1]) / 2.
-    except TypeError:
-        x = np.arange(0, y.shape[axis]) * dx
-        xm = (x[1:] + x[:-1]) / 2.
-
-    f = interp1d(x, y, axis=axis)
-    ym = f(xm)
-
-    yshape = ym.shape
-    xshape = [1] * len(yshape)
-    xshape[axis] = yshape[axis]
-    dx_array.shape = tuple(xshape)
-
-    integral = (ym * dx_array).sum(axis=axis)
-
-    return integral
 
 
 def _set_dimensionless_radius(self, radii=None, integration=False):
@@ -142,6 +84,21 @@ class SurfaceMassDensity(object):
         a DataFrame of parameters as well as nfw profiles for many clusters
         at once, only requiring the user to specify cluster z and richness,
         at a minimum.
+
+    References
+    ----------
+    Sigma and DeltaSigma are calculated using the formulas given in:
+
+    C.O. Wright and T.G. Brainerd, "Gravitational Lensing by NFW Halos,"
+    The Astrophysical Journal, Volume 534, Issue 1, pp. 34-40 (2000).
+
+    The offset profiles are calculated using formulas given, e.g., in
+    Equations 11-15 of:
+
+    J. Ford, L. Van Waerbeke, M. Milkeraitis, et al., "CFHTLenS: a weak
+    lensing shear analysis of the 3D-Matched-Filter galaxy clusters,"
+    Monthly Notices of the Royal Astronomical Society, Volume 447, Issue 2,
+    p.1304-1318 (2015).
     """
     def __init__(self, rs, delta_c, rho_crit, offsets=None, rbins=None):
         if rbins is None:
@@ -193,23 +150,6 @@ class SurfaceMassDensity(object):
         Quantity
             Surface mass density profiles (ndarray, in astropy.units of
             Msun/pc/pc). Each row corresponds to a single cluster halo.
-
-        Notes
-        ----------
-        Among the choices for numerical integration algorithms, the
-        following were considered:
-        (1) scipy.integrate.dblquad is the obvious choice, but is far too
-        slow because it makes of order 10^5 calls to the function to be
-        integrated, even for generous settings of epsabs, epsrel. Likely
-        it is getting stuck in non-smooth portions of the function space.
-        (2) scipy.integrate.simps is fast and converges faster than the
-        midpoint integration for both the integration over Roff and theta. 
-        (3) scipy.integrate.romb was somewhat slower than simps and as well
-        as the midpoint rule integration.
-        (4) midpoint rule integration via a Riemann Sum was about the same
-        speed as simps, and converges smoothly for both integrals, but
-        requires a larger number of bins to converge to the best estimate.
-        (5) numpy.trapz underestimates concave down functions.
         """
         def _centered_sigma(self):
             # perfectly centered cluster case
@@ -247,11 +187,11 @@ class SurfaceMassDensity(object):
             # size of "x" arrays to integrate over
             numRoff = 200
             numTh = 200  # TO DO: option for user to set this
-            #print('numRoff, numTh:', numRoff, numTh)
 
             numRbins = self._nbins
             maxsig = self._sigmaoffset.value.max()
-            # inner/outer bin edges (do NOT set endpoint=False!)
+            
+            # inner/outer bin edges
             roff_1D = np.linspace(0., 4.*maxsig, numRoff)
             theta_1D = np.linspace(0., 2.*np.pi, numTh)
             rMpc_1D = self._rbins.value
@@ -271,12 +211,10 @@ class SurfaceMassDensity(object):
             inner_integrand = sigma.value/(2.*np.pi)
 
             # ----- integrate over theta axis -----
-            # NOTE: simps converges much faster than midpoint (both do
-            # so smoothly). ~200 theta bins is good for simps.
+            # NOTE: ~200 theta bins is good for simps.
 
             sigma_of_RgivenRoff = simps(inner_integrand, x=theta_1D, axis=0,
                                         even='first')
-            #sigma_of_RgivenRoff = midpoint(inner_integrand, x=theta_1D, axis=0)
             # -------------------------------------
 
             # theta is gone, now dimensions are: (numRoff,numRbins,nlens)
@@ -288,14 +226,11 @@ class SurfaceMassDensity(object):
             dbl_integrand = sigma_of_RgivenRoff * PofRoff
 
             # ----- integrate over Roff axis -----
-            # NOTE: simps oscillates around final value, while midpoint
-            # underestimates and rises smoothly to final value.
-            # for simps ~200 roff bins is good.
+            # NOTE: simps ~200 roff bins is good.
             # (integration axis=0 after theta is gone).
 
             sigma_smoothed = simps(dbl_integrand, x=roff_1D, axis=0,
                                    even='first')
-            #sigma_smoothed = midpoint(dbl_integrand, x=roff_1D, axis=0)
             # -------------------------------------
 
             # reset _x to correspond to input rbins (default)
@@ -315,8 +250,8 @@ class SurfaceMassDensity(object):
 
         return finalsigma
 
-    #TODO: remove mp option (and midpoint function & uses of it) before release
-    def deltasigma_nfw(self, mp=False):
+
+    def deltasigma_nfw(self):
         """Calculate NFW differential surface mass density profile.
 
         Generate the surface mass density profiles of each cluster halo,
@@ -330,7 +265,6 @@ class SurfaceMassDensity(object):
             astropy.units of Msun/pc/pc). Each row corresponds to a single
             cluster halo.
         """
-
         def _centered_dsigma(self):
             # calculate g
 
@@ -381,11 +315,11 @@ class SurfaceMassDensity(object):
                 sigma_sm_rbins = self.sigma_nfw()
 
             inner_prec = 20 #maybe this should be a user specified option
-            innermost_sampling = 1.e-10 #anything below 1e-5 is fine
+            innermost_sampling = 1.e-10  # stable for anything below 1e-5
             r_inner = np.linspace(innermost_sampling,
                                   original_rbins.min(),
                                   endpoint=False, num=inner_prec)                
-            outer_prec = 3 * self._nbins #2 or 3 times is fine
+            outer_prec = 3 * self._nbins  # 2 or 3 times is fine
             r_outer = np.linspace(original_rbins.min(),
                                   original_rbins.max(),
                                   endpoint=False, num = outer_prec+1)[1:]           
@@ -409,10 +343,7 @@ class SurfaceMassDensity(object):
                 x = r_extended[0:index_of_rbin+1]
                 y = sigma_sm_extended[:, 0:index_of_rbin+1] * x
 
-                if mp is True:
-                    integral = midpoint(y, x=x, axis=-1)
-                else:
-                    integral = simps(y, x=x, axis=-1, even='first')
+                integral = simps(y, x=x, axis=-1, even='first')
 
                 # average of sigma_sm at r < rbin
                 mean_inside_sigma_sm[:, i] = (2. / r**2) * integral
@@ -441,3 +372,23 @@ class SurfaceMassDensity(object):
             finaldeltasigma = _offset_dsigma(self)
 
         return finaldeltasigma
+
+
+# Notes on Integration
+# ------------------------
+# Among the choices for numerical integration algorithms, the
+# following options were considered:
+# (1) scipy.integrate.dblquad is the obvious choice, but is far too
+# slow because it makes of order 10^5 calls to the function to be
+# integrated, even for generous settings of epsabs, epsrel. Likely
+# it is getting stuck in non-smooth portions of the function space.
+# (2) scipy.integrate.simps is fast and converges faster than the
+# midpoint integration for both the integration over Roff and theta. 
+# (3) scipy.integrate.romb was somewhat slower than simps and as well
+# as the midpoint rule integration.
+# (4) midpoint rule integration via a Riemann Sum (the choice used in
+# the previous reincarnation of this project in the C programming
+# language) is about the same speed as simps, and converges smoothly
+# for both integrals, but requires a much larger number of bins to
+# converge to the best estimate.
+# (5) numpy.trapz underestimates concave down functions.
