@@ -380,44 +380,18 @@ class SurfaceMassDensity(object):
             except AttributeError:
                 sigma_sm_rbins = self.sigma_nfw()
 
-            # get offset sigma inside min(rbins)
-            # ...could be sampled more finely both at r < and > min(rbins)...
-            numR_inner = 20  # this really affects speed!
+            inner_prec = 20 #maybe this should be a user specified option
+            innermost_sampling = 1.e-10 #anything below 1e-5 is fine
+            r_inner = np.linspace(innermost_sampling,
+                                  original_rbins.min(),
+                                  endpoint=False, num=inner_prec)                
+            outer_prec = 3 * self._nbins #2 or 3 times is fine
+            r_outer = np.linspace(original_rbins.min(),
+                                  original_rbins.max(),
+                                  endpoint=False, num = outer_prec+1)[1:]           
+            r_ext_unordered = np.concatenate([r_inner, r_outer, original_rbins])
+            r_extended = np.sort(r_ext_unordered)
 
-            # METHOD 1: this r_extended is identical to c's Rp
-            #dR_inner = original_rbins.min()/numR_inner
-            #r_inner = np.arange(0.5*dR_inner, original_rbins.min(), dR_inner)
-            #r_midpoints = 0.5 * (original_rbins[:-1] + original_rbins[1:])
-            #r_extended = np.hstack([r_inner, r_midpoints])
-
-            # METHOD 2: gives similar output to c for offset deltasigma
-            # use outer edges of rbins, starting at ~0->max(rbins)
-            r_inner = np.linspace(1.e-08, original_rbins.min(),
-                                  numR_inner, endpoint=False)
-            # want to integrate from 0->min(rbins) for delta_sigma(min(rbins))
-            r_extended = np.hstack([r_inner, original_rbins])
-
-
-            method3 = True
-            if method3:
-                # METHOD 3: try using LINEAR bins across full range 0->max(rbins)
-                # but denser for r < rmin
-                # LINEAR converges way faster than log for inner binning!
-                inner_prec = 20
-                innermost_sampling = 1.e-10 #anything below 1e-5 is fine
-                r_inner = np.linspace(innermost_sampling,
-                                      original_rbins.min(),
-                                      endpoint=False, num=inner_prec)                
-                outer_prec = 3 * self._nbins #2 or 3 times is fine
-                r_outer = np.linspace(original_rbins.min(),
-                                      original_rbins.max(),
-                                      endpoint=False, num = outer_prec+1)[1:]           
-                r_ext_unordered = np.concatenate([r_inner, r_outer, original_rbins])
-                r_extended = np.sort(r_ext_unordered)
-                #print('r_extended\n', r_extended)
-
-
-            
             # set temporary extended rbins, nbins, x, rs_dc_rcrit array
             self._rbins = r_extended * units.Mpc
             self._nbins = self._rbins.shape[0]
@@ -427,23 +401,12 @@ class SurfaceMassDensity(object):
                                                     1).repeat(self._nbins, 1)
 
             sigma_sm_extended = self.sigma_nfw()
-
-            # for Method 1, this is pretty close to c's sigma_smoothed_Rp
-            # (it is identical to 3rd-4th digit)
-            #print('sigma_sm_extended[0,:]\n', sigma_sm_extended[0,:])
-
             mean_inside_sigma_sm = np.zeros([self._nlens,
                                              original_rbins.shape[0]])
 
             for i, r in enumerate(original_rbins):
-                if not method3:
-                    index_of_rbin = i + numR_inner #method2
-                    #print('method2')
-                else:
-                    index_of_rbin = np.where(r_extended == r)[0][0] #method3
-                    #print('method3')
+                index_of_rbin = np.where(r_extended == r)[0][0]
                 x = r_extended[0:index_of_rbin+1]
-                #print('max(x)', x.max())
                 y = sigma_sm_extended[:, 0:index_of_rbin+1] * x
 
                 if mp is True:
@@ -456,12 +419,6 @@ class SurfaceMassDensity(object):
 
             mean_inside_sigma_sm = mean_inside_sigma_sm * (units.Msun /
                                                            units.pc**2)
-
-            # for Method 2, this is pretty close! (identical to 2nd-3rd digit)
-            # for Method 1, this is wildy off (factors of a few)
-            #print('mean_inside_sigma_sm[0,:]', mean_inside_sigma_sm[0,:])
-
-            #print('sigma_sm_rbins[0,:]', sigma_sm_rbins[0,:])
 
             # reset original rbins, nbins, x
             self._rbins = original_rbins * units.Mpc
