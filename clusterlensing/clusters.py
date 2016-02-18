@@ -401,16 +401,15 @@ class ClusterEnsemble(object):
 
     def _calculate_concentrations(self):
         if self._cm == 'DuttonMaccio':
-            self._c200 = cofm.c_DuttonMaccio(self._z, self._m200, h=0.7)
-            #, h=self._cosmo.h)
+            self._c200 = cofm.c_DuttonMaccio(self._z, self._m200,
+                                             h=self._cosmo.h)
         elif self._cm == 'Prada':
-            self._c200 = cofm.c_Prada(self._z, self._m200, h=0.7,
-                                      Om_M=0.3, Om_L=0.7)
-            #, h=self._cosmo.h, Om_M=self._cosmo.Om0, Om_L=1-self._cosmo.Om0)
+            self._c200 = cofm.c_Prada(self._z, self._m200, h=self._cosmo.h,
+                                      Om_M=self._cosmo.Om0,
+                                      Om_L=1-self._cosmo.Om0)
         elif self._cm == 'Duffy':
-            self._c200 = cofm.c_Duffy(self._z, self._m200, h=0.7)
-            #, h=self._cosmo.h)
-            
+            self._c200 = cofm.c_Duffy(self._z, self._m200, h=self._cosmo.h)
+
         self._df['c200'] = pd.Series(self._c200, index=self._df.index)
         self._calculate_deltac()
 
