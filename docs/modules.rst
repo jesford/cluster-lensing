@@ -9,5 +9,4 @@
    nfw
    cofm
    halobias
-   utils
 
