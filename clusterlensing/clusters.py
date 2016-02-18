@@ -448,20 +448,20 @@ class ClusterEnsemble(object):
         Other Parameters
         -------------------
         numTh : int, optional
-            Parameter passed to SurfaceMassDensity(). Number of bins to use
-            for integration over theta, for calculating offset profiles
+            Parameter to pass to SurfaceMassDensity(). Number of bins to
+            use for integration over theta, for calculating offset profiles
             (no effect for offsets=None). Default 200.
         numRoff : int, optional
-            Parameter passed to SurfaceMassDensity(). Number of bins to use
-            for integration over R_off, for calculating offset profiles
+            Parameter to pass to SurfaceMassDensity(). Number of bins to
+            use for integration over R_off, for calculating offset profiles
             (no effect for offsets=None). Default 200.
         numRinner : int, optional
-            Parameter passed to SurfaceMassDensity(). Number of bins at
+            Parameter to pass to SurfaceMassDensity(). Number of bins at
             r < min(rbins) to use for integration over Sigma(<r), for
             calculating DeltaSigma (no effect for Sigma ever, and no effect
             for DeltaSigma if offsets=None). Default 20.
         factorRouter : int, optional
-            Parameter passed to SurfaceMassDensity(). Factor increase over
+            Parameter to pass to SurfaceMassDensity(). Factor increase over
             number of rbins, at min(r) < r < max(r), of bins that will be
             used at for integration over Sigma(<r), for calculating
             DeltaSigma (no effect for Sigma, and no effect for DeltaSigma
