@@ -32,12 +32,12 @@ def test_rs_units():
 
 def test_rhoc_units():
     rhoc_unitless = rho_c.value
-    rhoc_wrongunits = rho_c.value * units.kg/units.m**3
+    rhoc_wrongunits = rho_c.value * units.kg / units.m**3
 
     # test that a dimensionless rho_c is coverted to Msun/Mpc/pc**2
     smd = SurfaceMassDensity(r_s, delta_c, rhoc_unitless,
                              offsets=sig_off, rbins=rbinarray)
-    assert_equal(smd._rho_crit.unit, units.Msun/units.Mpc/units.pc**2)
+    assert_equal(smd._rho_crit.unit, units.Msun / units.Mpc / units.pc**2)
 
     # test that an incorrect unit on rho_c raises an error
     assert_raises(ValueError, SurfaceMassDensity, r_s, delta_c,
@@ -135,8 +135,8 @@ toy_data_dc = np.array([[15993.18343503, 7231.03898592],
 toy_data_rhoc = np.array([[0.13363, 0.4028],
                           [0.13363, 0.4028],
                           [0.13363, 0.4028],
-                          [0.13363, 0.4028]]) * \
-                          units.Msun/units.Mpc/(units.pc**2)
+                          [0.13363, 0.4028]]) * (units.Msun / units.Mpc /
+                                                 (units.pc**2))
 
 toy_data_sigma = np.array([[[61.676628, 13.91868, 2.4468037,
                              0.37863308, 0.055465539],
@@ -150,7 +150,7 @@ toy_data_sigma = np.array([[[61.676628, 13.91868, 2.4468037,
                              25.927776, 4.446575],
                             [1260.0668, 536.75538, 156.88796,
                              32.628947, 5.4837611]],
-                           [np.empty(5)*np.nan, np.empty(5)*np.nan]])
+                           [np.empty(5) * np.nan, np.empty(5) * np.nan]])
 
 toy_data_deltasigma = np.array([[[65.309133, 26.372068, 7.6175566,
                                   1.7577702, 0.35356601],
@@ -164,7 +164,7 @@ toy_data_deltasigma = np.array([[[65.309133, 26.372068, 7.6175566,
                                   53.056979, 14.742129],
                                  [483.0392, 364.3582, 195.7899,
                                   71.458238, 19.210324]],
-                                [np.empty(5)*np.nan, np.empty(5)*np.nan]])
+                                [np.empty(5) * np.nan, np.empty(5) * np.nan]])
 
 
 def test_centered_profiles():
@@ -208,7 +208,7 @@ toy_data_sigma_off = np.array([[[56.922836, 17.461102, 2.5331495,
                                  26.017806, 4.4481085],
                                 [1070.3932, 563.12414, 159.64883,
                                  32.747803, 5.4857215]],
-                               [np.empty(5)*np.nan, np.empty(5)*np.nan]])
+                               [np.empty(5) * np.nan, np.empty(5) * np.nan]])
 
 toy_data_deltasigma_off = np.array([[[8.3569013, 16.021837, 7.3340382,
                                       1.7247532, 0.34935389],
@@ -222,7 +222,8 @@ toy_data_deltasigma_off = np.array([[[8.3569013, 16.021837, 7.3340382,
                                       52.590289, 14.699197],
                                      [86.975707, 203.06399, 186.61751,
                                       70.815764, 19.149708]],
-                                    [np.empty(5)*np.nan, np.empty(5)*np.nan]])
+                                    [np.empty(5) * np.nan,
+                                     np.empty(5) * np.nan]])
 
 
 def test_miscentered_profiles():

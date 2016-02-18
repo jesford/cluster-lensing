@@ -53,9 +53,9 @@ def test_update_richness():
     def _check_c200(i):
         assert_allclose(toy_data_c200[i], c.c200)
         if c.c200 is np.real:
-            assert_allclose(toy_data_r200[i]/toy_data_rs[i], c.c200)
+            assert_allclose(toy_data_r200[i] / toy_data_rs[i], c.c200)
         else:
-            assert(toy_data_r200[i]/toy_data_rs[i] is not np.real)
+            assert(toy_data_r200[i] / toy_data_rs[i] is not np.real)
 
     def _check_delta_c(i):
         assert_allclose(toy_data_deltac[i], c.delta_c)
@@ -82,9 +82,9 @@ def test_update_mass():
     def _check_c200(i):
         assert_allclose(toy_data_c200[i], c.c200)
         if c.c200 is np.real:
-            assert_allclose(toy_data_r200[i]/toy_data_rs[i], c.c200)
+            assert_allclose(toy_data_r200[i] / toy_data_rs[i], c.c200)
         else:
-            assert(toy_data_r200[i]/toy_data_rs[i] is not np.real)
+            assert(toy_data_r200[i] / toy_data_rs[i] is not np.real)
 
     def _check_delta_c(i):
         assert_allclose(toy_data_deltac[i], c.delta_c)
@@ -115,7 +115,7 @@ def test_negative_n200():
 
 def test_wrong_length_richness():
     c = ClusterEnsemble(toy_data_z)
-    richness = [np.ones(3), np.arange(4), np.arange(5)+20.]
+    richness = [np.ones(3), np.arange(4), np.arange(5) + 20.]
 
     def set_n200(val):
         c.n200 = val
@@ -125,7 +125,7 @@ def test_wrong_length_richness():
 
 def test_wrong_length_z():
     c = ClusterEnsemble(toy_data_z)
-    redshifts = [np.ones(3), np.arange(4), np.arange(5)+20.]
+    redshifts = [np.ones(3), np.arange(4), np.arange(5) + 20.]
 
     def set_z(val):
         c.z = val
@@ -163,11 +163,11 @@ def test_update_norm():
     c = ClusterEnsemble(toy_data_z)
     c.n200 = [10, 20]
     norm_before = c._massrich_norm.value
-    norm_after = 2.*norm_before
+    norm_after = 2. * norm_before
     m_before = c.m200
     c.massrich_norm = norm_after
     m_after = c.m200
-    assert_equal(m_before/m_after, np.array([norm_before/norm_after]*2))
+    assert_equal(m_before / m_after, np.array([norm_before / norm_after] * 2))
 
 
 # ------ TOY DATA FOR TESTING NFW ----------
@@ -187,7 +187,7 @@ toy_data_sigma = np.array([[[6.16761908e+01, 1.39039946e+01, 2.44275736e+00,
                              25.88781944, 4.43731976],
                             [1261.43218563, 536.87349277, 156.77363455,
                              32.58239059, 5.47390998]],
-                           [np.empty(5)*np.nan, np.empty(5)*np.nan]])
+                           [np.empty(5) * np.nan, np.empty(5) * np.nan]])
 
 toy_data_deltasigma = np.array([[[65.43997434, 26.39164262, 7.61618077,
                                   1.75644108, 0.35317515],
@@ -201,7 +201,7 @@ toy_data_deltasigma = np.array([[[65.43997434, 26.39164262, 7.61618077,
                                   53.06822795, 14.73246768],
                                  [484.19549909, 364.98607848, 195.93777776,
                                   71.4483272, 19.19583107]],
-                                [np.empty(5)*np.nan, np.empty(5)*np.nan]])
+                                [np.empty(5) * np.nan, np.empty(5) * np.nan]])
 
 toy_data_sigma_off = np.array([[[5.69501008e+01, 1.74504112e+01, 2.52901319,
                                  3.79783870e-01, 5.53770689e-02],
@@ -215,7 +215,7 @@ toy_data_sigma_off = np.array([[[5.69501008e+01, 1.74504112e+01, 2.52901319,
                                  25.97782737, 4.43885162],
                                 [1071.49027696, 563.33246958, 159.53729442,
                                  32.7011807, 5.47586815]],
-                               [np.empty(5)*np.nan, np.empty(5)*np.nan]])
+                               [np.empty(5) * np.nan, np.empty(5) * np.nan]])
 
 toy_data_deltasigma_off = np.array([[[8.36836538, 16.03773137, 7.33259501,
                                       1.72339183, 0.3489577],
@@ -229,7 +229,8 @@ toy_data_deltasigma_off = np.array([[[8.36836538, 16.03773137, 7.33259501,
                                       52.60120424, 14.68947908],
                                      [87.14987636, 203.42283987, 186.76588425,
                                       70.8056412, 19.13516388]],
-                                    [np.empty(5)*np.nan, np.empty(5)*np.nan]])
+                                    [np.empty(5) * np.nan,
+                                     np.empty(5) * np.nan]])
 
 
 def test_nfw_centered():

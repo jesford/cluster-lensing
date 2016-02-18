@@ -26,13 +26,13 @@ def _set_dimensionless_radius(self, radii=None, integration=False):
         # with each cluster's rs, we now have a 4D matrix:
         radii_4D = radii.reshape(d0, d1, d2, 1)
         rs_4D = self._rs.reshape(1, 1, 1, self._nlens)
-        x = radii_4D/rs_4D
+        x = radii_4D / rs_4D
 
     else:
         # 1D array of radii and clusters, reshape & broadcast
         radii_repeated = radii.reshape(1, self._nbins)
         rs_repeated = self._rs.reshape(self._nlens, 1)
-        x = radii_repeated/rs_repeated
+        x = radii_repeated / rs_repeated
 
     x = x.value
     if 0. in x:
@@ -42,9 +42,9 @@ def _set_dimensionless_radius(self, radii=None, integration=False):
     self._x = x
 
     # set the 3 cases of dimensionless radius x
-    self._x_small = np.where(self._x < 1.-1.e-6)
-    self._x_big = np.where(self._x > 1.+1.e-6)
-    self._x_one = np.where(np.abs(self._x-1) <= 1.e-6)
+    self._x_small = np.where(self._x < 1. - 1.e-6)
+    self._x_big = np.where(self._x > 1. + 1.e-6)
+    self._x_one = np.where(np.abs(self._x - 1) <= 1.e-6)
 
 
 class SurfaceMassDensity(object):
@@ -194,13 +194,13 @@ class SurfaceMassDensity(object):
             numerator_arg = ((1. / self._x[self._x_small]) +
                              np.sqrt((1. / (self._x[self._x_small]**2)) - 1.))
             denominator = np.sqrt(1. - (self._x[self._x_small]**2))
-            bigF[self._x_small] = np.log(numerator_arg)/denominator
+            bigF[self._x_small] = np.log(numerator_arg) / denominator
 
-            bigF[self._x_big] = (np.arccos(1./self._x[self._x_big]) /
+            bigF[self._x_big] = (np.arccos(1. / self._x[self._x_big]) /
                                  np.sqrt(self._x[self._x_big]**2 - 1.))
 
             f = (1. - bigF) / (self._x**2 - 1.)
-            f[self._x_one] = 1./3.
+            f[self._x_one] = 1. / 3.
             if np.isnan(np.sum(f)) or np.isinf(np.sum(f)):
                 print('\nERROR: f is not all real\n')
 
@@ -225,8 +225,8 @@ class SurfaceMassDensity(object):
             maxsig = self._sigmaoffset.value.max()
 
             # inner/outer bin edges
-            roff_1D = np.linspace(0., 4.*maxsig, numRoff)
-            theta_1D = np.linspace(0., 2.*np.pi, numTh)
+            roff_1D = np.linspace(0., 4. * maxsig, numRoff)
+            theta_1D = np.linspace(0., 2. * np.pi, numTh)
             rMpc_1D = self._rbins.value
 
             # reshape for broadcasting: (numTh,numRoff,numRbins)
@@ -241,7 +241,7 @@ class SurfaceMassDensity(object):
             _set_dimensionless_radius(self, radii=r_eq13, integration=True)
 
             sigma = _centered_sigma(self)
-            inner_integrand = sigma.value/(2.*np.pi)
+            inner_integrand = sigma.value / (2. * np.pi)
 
             # INTEGRATE OVER theta
             sigma_of_RgivenRoff = simps(inner_integrand, x=theta_1D, axis=0,
@@ -250,8 +250,8 @@ class SurfaceMassDensity(object):
             # theta is gone, now dimensions are: (numRoff,numRbins,nlens)
             sig_off_3D = self._sigmaoffset.value.reshape(1, 1, self._nlens)
             roff_v2 = roff_1D.reshape(numRoff, 1, 1)
-            PofRoff = (roff_v2/(sig_off_3D**2) *
-                       np.exp(-0.5*(roff_v2 / sig_off_3D)**2))
+            PofRoff = (roff_v2 / (sig_off_3D**2) *
+                       np.exp(-0.5 * (roff_v2 / sig_off_3D)**2))
 
             dbl_integrand = sigma_of_RgivenRoff * PofRoff
 
@@ -317,11 +317,11 @@ class SurfaceMassDensity(object):
             big_2b = 1. + self._x[self._x_big]
             secondpart[self._x_big] = np.arctan(np.sqrt(big_2a / big_2b))
 
-            both_3a = (4. / (self._x**2)) * np.log(self._x/2.)
-            both_3b = 2. / (self._x**2-1.)
+            both_3a = (4. / (self._x**2)) * np.log(self._x / 2.)
+            both_3b = 2. / (self._x**2 - 1.)
             g = firstpart * secondpart + both_3a - both_3b
 
-            g[self._x_one] = (10./3.) + 4.*np.log(0.5)
+            g[self._x_one] = (10. / 3.) + 4. * np.log(0.5)
 
             if np.isnan(np.sum(g)) or np.isinf(np.sum(g)):
                 print('\nERROR: g is not all real\n', g)
@@ -348,7 +348,7 @@ class SurfaceMassDensity(object):
             outer_prec = self._factorRouter * self._nbins
             r_outer = np.linspace(original_rbins.min(),
                                   original_rbins.max(),
-                                  endpoint=False, num=outer_prec+1)[1:]
+                                  endpoint=False, num=outer_prec + 1)[1:]
             r_ext_unordered = np.hstack([r_inner, r_outer, original_rbins])
             r_extended = np.sort(r_ext_unordered)
 
@@ -366,8 +366,8 @@ class SurfaceMassDensity(object):
 
             for i, r in enumerate(original_rbins):
                 index_of_rbin = np.where(r_extended == r)[0][0]
-                x = r_extended[0:index_of_rbin+1]
-                y = sigma_sm_extended[:, 0:index_of_rbin+1] * x
+                x = r_extended[0:index_of_rbin + 1]
+                y = sigma_sm_extended[:, 0:index_of_rbin + 1] * x
 
                 integral = simps(y, x=x, axis=-1, even='first')
 

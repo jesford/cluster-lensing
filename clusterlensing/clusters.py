@@ -405,7 +405,7 @@ class ClusterEnsemble(object):
         elif self._cm == 'Prada':
             self._c200 = cofm.c_Prada(self._z, self._m200, h=self._cosmo.h,
                                       Om_M=self._cosmo.Om0,
-                                      Om_L=1-self._cosmo.Om0)
+                                      Om_L=1 - self._cosmo.Om0)
         elif self._cm == 'Duffy':
             self._c200 = cofm.c_Duffy(self._z, self._m200, h=self._cosmo.h)
 

@@ -14,7 +14,7 @@ def test_Mnl_z0():
         assert_allclose(b, ans)
 
     # integer multiples of non-linear mass
-    M_nl = (8.73/h) * 10.**12.
+    M_nl = (8.73 / h) * 10.**12.
     mass = np.array([0., 1., 2., 10., 100.]) * M_nl
 
     # corresponding bias at z=0
