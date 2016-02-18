@@ -1,4 +1,5 @@
 ## Galaxy Cluster and Weak Lensing Tools
+[![Build Status](https://travis-ci.org/jesford/cluster-lensing.svg?branch=master)](https://travis-ci.org/jesford/cluster-lensing)
 
 The full **cluster-lensing** documentation is [here](http://jesford.github.io/cluster-lensing).
 
