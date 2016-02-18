@@ -175,71 +175,6 @@ def test_update_norm():
 toy_data_rbins = np.array([0.1, 0.26591479, 0.70710678, 1.88030155, 5.])
 toy_data_offset = np.array([0.1, 0.1])
 
-# TO DO: eventually python calculation should be ground "truth" (i.e. the 4
-# data sets below), as simps is more accurate than midpoint integration.
-
-# IMPORTANT NOTE FOR COMPARISONS BETWEEN PY AND C PROFILES:
-# below 4 sets were output by c calculation, for different c200 calculated
-# using a different cosmology than the one used for python profiles. Thus
-# they are not directly comparable!
-toy_data_sigmaC = np.array([[[6.16767240e+01, 1.39187020e+01, 2.44680800e+00,
-                            3.78634000e-01, 5.54660000e-02],
-                            [7.96846330e+01, 1.78510170e+01, 3.12497300e+00,
-                             4.82659000e-01, 7.06500000e-02]],
-                            [[1.27435338e+02, 3.33162080e+01, 6.41061600e+00,
-                              1.03540100e+00, 1.54387000e-01],
-                              [1.66959114e+02, 4.29022790e+01, 8.16254600e+00,
-                               1.31108200e+00, 1.95039000e-01]],
-                            [[878.183118, 390.919853, 120.077149,
-                              25.927817, 4.446582], [1260.051922, 536.749041,
-                            156.886111, 32.628563, 5.483696]],
-                            [np.empty(5)*np.nan, np.empty(5)*np.nan]])
-
-
-toy_data_deltasigmaC = np.array([[[65.309234, 26.372108, 7.617568,
-                                  1.757773, 0.353567],
-                                  [85.577146, 34.252247, 9.830038,
-                                   2.259187, 0.453313]],
-                                [[103.741612, 49.563345, 16.319782,
-                                  4.094266, 0.866397],
-                                [139.948531, 65.608588, 21.268782,
-                                 5.281821, 1.11081]],
-                                 [[314.797102, 245.516172, 138.665076,
-                                   53.057064, 14.742152],
-                                 [483.0335, 364.353901, 195.78759,
-                                  71.457397, 19.210098]],
-                                [np.empty(5)*np.nan, np.empty(5)*np.nan]])
-
-toy_data_sigma_offC = np.array([[[5.72922100e+01, 1.74796230e+01, 2.53308800e+00,
-                                 3.80508000e-01, 5.54890000e-02],
-                                [7.42894330e+01, 2.24888540e+01, 3.23564000e+00,
-                                 4.85052000e-01, 7.06790000e-02]],
-                               [[112.162248, 39.549804, 6.615806,
-                                 1.040329, 0.15445],
-                                [147.648409, 51.236081, 8.42712,
-                                 1.317355, 0.195118]],
-                               [[749.269997, 407.160948, 121.99714,
-                                 26.017224, 4.448009],
-                                [1071.578332, 563.177646, 159.643017,
-                                 32.746632, 5.485526]],
-                               [np.empty(5)*np.nan, np.empty(5)*np.nan]])
-
-toy_data_deltasigma_offC = np.array([[[8.030923, 20.076035, 7.259893,
-                                      1.681247, 0.335841],
-                                     [10.466821, 26.085422, 9.367618,
-                                      2.160572, 0.430557]],
-                                    [[14.09775, 37.534385, 15.599696,
-                                      3.928595, 0.824545],
-                                     [18.807823, 49.702694, 20.32113,
-                                      5.065814, 1.056858]],
-                                    [[57.176779, 189.378023, 136.18578,
-                                      52.183441, 14.251751],
-                                     [85.983442, 280.070251, 191.662768,
-                                      70.063303, 18.533542]],
-                                    [np.empty(5)*np.nan, np.empty(5)*np.nan]])
-
-
-#py...
 toy_data_sigma = np.array([[[6.16761908e+01, 1.39039946e+01, 2.44275736e+00,
                              3.77903918e-01, 5.53525953e-02],
                             [7.96641862e+01, 1.78324931e+01, 3.12034544e+00,
@@ -268,9 +203,9 @@ toy_data_deltasigma = np.array([[[65.43997434, 26.39164262, 7.61618077,
                                   71.4483272, 19.19583107]],
                                 [np.empty(5)*np.nan, np.empty(5)*np.nan]])
 
-toy_data_sigma_off = np.array([[[5.69501008e+01, 1.74504112e+01, 2.52901319e+00,
+toy_data_sigma_off = np.array([[[5.69501008e+01, 1.74504112e+01, 2.52901319,
                                  3.79783870e-01, 5.53770689e-02],
-                                [7.38052696e+01, 2.24484132e+01, 3.23098141e+00,
+                                [7.38052696e+01, 2.24484132e+01, 3.23098141,
                                  4.84248607e-01, 7.05563626e-02]],
                                [[111.8118779, 39.51432979, 6.60603604,
                                  1.03835891, 0.15413189],
@@ -296,50 +231,6 @@ toy_data_deltasigma_off = np.array([[[8.36836538, 16.03773137, 7.33259501,
                                       70.8056412, 19.13516388]],
                                     [np.empty(5)*np.nan, np.empty(5)*np.nan]])
 
-# ------------------------------------------
-# test c calculations (smd_nfw.c)
-
-
-def test_nfw_ccalc_centered():
-    c = ClusterEnsemble(toy_data_z)
-
-    def _check_sigma(i, j):
-        assert_allclose(c.sigma_nfw[j].value, toy_data_sigma[i, j], rtol=1e-4)
-
-    def _check_deltasigma(i, j):
-        assert_allclose(c.deltasigma_nfw[j].value, toy_data_deltasigma[i, j],
-                        rtol=1e-4)
-
-    for i, n200 in enumerate(toy_data_n200):
-        c.n200 = n200
-        c.calc_nfw(toy_data_rbins, use_c=True)
-        for j in range(c.z.shape[0]):
-            yield _check_sigma, i, j
-            yield _check_deltasigma, i, j
-
-
-def test_nfw_ccalc_offset():
-    c = ClusterEnsemble(toy_data_z)
-
-    # poor disagreement between python results and old c calculations,
-    # rtol=1 is required for these tests to pass:
-    def _check_sigma(i, j):
-        assert_allclose(c.sigma_nfw[j].value, toy_data_sigma_offC[i, j], rtol=1.)
-
-    def _check_deltasigma(i, j):
-        assert_allclose(c.deltasigma_nfw[j].value,
-                        toy_data_deltasigma_offC[i, j], rtol=1.)
-
-    for i, n200 in enumerate(toy_data_n200):
-        c.n200 = n200
-        c.calc_nfw(toy_data_rbins, offsets=toy_data_offset, use_c=True)
-        for j in range(c.z.shape[0]):
-            yield _check_sigma, i, j
-            yield _check_deltasigma, i, j
-
-
-# ------------------------------------------
-# test python calculations
 
 def test_nfw_centered():
     c = ClusterEnsemble(toy_data_z)
@@ -401,7 +292,7 @@ def test_for_infs_in_miscentered_c_calc():
     # last element in toy_data is n200=0 -> NaN (skip for this check)
     for n200 in toy_data_n200[:-1]:
         c.n200 = n200
-        c.calc_nfw(toy_data_rbins, offsets=toy_data_offset, use_c=True)
+        c.calc_nfw(toy_data_rbins, offsets=toy_data_offset)
         for i in range(c.z.shape[0]):
             yield _check_sigma_off, c.sigma_nfw[i].value
             yield _check_deltasigma_off, c.deltasigma_nfw[i].value
