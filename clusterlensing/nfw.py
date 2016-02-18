@@ -1,6 +1,8 @@
 """NFW profiles for shear and magnification.
 
-Surface mass density and differential surface mass density calculations for NFW dark matter halos, with and without the effects of miscentering offsets.
+Surface mass density and differential surface mass density calculations
+for NFW dark matter halos, with and without the effects of miscentering
+offsets.
 """
 
 from __future__ import absolute_import, division, print_function
@@ -70,6 +72,24 @@ class SurfaceMassDensity(object):
         Radial bins (in Mpc) at which profiles will be calculated. Should
         be 1D, optionally with astropy.units of Mpc.
 
+    Other Parameters
+    -------------------
+    numTh : int, optional
+        Number of bins to use for integration over theta, for calculating
+        offset profiles (no effect for offsets=None). Default 200.
+    numRoff : int, optional
+        Number of bins to use for integration over R_off, for calculating
+        offset profiles (no effect for offsets=None). Default 200.
+    numRinner : int, optional
+        Number of bins at r < min(rbins) to use for integration over
+        Sigma(<r), for calculating DeltaSigma (no effect for Sigma ever,
+        and no effect for DeltaSigma if offsets=None). Default 20.
+    factorRouter : int, optional
+        Factor increase over number of rbins, at min(r) < r < max(r), of
+        bins that will be used at for integration over Sigma(<r), for
+        calculating DeltaSigma (no effect for Sigma, and no effect for
+        DeltaSigma if offsets=None). Default 3.
+
     Methods
     ----------
     sigma_nfw()
@@ -100,7 +120,8 @@ class SurfaceMassDensity(object):
     Monthly Notices of the Royal Astronomical Society, Volume 447, Issue 2,
     p.1304-1318 (2015).
     """
-    def __init__(self, rs, delta_c, rho_crit, offsets=None, rbins=None):
+    def __init__(self, rs, delta_c, rho_crit, offsets=None, rbins=None,
+                 numRoff=200, numTh=200, numRinner=20, factorRouter=3):
         if rbins is None:
             rmin, rmax = 0.1, 5.
             rbins = np.logspace(np.log10(rmin), np.log10(rmax), num=50)
@@ -115,6 +136,23 @@ class SurfaceMassDensity(object):
         self._rho_crit = utils.check_units_and_type(rho_crit, units.Msun /
                                                     units.Mpc / (units.pc**2))
 
+        if type(numRoff) == int and numRoff > 0:
+            self._numRoff = numRoff
+        else:
+            raise ValueError('numRoff must be a positive integer')
+        if type(numTh) == int and numTh > 0:
+            self._numTh = numTh
+        else:
+            raise ValueError('numTh must be a positive integer')
+        if type(numRinner) == int and numRinner > 0:
+            self._numRinner = numRinner
+        else:
+            raise ValueError('numRinner must be a positive integer')
+        if type(factorRouter) == int and factorRouter > 0:
+            self._factorRouter = factorRouter
+        else:
+            raise ValueError('factorRouter must be a positive integer')
+
         self._nbins = self._rbins.shape[0]
         self._nlens = self._rs.shape[0]
 
@@ -122,7 +160,7 @@ class SurfaceMassDensity(object):
             self._sigmaoffset = utils.check_units_and_type(offsets, units.Mpc)
             utils.check_input_size(self._sigmaoffset, self._nlens)
         else:
-            self._sigmaoffset = offsets  #None
+            self._sigmaoffset = offsets
 
         # check array sizes are compatible
         utils.check_input_size(self._rs, self._nlens)
@@ -185,12 +223,12 @@ class SurfaceMassDensity(object):
         def _offset_sigma(self):
 
             # size of "x" arrays to integrate over
-            numRoff = 200
-            numTh = 200  # TO DO: option for user to set this
+            numRoff = self._numRoff
+            numTh = self._numTh
 
             numRbins = self._nbins
             maxsig = self._sigmaoffset.value.max()
-            
+
             # inner/outer bin edges
             roff_1D = np.linspace(0., 4.*maxsig, numRoff)
             theta_1D = np.linspace(0., 2.*np.pi, numTh)
@@ -210,12 +248,9 @@ class SurfaceMassDensity(object):
             sigma = _centered_sigma(self)
             inner_integrand = sigma.value/(2.*np.pi)
 
-            # ----- integrate over theta axis -----
-            # NOTE: ~200 theta bins is good for simps.
-
+            # INTEGRATE OVER theta
             sigma_of_RgivenRoff = simps(inner_integrand, x=theta_1D, axis=0,
                                         even='first')
-            # -------------------------------------
 
             # theta is gone, now dimensions are: (numRoff,numRbins,nlens)
             sig_off_3D = self._sigmaoffset.value.reshape(1, 1, self._nlens)
@@ -225,13 +260,10 @@ class SurfaceMassDensity(object):
 
             dbl_integrand = sigma_of_RgivenRoff * PofRoff
 
-            # ----- integrate over Roff axis -----
-            # NOTE: simps ~200 roff bins is good.
+            # INTEGRATE OVER Roff
             # (integration axis=0 after theta is gone).
-
             sigma_smoothed = simps(dbl_integrand, x=roff_1D, axis=0,
                                    even='first')
-            # -------------------------------------
 
             # reset _x to correspond to input rbins (default)
             _set_dimensionless_radius(self)
@@ -249,7 +281,6 @@ class SurfaceMassDensity(object):
             self._sigma_sm = finalsigma
 
         return finalsigma
-
 
     def deltasigma_nfw(self):
         """Calculate NFW differential surface mass density profile.
@@ -314,16 +345,16 @@ class SurfaceMassDensity(object):
             except AttributeError:
                 sigma_sm_rbins = self.sigma_nfw()
 
-            inner_prec = 20 #maybe this should be a user specified option
             innermost_sampling = 1.e-10  # stable for anything below 1e-5
+            inner_prec = self._numRinner
             r_inner = np.linspace(innermost_sampling,
                                   original_rbins.min(),
-                                  endpoint=False, num=inner_prec)                
-            outer_prec = 3 * self._nbins  # 2 or 3 times is fine
+                                  endpoint=False, num=inner_prec)
+            outer_prec = self._factorRouter * self._nbins
             r_outer = np.linspace(original_rbins.min(),
                                   original_rbins.max(),
-                                  endpoint=False, num = outer_prec+1)[1:]           
-            r_ext_unordered = np.concatenate([r_inner, r_outer, original_rbins])
+                                  endpoint=False, num=outer_prec+1)[1:]
+            r_ext_unordered = np.hstack([r_inner, r_outer, original_rbins])
             r_extended = np.sort(r_ext_unordered)
 
             # set temporary extended rbins, nbins, x, rs_dc_rcrit array
@@ -358,7 +389,7 @@ class SurfaceMassDensity(object):
             rs_dc_rcrit = self._rs * self._delta_c * self._rho_crit
             self._rs_dc_rcrit = rs_dc_rcrit.reshape(self._nlens,
                                                     1).repeat(self._nbins, 1)
-            self._sigma_sm = sigma_sm_rbins  # reset to original rbins sigma_sm
+            self._sigma_sm = sigma_sm_rbins  # reset to original sigma_sm
 
             dsigma_sm = mean_inside_sigma_sm - sigma_sm_rbins
 
@@ -383,7 +414,7 @@ class SurfaceMassDensity(object):
 # integrated, even for generous settings of epsabs, epsrel. Likely
 # it is getting stuck in non-smooth portions of the function space.
 # (2) scipy.integrate.simps is fast and converges faster than the
-# midpoint integration for both the integration over Roff and theta. 
+# midpoint integration for both the integration over Roff and theta.
 # (3) scipy.integrate.romb was somewhat slower than simps and as well
 # as the midpoint rule integration.
 # (4) midpoint rule integration via a Riemann Sum (the choice used in
