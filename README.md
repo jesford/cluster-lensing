@@ -1,10 +1,8 @@
 ## Galaxy Cluster and Weak Lensing Tools
 
-The full
-[clusterlensing documentation](http://clusterlensing.readthedocs.org/)
-is hosted on ReadTheDocs.
+The full clusterlensing documentation is [here](http://jesford.github.io/cluster-lensing)
 
-**clusterlensing** is a Python project for calculating a variety of galaxy cluster
+**cluster-lensing** is a Python project for calculating a variety of galaxy cluster
 properties, as well as mass-richness and mass-concentration scaling
 relations, and weak lensing profiles. These include surface mass
 density (Sigma) and differential surface mass density (DeltaSigma) for
@@ -12,7 +10,7 @@ NFW halos, both with and without the effects of cluster miscentering.
 
 The focus of this project is the ClusterEnsemble()
 class in clusters.py. See a demo of what it can do in the provided
-notebook: [demo.ipynb](https://github.com/jesford/wl-profile/blob/master/demo.ipynb).
+notebook: [demo.ipynb](https://github.com/jesford/cluster-lensing/blob/master/demo.ipynb).
 
 ClusterEnsemble() allows you to easily build up a nicely
 formatted table (a pandas dataframe) of cluster attributes, and
