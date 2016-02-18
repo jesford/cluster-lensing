@@ -136,22 +136,17 @@ class SurfaceMassDensity(object):
         self._rho_crit = utils.check_units_and_type(rho_crit, units.Msun /
                                                     units.Mpc / (units.pc**2))
 
-        if type(numRoff) == int and numRoff > 0:
-            self._numRoff = numRoff
-        else:
-            raise ValueError('numRoff must be a positive integer')
-        if type(numTh) == int and numTh > 0:
-            self._numTh = numTh
-        else:
-            raise ValueError('numTh must be a positive integer')
-        if type(numRinner) == int and numRinner > 0:
-            self._numRinner = numRinner
-        else:
-            raise ValueError('numRinner must be a positive integer')
-        if type(factorRouter) == int and factorRouter > 0:
-            self._factorRouter = factorRouter
-        else:
-            raise ValueError('factorRouter must be a positive integer')
+        self._numRoff = utils.check_units_and_type(numRoff, None,
+                                                   is_scalar=True)
+        self._numTh = utils.check_units_and_type(numTh, None, is_scalar=True)
+        self._numRinner = utils.check_units_and_type(numRinner, None,
+                                                     is_scalar=True)
+        self._factorRouter = utils.check_units_and_type(factorRouter, None,
+                                                        is_scalar=True)
+        # check numbers of bins are all positive
+        if (numRoff <= 0) or (numTh <= 0) or (numRinner <= 0) \
+            or (factorRouter <= 0):
+             raise ValueError('Require numbers of bins > 0')
 
         self._nbins = self._rbins.shape[0]
         self._nlens = self._rs.shape[0]
