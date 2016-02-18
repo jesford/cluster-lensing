@@ -77,7 +77,8 @@ class ClusterEnsemble(object):
 
     Methods
     ----------
-    calc_nfw(rbins, offsets=None)
+    calc_nfw(rbins, offsets=None, numTh=200, numRoff=200, numRinner=20,
+             factorRouter=3)
         Generate Sigma and DeltaSigma NFW profiles for each cluster,
         optionally with miscentering offsets included.
     show(notebook=True)
@@ -424,7 +425,8 @@ class ClusterEnsemble(object):
         self._deltac = top / bottom
         self._df['delta_c'] = pd.Series(self._deltac, index=self._df.index)
 
-    def calc_nfw(self, rbins, offsets=None):
+    def calc_nfw(self, rbins, offsets=None, numTh=200, numRoff=200,
+                 numRinner=20, factorRouter=3):
         """Calculates Sigma and DeltaSigma profiles.
 
         Generates the surface mass density (sigma_nfw attribute of parent
@@ -442,6 +444,28 @@ class ClusterEnsemble(object):
             Parameter describing the width (in Mpc) of the Gaussian
             distribution of miscentering offsets. Should be 1D, optionally
             with astropy.units of Mpc.
+
+        Other Parameters
+        -------------------
+        numTh : int, optional
+            Parameter passed to SurfaceMassDensity(). Number of bins to use
+            for integration over theta, for calculating offset profiles
+            (no effect for offsets=None). Default 200.
+        numRoff : int, optional
+            Parameter passed to SurfaceMassDensity(). Number of bins to use
+            for integration over R_off, for calculating offset profiles
+            (no effect for offsets=None). Default 200.
+        numRinner : int, optional
+            Parameter passed to SurfaceMassDensity(). Number of bins at
+            r < min(rbins) to use for integration over Sigma(<r), for
+            calculating DeltaSigma (no effect for Sigma ever, and no effect
+            for DeltaSigma if offsets=None). Default 20.
+        factorRouter : int, optional
+            Parameter passed to SurfaceMassDensity(). Factor increase over
+            number of rbins, at min(r) < r < max(r), of bins that will be
+            used at for integration over Sigma(<r), for calculating
+            DeltaSigma (no effect for Sigma, and no effect for DeltaSigma
+            if offsets=None). Default 3.
         """
         if offsets is None:
             self._sigoffset = np.zeros(self.number) * units.Mpc
@@ -453,7 +477,12 @@ class ClusterEnsemble(object):
 
         rhoc = self._rho_crit.to(units.Msun / units.pc**2 / units.Mpc)
         smd = SurfaceMassDensity(self.rs, self.delta_c, rhoc,
-                                 offsets=self._sigoffset, rbins=self.rbins)
+                                 offsets=self._sigoffset,
+                                 rbins=self.rbins,
+                                 numTh=numTh,
+                                 numRoff=numRoff,
+                                 numRinner=numRinner,
+                                 factorRouter=factorRouter)
 
         self.sigma_nfw = smd.sigma_nfw()
         self.deltasigma_nfw = smd.deltasigma_nfw()
