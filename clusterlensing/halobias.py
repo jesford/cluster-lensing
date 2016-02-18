@@ -6,14 +6,14 @@ Om_M = cosmo.Om0
 Om_L = 1. - Om_M
 
 
-def bias(mass_halo, z_halo, h=h, Om_M=Om_M, Om_L=Om_L):
+def bias(mass, z, h=h, Om_M=Om_M, Om_L=Om_L):
     """Calculate halo bias, from Seljak & Warren 2004.
 
     Parameters
     ----------
-    mass_halo : ndarray or float
+    mass : ndarray or float
         Halo mass to calculate bias for.
-    z_halo : ndarray or float
+    z : ndarray or float
         Halo z, same type and size as mass_halo.
     h : float, optional
         Hubble parameter, defaults to astropy.cosmology.Planck13.h
@@ -30,8 +30,8 @@ def bias(mass_halo, z_halo, h=h, Om_M=Om_M, Om_L=Om_L):
         z_halo. Calculated according to Seljak & Warren 2004.
     """
     M_nl_0 = (8.73 / h) * (10. ** 12.)         # nonlinear mass today [M_sun]
-    M_nl = M_nl_0 * (Om_M + Om_L / ((1. + z_halo) ** 3.))  # scaled to z_lens
-    x = mass_halo / M_nl
+    M_nl = M_nl_0 * (Om_M + Om_L / ((1. + z) ** 3.))  # scaled to z_lens
+    x = mass / M_nl
     b = 0.53 + 0.39 * (x ** 0.45) + 0.13 / (40. * x +
                                             1.) + (5.e-4) * (x ** 1.5)
     return b
