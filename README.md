@@ -1,6 +1,6 @@
 ## Galaxy Cluster and Weak Lensing Tools
 
-The full clusterlensing documentation is [here](http://jesford.github.io/cluster-lensing).
+The full **cluster-lensing** documentation is [here](http://jesford.github.io/cluster-lensing).
 
 **cluster-lensing** is a Python project for calculating a variety of galaxy cluster
 properties, as well as mass-richness and mass-concentration scaling
