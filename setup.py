@@ -32,17 +32,11 @@ setup(name=NAME,
     url=URL,
     download_url=DOWNLOAD_URL,
     license=LICENSE,
-    packages=['clusterlensing'],
+    packages=['clusterlensing', 'clusterlensing/tests'],
     classifiers=[
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         'Programming Language :: Python :: 2.7'
-        ],
-    install_requires=[
-        "numpy",
-        "scipy",
-        "pandas",
-        "astropy"
         ]
      )
