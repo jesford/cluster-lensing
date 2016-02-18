@@ -65,6 +65,7 @@ def test_DuttonMaccio():
 
 def test_Prada():
     relation = 'Prada'
+    # Prada prediction is off the charts for high z...
     scalar_answers = np.array([[6.65883862, 5.71130928,
                                 5.06733941, 5.30163572],
                               [5.90404735, 5.23409449,
