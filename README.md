@@ -3,6 +3,14 @@
 
 The full **cluster-lensing** documentation is [here](http://jesford.github.io/cluster-lensing).
 
+###Installation
+**cluster-lensing** is a pure Python package that can be installed by
+running:
+```bash
+pip install cluster-lensing
+```
+
+### Description
 **cluster-lensing** is a Python project for calculating a variety of galaxy cluster
 properties, as well as mass-richness and mass-concentration scaling
 relations, and weak lensing profiles. These include surface mass
@@ -40,5 +48,4 @@ This project has inherited code from the
 [cofm](https://github.com/jesford/cofm) repository for
 concentration-mass relationships and the
 [smd-nfw](https://github.com/jesford/smd-nfw) repository for
-calculating NFW halo profiles. **Stay tuned for the initial package
-release coming any day now!**
+calculating NFW halo profiles.
