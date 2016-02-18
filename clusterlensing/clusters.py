@@ -78,7 +78,7 @@ class ClusterEnsemble(object):
 
     Methods
     ----------
-    calc_nfw(rbins, offsets=None, use_c=True)
+    calc_nfw(rbins, offsets=None)
         Generate Sigma and DeltaSigma NFW profiles for each cluster,
         optionally with miscentering offsets included.
     show(notebook=True)
@@ -425,7 +425,7 @@ class ClusterEnsemble(object):
         self._deltac = top / bottom
         self._df['delta_c'] = pd.Series(self._deltac, index=self._df.index)
 
-    def calc_nfw(self, rbins, offsets=None, use_c=False):
+    def calc_nfw(self, rbins, offsets=None):
         """Calculates Sigma and DeltaSigma profiles.
 
         Generates the surface mass density (sigma_nfw attribute of parent
@@ -443,9 +443,6 @@ class ClusterEnsemble(object):
             Parameter describing the width (in Mpc) of the Gaussian
             distribution of miscentering offsets. Should be 1D, optionally
             with astropy.units of Mpc.
-        use_c : bool, optional
-            Sets whether to use the Python implementation of calculation
-            (use_c=False, default), or the legacy c version (use_c=True).
         """
         if offsets is None:
             self._sigoffset = np.zeros(self.number) * units.Mpc
@@ -455,36 +452,9 @@ class ClusterEnsemble(object):
 
         self.rbins = utils.check_units_and_type(rbins, units.Mpc)
 
-        if use_c:
-            rhoc4c = self._rho_crit.to(units.Msun / units.pc**3)
-            # --------
-            # the old c way
-            smdout = np.transpose(np.vstack(([self.rs],
-                                            [self.delta_c],
-                                            [rhoc4c],
-                                            [self._sigoffset])))
-            np.savetxt('smd_in1.dat', np.transpose(self.rbins), fmt='%15.8g')
-            np.savetxt('smd_in2.dat', smdout, fmt='%15.8g')
-            os.system('./smd_nfw')    # c program does the calculations
-            sigma_nfw = np.loadtxt('sigma.dat')
-            deltasigma_nfw = np.loadtxt('deltasigma.dat')
-            os.system('rm -f smd_in1.dat')
-            os.system('rm -f smd_in2.dat')
-            os.system('rm -f sigma.dat')
-            os.system('rm -f deltasigma.dat')
-            # --------
+        rhoc = self._rho_crit.to(units.Msun / units.pc**2 / units.Mpc)
+        smd = SurfaceMassDensity(self.rs, self.delta_c, rhoc,
+                                 offsets=self._sigoffset, rbins=self.rbins)
 
-            self.sigma_nfw = sigma_nfw * units.Msun / (units.pc**2)
-            self.deltasigma_nfw = deltasigma_nfw * units.Msun / (units.pc**2)
-
-        else:
-            # the python way
-            rhoc4py = self._rho_crit.to(units.Msun / units.pc**2 / units.Mpc)
-            smd = SurfaceMassDensity(self.rs,
-                                     self.delta_c,
-                                     rhoc4py,
-                                     offsets=self._sigoffset,
-                                     rbins=self.rbins)
-
-            self.sigma_nfw = smd.sigma_nfw()
-            self.deltasigma_nfw = smd.deltasigma_nfw()
+        self.sigma_nfw = smd.sigma_nfw()
+        self.deltasigma_nfw = smd.deltasigma_nfw()
