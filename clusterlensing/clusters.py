@@ -78,7 +78,7 @@ class ClusterEnsemble(object):
 
     Methods
     ----------
-    calc_nfw(rbins, offsets=None, use_c=True, epsabs=0.1, epsrel=0.1)
+    calc_nfw(rbins, offsets=None, use_c=True)
         Generate Sigma and DeltaSigma NFW profiles for each cluster,
         optionally with miscentering offsets included.
     show(notebook=True)
