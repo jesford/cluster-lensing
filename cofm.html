@@ -1,0 +1,255 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>cofm module &mdash; cluster-lensing 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="cluster-lensing 0.1.0 documentation" href="index.html" />
+    <link rel="up" title="&lt;no title&gt;" href="modules.html" />
+    <link rel="next" title="halobias module" href="halobias.html" />
+    <link rel="prev" title="nfw module" href="nfw.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-clusterlensing.cofm">
+<span id="cofm-module"></span><h1>cofm module<a class="headerlink" href="#module-clusterlensing.cofm" title="Permalink to this headline">¶</a></h1>
+<p>Calculate halo concentration from mass and redshift.</p>
+<dl class="function">
+<dt id="clusterlensing.cofm.c_Duffy">
+<code class="descclassname">clusterlensing.cofm.</code><code class="descname">c_Duffy</code><span class="sig-paren">(</span><em>z</em>, <em>m</em>, <em>h=0.6777</em><span class="sig-paren">)</span><a class="headerlink" href="#clusterlensing.cofm.c_Duffy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Concentration from c(M) relation published in Duffy et al. (2008).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>z</strong> : float or array_like</p>
+<blockquote>
+<div><p>Redshift(s) of halos.</p>
+</div></blockquote>
+<p><strong>m</strong> : float or array_like</p>
+<blockquote>
+<div><p>Mass(es) of halos (m200 definition), in units of solar masses.</p>
+</div></blockquote>
+<p><strong>h</strong> : float, optional</p>
+<blockquote>
+<div><p>Hubble parameter. Default is from Planck13.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">ndarray</p>
+<blockquote class="last">
+<div><p>Concentration values (c200) for halos.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<p>Results from N-body simulations using WMAP5 cosmology, presented in:</p>
+<p>A.R. Duffy, J. Schaye, S.T. Kay, and C. Dalla Vecchia, &#8220;Dark matter
+halo concentrations in the Wilkinson Microwave Anisotropy Probe year 5
+cosmology,&#8221; Monthly Notices of the Royal Astronomical Society, Volume
+390, Issue 1, pp. L64-L68, 2008.</p>
+<p>This calculation uses the parameters corresponding to the NFW model,
+the &#8216;200&#8217; halo definition, and the &#8216;full&#8217; sample of halos spanning
+z = 0-2. This means the values of fitted parameters (A,B,C) = (5.71,
+-0.084,-0.47) in Table 1 of Duffy et al. (2008).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="clusterlensing.cofm.c_DuttonMaccio">
+<code class="descclassname">clusterlensing.cofm.</code><code class="descname">c_DuttonMaccio</code><span class="sig-paren">(</span><em>z</em>, <em>m</em>, <em>h=0.6777</em><span class="sig-paren">)</span><a class="headerlink" href="#clusterlensing.cofm.c_DuttonMaccio" title="Permalink to this definition">¶</a></dt>
+<dd><p>Concentration from c(M) relation in Dutton &amp; Maccio (2014).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>z</strong> : float or array_like</p>
+<blockquote>
+<div><p>Redshift(s) of halos.</p>
+</div></blockquote>
+<p><strong>m</strong> : float or array_like</p>
+<blockquote>
+<div><p>Mass(es) of halos (m200 definition), in units of solar masses.</p>
+</div></blockquote>
+<p><strong>h</strong> : float, optional</p>
+<blockquote>
+<div><p>Hubble parameter. Default is from Planck13.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">ndarray</p>
+<blockquote class="last">
+<div><p>Concentration values (c200) for halos.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<p>Calculation from Planck-based results of simulations presented in:</p>
+<p>A.A. Dutton &amp; A.V. Maccio, &#8220;Cold dark matter haloes in the Planck era:
+evolution of structural parameters for Einasto and NFW profiles,&#8221;
+Monthly Notices of the Royal Astronomical Society, Volume 441, Issue 4,
+p.3359-3374, 2014.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="clusterlensing.cofm.c_Prada">
+<code class="descclassname">clusterlensing.cofm.</code><code class="descname">c_Prada</code><span class="sig-paren">(</span><em>z</em>, <em>m</em>, <em>h=0.6777</em>, <em>Om_M=0.30712</em>, <em>Om_L=0.6928799999999999</em><span class="sig-paren">)</span><a class="headerlink" href="#clusterlensing.cofm.c_Prada" title="Permalink to this definition">¶</a></dt>
+<dd><p>Concentration from c(M) relation published in Prada et al. (2012).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>z</strong> : float or array_like</p>
+<blockquote>
+<div><p>Redshift(s) of halos.</p>
+</div></blockquote>
+<p><strong>m</strong> : float or array_like</p>
+<blockquote>
+<div><p>Mass(es) of halos (m200 definition), in units of solar masses.</p>
+</div></blockquote>
+<p><strong>h</strong> : float, optional</p>
+<blockquote>
+<div><p>Hubble parameter. Default is from Planck13.</p>
+</div></blockquote>
+<p><strong>Om_M</strong> : float, optional</p>
+<blockquote>
+<div><p>Matter density parameter. Default is from Planck13.</p>
+</div></blockquote>
+<p><strong>Om_L</strong> : float, optional</p>
+<blockquote>
+<div><p>Cosmological constant density parameter. Default is from Planck13.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">ndarray</p>
+<blockquote class="last">
+<div><p>Concentration values (c200) for halos.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This c(M) relation is somewhat controversial, due to its upturn in
+concentration for high masses (normally we expect concentration to
+decrease with increasing mass). See the reference below for discussion.</p>
+<p class="rubric">References</p>
+<p>Calculation based on results of N-body simulations presented in:</p>
+<p>F. Prada, A.A. Klypin, A.J. Cuesta, J.E. Betancort-Rijo, and J.
+Primack, &#8220;Halo concentrations in the standard Lambda cold dark matter
+cosmology,&#8221; Monthly Notices of the Royal Astronomical Society, Volume
+423, Issue 4, pp. 3018-3030, 2012.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">cluster-lensing</a></h1>
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=jesford&repo=cluster-lensing&type=watch&count=true&size=large"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo.html">Demo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clusters.html">clusters module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nfw.html">nfw module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">cofm module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="halobias.html">halobias module</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">&lt;no title&gt;</a><ul>
+      <li>Previous: <a href="nfw.html" title="previous chapter">nfw module</a></li>
+      <li>Next: <a href="halobias.html" title="next chapter">halobias module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Jes Ford.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+      |
+      <a href="_sources/cofm.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/jesford/cluster-lensing" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

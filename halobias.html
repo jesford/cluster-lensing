@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>halobias module &mdash; cluster-lensing 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="cluster-lensing 0.1.0 documentation" href="index.html" />
+    <link rel="up" title="&lt;no title&gt;" href="modules.html" />
+    <link rel="prev" title="cofm module" href="cofm.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-clusterlensing.halobias">
+<span id="halobias-module"></span><h1>halobias module<a class="headerlink" href="#module-clusterlensing.halobias" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="clusterlensing.halobias.bias">
+<code class="descclassname">clusterlensing.halobias.</code><code class="descname">bias</code><span class="sig-paren">(</span><em>mass</em>, <em>z</em>, <em>h=0.6777</em>, <em>Om_M=0.30712</em>, <em>Om_L=0.6928799999999999</em><span class="sig-paren">)</span><a class="headerlink" href="#clusterlensing.halobias.bias" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate halo bias, from Seljak &amp; Warren 2004.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>mass</strong> : ndarray or float</p>
+<blockquote>
+<div><p>Halo mass to calculate bias for.</p>
+</div></blockquote>
+<p><strong>z</strong> : ndarray or float</p>
+<blockquote>
+<div><p>Halo z, same type and size as mass.</p>
+</div></blockquote>
+<p><strong>h</strong> : float, optional</p>
+<blockquote>
+<div><p>Hubble parameter, defaults to astropy.cosmology.Planck13.h</p>
+</div></blockquote>
+<p><strong>Om_M</strong> : float, optional</p>
+<blockquote>
+<div><p>Fractional matter density, defaults to
+astropy.cosmology.Planck13.Om0</p>
+</div></blockquote>
+<p><strong>Om_L</strong> : float, optional</p>
+<blockquote>
+<div><p>Fractional dark energy density, defaults to 1-Om_M.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">ndarray or float</p>
+<blockquote class="last">
+<div><p>Returns the halo bias, of same type and size as input mass_halo and
+z_halo. Calculated according to Seljak &amp; Warren 2004 for z = 0.
+For halo z &gt; 0, the non-linear mass is adjusted using the input
+cosmological parameters.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<p>Based on fitting formula derived from simulations in:</p>
+<p>U. Seljak and M.S. Warren, &#8220;Large-scale bias and stochasticity of
+haloes and dark matter,&#8221; Monthly Notices of the Royal Astronomical
+Society, Volume 355, Issue 1, pp. 129-136 (2004).</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">cluster-lensing</a></h1>
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=jesford&repo=cluster-lensing&type=watch&count=true&size=large"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo.html">Demo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clusters.html">clusters module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nfw.html">nfw module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cofm.html">cofm module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">halobias module</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">&lt;no title&gt;</a><ul>
+      <li>Previous: <a href="cofm.html" title="previous chapter">cofm module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Jes Ford.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+      |
+      <a href="_sources/halobias.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/jesford/cluster-lensing" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

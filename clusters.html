@@ -1,0 +1,666 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>clusters module &mdash; cluster-lensing 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="cluster-lensing 0.1.0 documentation" href="index.html" />
+    <link rel="up" title="&lt;no title&gt;" href="modules.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="modules.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-clusterlensing.clusters">
+<span id="clusters-module"></span><h1>clusters module<a class="headerlink" href="#module-clusterlensing.clusters" title="Permalink to this headline">¶</a></h1>
+<p>Galaxy Cluster Ensemble Calculations.</p>
+<p>Cluster mass-richness and mass-concentration scaling relations, and NFW
+halo profiles for weak lensing shear and magnification, including the
+effects of cluster miscentering offsets.</p>
+<p>This framework calculates properties and profiles for every individual
+cluster, storing the data in tabular form. This is useful for fitting
+measured stacked weak lensing profiles, e.g. when you want to account for
+the full redshift, mass, and/or centroid offset distributions, and avoid
+fitting a single average mass at a single effective redshift.</p>
+<dl class="class">
+<dt id="clusterlensing.clusters.ClusterEnsemble">
+<em class="property">class </em><code class="descclassname">clusterlensing.clusters.</code><code class="descname">ClusterEnsemble</code><span class="sig-paren">(</span><em>redshifts</em>, <em>cosmology='Planck13'</em>, <em>cm='DuttonMaccio'</em><span class="sig-paren">)</span><a class="headerlink" href="#clusterlensing.clusters.ClusterEnsemble" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Ensemble of galaxy clusters and their properties.</p>
+<p>The ClusterEnsemble object contains parameters and calculated
+values for every individual cluster in a sample. Initializing with
+a collection of redshifts z will fix the number of clusters
+described by the object. Setting the n200 values will then populate
+the object with the full set of available attributes (except for
+the NFW profiles). The values of z, n200, massrich_norm, and
+massrich_slope can be altered and these changes will propogate to
+the other (dependent) attributes.</p>
+<p>In order to generate the attributes containing the NFW halo
+profiles, sigma_nfw and deltasigma_nfw, pass the desired radial
+bins (and additional optional parameters) to the calc_nfw method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>z</strong> : array_like</p>
+<blockquote>
+<div><p>Redshifts for each cluster in the sample. Should be 1D.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first"><strong>cosmology</strong> : str, optional</p>
+<blockquote>
+<div><p>Cosmology to use in calculations, default &#8216;Planck13&#8217;. Other choices
+are &#8216;WMAP9&#8217;, &#8216;WMAP7&#8217;, and &#8216;WMAP5&#8217;.</p>
+</div></blockquote>
+<p><strong>cm</strong> : str, optional</p>
+<blockquote class="last">
+<div><p>Concentration-mass relation to use, default &#8216;DuttonMaccio&#8217;. Other
+choices are &#8216;Prada&#8217; and &#8216;Duffy&#8217;.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#clusterlensing.clusters.ClusterEnsemble.z" title="clusterlensing.clusters.ClusterEnsemble.z"><code class="xref py py-obj docutils literal"><span class="pre">z</span></code></a></td>
+<td>Cluster redshifts.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#clusterlensing.clusters.ClusterEnsemble.n200" title="clusterlensing.clusters.ClusterEnsemble.n200"><code class="xref py py-obj docutils literal"><span class="pre">n200</span></code></a></td>
+<td>Cluster richness values.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#clusterlensing.clusters.ClusterEnsemble.m200" title="clusterlensing.clusters.ClusterEnsemble.m200"><code class="xref py py-obj docutils literal"><span class="pre">m200</span></code></a></td>
+<td>Cluster masses.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#clusterlensing.clusters.ClusterEnsemble.c200" title="clusterlensing.clusters.ClusterEnsemble.c200"><code class="xref py py-obj docutils literal"><span class="pre">c200</span></code></a></td>
+<td>Cluster concentration parameters.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#clusterlensing.clusters.ClusterEnsemble.delta_c" title="clusterlensing.clusters.ClusterEnsemble.delta_c"><code class="xref py py-obj docutils literal"><span class="pre">delta_c</span></code></a></td>
+<td>Characteristic overdensities of the cluster halos.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#clusterlensing.clusters.ClusterEnsemble.r200" title="clusterlensing.clusters.ClusterEnsemble.r200"><code class="xref py py-obj docutils literal"><span class="pre">r200</span></code></a></td>
+<td>Cluster Radii.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#clusterlensing.clusters.ClusterEnsemble.rs" title="clusterlensing.clusters.ClusterEnsemble.rs"><code class="xref py py-obj docutils literal"><span class="pre">rs</span></code></a></td>
+<td>Cluster scale radii.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#clusterlensing.clusters.ClusterEnsemble.Dang_l" title="clusterlensing.clusters.ClusterEnsemble.Dang_l"><code class="xref py py-obj docutils literal"><span class="pre">Dang_l</span></code></a></td>
+<td>Angular diameter distances to clusters.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#clusterlensing.clusters.ClusterEnsemble.dataframe" title="clusterlensing.clusters.ClusterEnsemble.dataframe"><code class="xref py py-obj docutils literal"><span class="pre">dataframe</span></code></a></td>
+<td>Pandas DataFrame of cluster properties.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#clusterlensing.clusters.ClusterEnsemble.massrich_norm" title="clusterlensing.clusters.ClusterEnsemble.massrich_norm"><code class="xref py py-obj docutils literal"><span class="pre">massrich_norm</span></code></a></td>
+<td>Normalization of Mass-Richness relation:</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#clusterlensing.clusters.ClusterEnsemble.massrich_slope" title="clusterlensing.clusters.ClusterEnsemble.massrich_slope"><code class="xref py py-obj docutils literal"><span class="pre">massrich_slope</span></code></a></td>
+<td>Slope of Mass-Richness relation:</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<colgroup>
+<col width="7%" />
+<col width="93%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>describe</td>
+<td>(str) Short description of the ClusterEnsemble object.</td>
+</tr>
+<tr class="row-even"><td>number</td>
+<td>(int) Number of clusters in the sample.</td>
+</tr>
+<tr class="row-odd"><td>sigma_nfw</td>
+<td>(Quantity) Surface mass density of every cluster, (1D ndarray) with astropy.units of Msun/pc/pc. Generated for each element of rbins by running calc_nfw(rbins) method.</td>
+</tr>
+<tr class="row-even"><td>deltasigma_nfw</td>
+<td>(Quantity) Differential surface mass density of every cluster, (1D ndarray) with astropy.units of Msun/pc/pc. Generated for each element of rbins by running calc_nfw(rbins) method.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="35%" />
+<col width="65%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>calc_nfw(rbins, offsets=None, numTh=200, numRoff=200, numRinner=20,</td>
+<td>factorRouter=3) Generate Sigma and DeltaSigma NFW profiles for each cluster, optionally with miscentering offsets included.</td>
+</tr>
+<tr class="row-even"><td>show(notebook=True)</td>
+<td>Display table of cluster information and mass-richness scaling relaton in use.</td>
+</tr>
+<tr class="row-odd"><td>massrich_parameters()</td>
+<td>Print a string showing the mass-richness scaling relation and current values of the normalization and slope.</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="clusterlensing.clusters.ClusterEnsemble.Dang_l">
+<code class="descname">Dang_l</code><a class="headerlink" href="#clusterlensing.clusters.ClusterEnsemble.Dang_l" title="Permalink to this definition">¶</a></dt>
+<dd><p>Angular diameter distances to clusters.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Property:</th><td class="field-body">Returns distances in Mpc</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Type:</th><td class="field-body">Quantity (1D ndarray, with astropy.units of Mpc)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clusterlensing.clusters.ClusterEnsemble.c200">
+<code class="descname">c200</code><a class="headerlink" href="#clusterlensing.clusters.ClusterEnsemble.c200" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cluster concentration parameters.</p>
+<p>c200 is calculated from m200 and z using the mass-concentration
+relation specified when ClusterEnsemble object was created (default
+is relation from Dutton &amp; Maccio 2015). Note that c200 = r200/rs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Property:</th><td class="field-body">Returns c200</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Type:</th><td class="field-body">ndarray</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="clusterlensing.clusters.ClusterEnsemble.calc_nfw">
+<code class="descname">calc_nfw</code><span class="sig-paren">(</span><em>rbins</em>, <em>offsets=None</em>, <em>numTh=200</em>, <em>numRoff=200</em>, <em>numRinner=20</em>, <em>factorRouter=3</em><span class="sig-paren">)</span><a class="headerlink" href="#clusterlensing.clusters.ClusterEnsemble.calc_nfw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates Sigma and DeltaSigma profiles.</p>
+<p>Generates the surface mass density (sigma_nfw attribute of parent
+object) and differential surface mass density (deltasigma_nfw
+attribute of parent object) profiles of each cluster, assuming a
+spherical NFW model. Optionally includes the effect of cluster
+miscentering offsets.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>rbins</strong> : array_like</p>
+<blockquote>
+<div><p>Radial bins (in Mpc) for calculating cluster profiles. Should
+be 1D, optionally with astropy.units of Mpc.</p>
+</div></blockquote>
+<p><strong>offsets</strong> : array_like, optional</p>
+<blockquote>
+<div><p>Parameter describing the width (in Mpc) of the Gaussian
+distribution of miscentering offsets. Should be 1D, optionally
+with astropy.units of Mpc.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first"><strong>numTh</strong> : int, optional</p>
+<blockquote>
+<div><p>Parameter to pass to SurfaceMassDensity(). Number of bins to
+use for integration over theta, for calculating offset profiles
+(no effect for offsets=None). Default 200.</p>
+</div></blockquote>
+<p><strong>numRoff</strong> : int, optional</p>
+<blockquote>
+<div><p>Parameter to pass to SurfaceMassDensity(). Number of bins to
+use for integration over R_off, for calculating offset profiles
+(no effect for offsets=None). Default 200.</p>
+</div></blockquote>
+<p><strong>numRinner</strong> : int, optional</p>
+<blockquote>
+<div><p>Parameter to pass to SurfaceMassDensity(). Number of bins at
+r &lt; min(rbins) to use for integration over Sigma(&lt;r), for
+calculating DeltaSigma (no effect for Sigma ever, and no effect
+for DeltaSigma if offsets=None). Default 20.</p>
+</div></blockquote>
+<p><strong>factorRouter</strong> : int, optional</p>
+<blockquote class="last">
+<div><p>Parameter to pass to SurfaceMassDensity(). Factor increase over
+number of rbins, at min(r) &lt; r &lt; max(r), of bins that will be
+used at for integration over Sigma(&lt;r), for calculating
+DeltaSigma (no effect for Sigma, and no effect for DeltaSigma
+if offsets=None). Default 3.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clusterlensing.clusters.ClusterEnsemble.dataframe">
+<code class="descname">dataframe</code><a class="headerlink" href="#clusterlensing.clusters.ClusterEnsemble.dataframe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pandas DataFrame of cluster properties.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Property:</th><td class="field-body">Returns DataFrame</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Type:</th><td class="field-body">pandas.core.frame.DataFrame</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clusterlensing.clusters.ClusterEnsemble.delta_c">
+<code class="descname">delta_c</code><a class="headerlink" href="#clusterlensing.clusters.ClusterEnsemble.delta_c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Characteristic overdensities of the cluster halos.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Property:</th><td class="field-body">Returns characteristic overdensity</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Type:</th><td class="field-body">ndarray</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clusterlensing.clusters.ClusterEnsemble.m200">
+<code class="descname">m200</code><a class="headerlink" href="#clusterlensing.clusters.ClusterEnsemble.m200" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cluster masses.</p>
+<p>Mass interior to a sphere of radius r200. If m200 is set directly,
+then richness n200 is calculated from m200 using the mass-richness
+scaling relation specified by the parameters massrich_norm and
+massrich_slope. If n200 is set directly, then m200 is calculated
+from n200 using the same scaling relation. Changes to m200 will
+propagate to all mass-dependant variables.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Property:</th><td class="field-body">Returns cluster masses in Msun</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Property type:</th><td class="field-body">Quantity
+1D ndarray, with astropy.units of Msun.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Setter:</th><td class="field-body">Sets cluster mass values in Msun</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Setter type:</th><td class="field-body">array_like
+Should be 1D array or list, optionally with units.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clusterlensing.clusters.ClusterEnsemble.massrich_norm">
+<code class="descname">massrich_norm</code><a class="headerlink" href="#clusterlensing.clusters.ClusterEnsemble.massrich_norm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalization of Mass-Richness relation:</p>
+<p>M200 = norm * (N200 / 20) ^ slope.</p>
+<p>Changes to massrich_norm will propagate to all mass-dependant
+variables. (This will take current n200 values and convert them to
+m200; in order to retain original values of m200, save them in a
+temporary variable and reset them after this change).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Property:</th><td class="field-body">Returns normalization in Msun</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Property type:</th><td class="field-body">Quantity
+float, with astropy.units of Msun. Default is 2.7e+13 Msun.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Setter:</th><td class="field-body">Sets normalization in Msun</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Setter type:</th><td class="field-body">float (optionally in astropy.units of Msun)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="clusterlensing.clusters.ClusterEnsemble.massrich_parameters">
+<code class="descname">massrich_parameters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#clusterlensing.clusters.ClusterEnsemble.massrich_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print values of M200-N200 scaling relation parameters.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clusterlensing.clusters.ClusterEnsemble.massrich_slope">
+<code class="descname">massrich_slope</code><a class="headerlink" href="#clusterlensing.clusters.ClusterEnsemble.massrich_slope" title="Permalink to this definition">¶</a></dt>
+<dd><p>Slope of Mass-Richness relation:</p>
+<p>M200 = norm * (N200 / 20) ^ slope.</p>
+<p>Changes to massrich_slope will propagate to all mass-dependant
+variables. (This will take current n200 values and convert them to
+m200; in order to retain original values of m200, save them in a
+temporary variable and reset them after this change).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Property:</th><td class="field-body">Returns slope</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Property type:</th><td class="field-body">float
+Default value is 1.4.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Setter:</th><td class="field-body">Sets slope</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Setter type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clusterlensing.clusters.ClusterEnsemble.n200">
+<code class="descname">n200</code><a class="headerlink" href="#clusterlensing.clusters.ClusterEnsemble.n200" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cluster richness values.</p>
+<p>If n200 is set directly, then mass m200 is calculated from n200
+using the mass-richness scaling relation specified by the
+parameters massrich_norm and massrich_slope. If m200 is set
+directly, then n200 is calculated from m200 using the same scaling
+relation. Changes to n200 will propagate to all mass-dependant
+variables.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Property:</th><td class="field-body">Returns cluster richness values</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Property type:</th><td class="field-body">ndarray</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Setter:</th><td class="field-body">Sets cluster richness values</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Setter type:</th><td class="field-body">array_like</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clusterlensing.clusters.ClusterEnsemble.r200">
+<code class="descname">r200</code><a class="headerlink" href="#clusterlensing.clusters.ClusterEnsemble.r200" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cluster Radii.</p>
+<p>r200 is the cluster radius within which the mean density is 200
+times the critical energy density of the universe at that z.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Property:</th><td class="field-body">Returns r200 in Mpc</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Type:</th><td class="field-body">Quantity (1D ndarray, in astropy.units of Mpc)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clusterlensing.clusters.ClusterEnsemble.rs">
+<code class="descname">rs</code><a class="headerlink" href="#clusterlensing.clusters.ClusterEnsemble.rs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cluster scale radii.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Property:</th><td class="field-body">Returns scale radius in Mpc</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Type:</th><td class="field-body">Quantity (1D ndarray, in astropy.units of Mpc)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="clusterlensing.clusters.ClusterEnsemble.show">
+<code class="descname">show</code><span class="sig-paren">(</span><em>notebook=True</em><span class="sig-paren">)</span><a class="headerlink" href="#clusterlensing.clusters.ClusterEnsemble.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display cluster properties and scaling relation parameters.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clusterlensing.clusters.ClusterEnsemble.z">
+<code class="descname">z</code><a class="headerlink" href="#clusterlensing.clusters.ClusterEnsemble.z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cluster redshifts.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Property:</th><td class="field-body">Returns cluster redshifts</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Property type:</th><td class="field-body">ndarray</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Setter:</th><td class="field-body">Sets cluster redshifts</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Setter type:</th><td class="field-body">array_like</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="clusterlensing.clusters.calc_delta_c">
+<code class="descclassname">clusterlensing.clusters.</code><code class="descname">calc_delta_c</code><span class="sig-paren">(</span><em>c200</em><span class="sig-paren">)</span><a class="headerlink" href="#clusterlensing.clusters.calc_delta_c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate characteristic overdensity from concentration.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>c200</strong> : ndarray or float</p>
+<blockquote>
+<div><p>Cluster concentration parameter.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">ndarray or float</p>
+<blockquote class="last">
+<div><p>Cluster characteristic overdensity, of same type as c200.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="clusterlensing.clusters.mass_to_richess">
+<code class="descclassname">clusterlensing.clusters.</code><code class="descname">mass_to_richess</code><span class="sig-paren">(</span><em>mass</em>, <em>norm=27000000000000.0</em>, <em>slope=1.4</em><span class="sig-paren">)</span><a class="headerlink" href="#clusterlensing.clusters.mass_to_richess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate richness from mass.</p>
+<p>Mass-richness relation assumed is:
+mass = norm * (richness / 20) ^ slope.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>mass</strong> : ndarray or float</p>
+<blockquote>
+<div><p>Cluster mass value(s) in units of solar masses.</p>
+</div></blockquote>
+<p><strong>norm</strong> : float, optional</p>
+<blockquote>
+<div><p>Normalization of mass-richness relation in units of solar masses,
+defaults to 2.7e13.</p>
+</div></blockquote>
+<p><strong>slope</strong> : float, optional</p>
+<blockquote>
+<div><p>Slope of mass-richness relation in units of solar masses, defaults
+to 1.4.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">ndarray or float</p>
+<blockquote class="last">
+<div><p>Cluster richness(es), of same type as mass.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="#clusterlensing.clusters.richess_to_mass" title="clusterlensing.clusters.richess_to_mass"><code class="xref py py-obj docutils literal"><span class="pre">richess_to_mass</span></code></a></dt>
+<dd>The inverse of this function.</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="clusterlensing.clusters.richess_to_mass">
+<code class="descclassname">clusterlensing.clusters.</code><code class="descname">richess_to_mass</code><span class="sig-paren">(</span><em>richness</em>, <em>norm=27000000000000.0</em>, <em>slope=1.4</em><span class="sig-paren">)</span><a class="headerlink" href="#clusterlensing.clusters.richess_to_mass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate mass from richness.</p>
+<p>Mass-richness relation assumed is:
+mass = norm * (richness / 20) ^ slope.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>richness</strong> : ndarray or float</p>
+<blockquote>
+<div><p>Cluster richness value(s).</p>
+</div></blockquote>
+<p><strong>norm</strong> : float, optional</p>
+<blockquote>
+<div><p>Normalization of mass-richness relation in units of solar masses,
+defaults to 2.7e13.</p>
+</div></blockquote>
+<p><strong>slope</strong> : float, optional</p>
+<blockquote>
+<div><p>Slope of mass-richness relation in units of solar masses, defaults
+to 1.4.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">ndarray or float</p>
+<blockquote class="last">
+<div><p>Cluster mass(es) in units of solar masses, of same type as
+richness.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="#clusterlensing.clusters.mass_to_richess" title="clusterlensing.clusters.mass_to_richess"><code class="xref py py-obj docutils literal"><span class="pre">mass_to_richess</span></code></a></dt>
+<dd>The inverse of this function.</dd>
+</dl>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">cluster-lensing</a></h1>
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=jesford&repo=cluster-lensing&type=watch&count=true&size=large"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo.html">Demo</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">clusters module</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nfw.html">nfw module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cofm.html">cofm module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="halobias.html">halobias module</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">&lt;no title&gt;</a><ul>
+      <li>Previous: <a href="modules.html" title="previous chapter">&lt;no title&gt;</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Jes Ford.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+      |
+      <a href="_sources/clusters.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/jesford/cluster-lensing" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>
