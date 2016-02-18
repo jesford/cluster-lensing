@@ -3,9 +3,9 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-clusterlensing
+cluster-lensing
 ===========================
-Welcome to the **clusterlensing** documentation! Here you will find the
+Welcome to the **cluster-lensing** documentation! Here you will find the
 tools to calculate galaxy cluster halo properties and weak lensing
 shear and magnification profiles. The model can easily include the
 effects of possible cluster miscentering offsets, which would
@@ -18,6 +18,7 @@ otherwise lead to biased mass or concentration estimates.
 
    intro
    tutorial
+   demo
    modules
 
 
@@ -27,6 +28,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
-
- 
