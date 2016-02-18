@@ -1,0 +1,6 @@
+include LICENSE.md
+include README.md
+include CHANGES.md
+include demo.ipynb
+include setup.py
+recursive-include clusterlensing *.py
