@@ -28,6 +28,85 @@ except:
     notebook_display = False
 
 
+def calc_delta_c(c200):
+    """Calculate characteristic overdensity from concentration.
+
+    Parameters
+    ----------
+    c200 : ndarray or float
+        Cluster concentration parameter.
+
+    Returns
+    ----------
+    ndarray or float
+        Cluster characteristic overdensity, of same type as c200.
+    """
+    top = (200. / 3.) * c200**3.
+    bottom = np.log(1. + c200) - (c200 / (1. + c200))
+    return (top / bottom)
+
+
+def richess_to_mass(richness, norm=2.7e13, slope=1.4):
+    """Calculate mass from richness.
+
+    Mass-richness relation assumed is:
+    mass = norm * (richness / 20) ^ slope.
+
+    Parameters
+    ----------
+    richness : ndarray or float
+        Cluster richness value(s).
+    norm : float, optional
+        Normalization of mass-richness relation in units of solar masses,
+        defaults to 2.7e13.
+    slope : float, optional
+        Slope of mass-richness relation in units of solar masses, defaults
+        to 1.4.
+
+    Returns
+    ----------
+    ndarray or float
+        Cluster mass(es) in units of solar masses, of same type as
+        richness.
+
+    See Also
+    ----------
+    mass_to_richess : The inverse of this function.
+    """
+    mass = norm * ((richness / 20.) ** slope)
+    return mass
+
+
+def mass_to_richess(mass, norm=2.7e13, slope=1.4):
+    """Calculate richness from mass.
+
+    Mass-richness relation assumed is:
+    mass = norm * (richness / 20) ^ slope.
+
+    Parameters
+    ----------
+    mass : ndarray or float
+        Cluster mass value(s) in units of solar masses.
+    norm : float, optional
+        Normalization of mass-richness relation in units of solar masses,
+        defaults to 2.7e13.
+    slope : float, optional
+        Slope of mass-richness relation in units of solar masses, defaults
+        to 1.4.
+
+    Returns
+    ----------
+    ndarray or float
+        Cluster richness(es), of same type as mass.
+
+    See Also
+    ----------
+    richess_to_mass : The inverse of this function.
+    """
+    richness = 20. * (mass / norm)**(1. / slope)
+    return richness
+
+
 class ClusterEnsemble(object):
     """Ensemble of galaxy clusters and their properties.
 
@@ -206,18 +285,20 @@ class ClusterEnsemble(object):
     def _richness_to_mass(self):
         # Calculates M_200 for simple power-law scaling relation
         # (with default parameters from arXiv:1409.3571)
-        self._m200 = self._massrich_norm * ((self._n200 / 20.) **
-                                            self._massrich_slope)
+        m200 = richess_to_mass(self._n200, norm=self._massrich_norm.value,
+                               slope=self._massrich_slope)
+        self._m200 = m200 * units.Msun
         self._df['m200'] = pd.Series(self._m200, index=self._df.index)
         self._update_dependant_variables()
 
     def _mass_to_richness(self):
         # Calculates N_200 for simple power-law scaling relation.
         # Inverse of _richness_to_mass() function.
-        n200 = 20. * (self._m200 /
-                      self._massrich_norm)**(1. / self._massrich_slope)
+        n200 = mass_to_richess(self._m200.value,
+                               norm=self._massrich_norm.value,
+                               slope=self._massrich_slope)
         # note: units cancel but n200 is still a Quantity
-        self._n200 = n200.value
+        self._n200 = n200
         self._df['n200'] = pd.Series(self._n200, index=self._df.index)
         self._update_dependant_variables()
 
@@ -420,9 +501,7 @@ class ClusterEnsemble(object):
 
     def _calculate_deltac(self):
         # calculate concentration parameter from c200
-        top = (200. / 3.) * self._c200**3.
-        bottom = np.log(1. + self._c200) - (self._c200 / (1. + self._c200))
-        self._deltac = top / bottom
+        self._deltac = calc_delta_c(self._c200)
         self._df['delta_c'] = pd.Series(self._deltac, index=self._df.index)
 
     def calc_nfw(self, rbins, offsets=None, numTh=200, numRoff=200,
