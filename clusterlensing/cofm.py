@@ -30,7 +30,7 @@ def check_inputs(z, m):
 
     if (z < 0).any() or (m < 0).any():
         raise ValueError('z and m must be positive')
-        
+
     if nz != nm and nz > 1 and nm > 1:
         raise ValueError('z and m arrays must be either equal in length, \
                           OR of different length with one of length 1.')
