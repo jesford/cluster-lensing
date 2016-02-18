@@ -8,34 +8,24 @@ properties. This is useful for fitting a stacked weak lensing profile,
 for example, where you want to avoid fitting a single average cluster
 mass.
 
-.. code-block:: python
+This entire demonstration is also available as a Jupyter Notebook: `demo.ipynb <https://github.com/jesford/cluster-lensing/blob/master/demo.ipynb>`__
 
-    from __future__ import print_function
-    
-    %matplotlib inline
-    %load_ext autoreload
-    %autoreload 2
-    
-    import numpy as np
-    from astropy import units
-    from matplotlib import pyplot as plt
-    
-    from clusterlensing.clusters import ClusterEnsemble
+>>> from __future__ import print_function
+>>> import numpy as np
+>>> from astropy import units
+>>> from matplotlib import pyplot as plt
+>>> %matplotlib inline  # for jupyter notebook
+>>> from clusterlensing import ClusterEnsemble
 
 Create a ClusterEnsemble object by passing in a numpy array (or list) of redshifts
 -------------------------------------------------------------------------
 
-.. code-block:: python
-
-    z = [0.1,0.2,0.3]
-    c = ClusterEnsemble(z)
-    c.describe
-
-
-
+>>> z = [0.1,0.2,0.3]
+>>> c = ClusterEnsemble(z)
+>>> c.describe
 
 .. parsed-literal::
-
+   
     'Ensemble of galaxy clusters and their properties.'
 
 
@@ -48,9 +38,7 @@ we see the default assumptions for the power-law slope and normalization
 that will be used to convert richness :math:`N_{200}` to mass
 :math:`M_{200}`. We'll see how to change those parameters below.
 
-.. code-block:: python
-
-    c.show()
+>>> c.show()
 
 
 .. parsed-literal::
@@ -103,11 +91,9 @@ This step will also generate :math:`M_{200}`, :math:`r_{200}`,
 :math:`c_{200}`, scale radius :math:`r_s`, and other parameters,
 assuming the scaling relation given below.
 
-.. code-block:: python
-
-    n200 = np.ones(3)*20.
-    c.n200 = n200
-    c.show()
+>>> n200 = np.ones(3)*20.
+>>> c.n200 = n200
+>>> c.show()
 
 
 .. parsed-literal::
@@ -183,34 +169,30 @@ Access any column of the dataframe as an array
 Notice that `astropy units <http://docs.astropy.org/en/stable/units/>`__
 are present for the appropriate columns.
 
-.. code-block:: python
 
-    print('z: \t', c.z)
-    print('n200: \t', c.n200)
-    print('r200: \t', c.r200)
-    print('m200: \t', c.m200)
-    print('c200: \t', c.c200)
-    print('rs: \t', c.rs)
-
+>>> print('z: \t', c.z)
+>>> print('n200: \t', c.n200)
+>>> print('r200: \t', c.r200)
+>>> print('m200: \t', c.m200)
+>>> print('c200: \t', c.c200)
+>>> print('rs: \t', c.rs)
 
 .. parsed-literal::
 
-    z: 	 [ 0.1  0.2  0.3]
+    z:           [ 0.1  0.2  0.3]
     n200: 	 [ 20.  20.  20.]
     r200: 	 [ 0.61222163  0.59108187  0.56947428] Mpc
     m200: 	 [  2.70000000e+13   2.70000000e+13   2.70000000e+13] solMass
     c200: 	 [ 5.8399338   5.64451215  5.44245689]
     rs: 	 [ 0.10483366  0.10471797  0.10463552] Mpc
 
+ 
 
 If you don't want units, you can get just the values
 ----------------------------------------------
 
-.. code-block:: python
 
-    c.r200.value
-
-
+>>> c.r200.value
 
 
 .. parsed-literal::
@@ -222,11 +204,7 @@ If you don't want units, you can get just the values
 Or access the Pandas DataFrame directly
 ----------------------------------------
 
-.. code-block:: python
-
-    c.dataframe
-
-
+>>> c.dataframe
 
 
 .. raw:: html
@@ -288,12 +266,9 @@ Change the redshifts
 These changes will propogate to all redshift-dependant cluster
 attributes.
 
-.. code-block:: python
 
-    c.z = np.array([0.4,0.5,0.6])
-    c.dataframe
-
-
+>>> c.z = np.array([0.4,0.5,0.6])
+>>> c.dataframe
 
 
 .. raw:: html
@@ -356,17 +331,14 @@ Changing mass will affect richness and vice-versa, through the
 mass-richness scaling relation. These changes will propogate to all
 mass-dependant cluster attributes, as appropriate.
 
-.. code-block:: python
 
-    c.m200 = [3e13,2e14,1e15]
-    c.show()
+>>> c.m200 = [3e13,2e14,1e15]
+>>> c.show()
 
 
 .. parsed-literal::
-
     
     Cluster Ensemble:
-
 
 
 .. raw:: html
@@ -429,17 +401,14 @@ mass-dependant cluster attributes, as appropriate.
        slope: 1.4
 
 
-.. code-block:: python
-
-    c.n200 = [20,30,40]
-    c.show()
+>>> c.n200 = [20,30,40]
+>>> c.show()
 
 
 .. parsed-literal::
 
     
     Cluster Ensemble:
-
 
 
 .. raw:: html
@@ -496,7 +465,6 @@ mass-dependant cluster attributes, as appropriate.
 
 .. parsed-literal::
 
-    
     Mass-Richness Power Law: M200 = norm * (N200 / 20) ^ slope
        norm: 2.7e+13 solMass
        slope: 1.4
@@ -509,17 +477,14 @@ The mass-richness slope and normalization can both be changed. The new
 parameters will be applied to the current n200, and will propagate to
 mass and other dependant quantities.
 
-.. code-block:: python
-
-    c.massrich_slope = 1.5
-    c.show()
+>>> c.massrich_slope = 1.5
+>>> c.show()
 
 
 .. parsed-literal::
 
     
     Cluster Ensemble:
-
 
 
 .. raw:: html
@@ -582,10 +547,9 @@ mass and other dependant quantities.
        slope: 1.5
 
 
-.. code-block:: python
+There is an option to show a basic table without the Pandas formatting:
 
-    # Show basic table without Pandas formatting
-    c.show(notebook = False)
+>>> c.show(notebook = False)
 
 
 .. parsed-literal::
@@ -607,12 +571,10 @@ Calculate :math:`\Sigma(r)` and :math:`\Delta\Sigma(r)` for NFW model
 
 First select the radial bins in units of Mpc.
 
-.. code-block:: python
-
-    rmin, rmax = 0.1, 5. # Mpc
-    nbins = 20
-    rbins = np.logspace(np.log10(rmin), np.log10(rmax), num = nbins)
-    print('rbins range from', rbins.min(), 'to', rbins.max(), 'Mpc')
+>>> rmin, rmax = 0.1, 5. # Mpc
+>>> nbins = 20
+>>> rbins = np.logspace(np.log10(rmin), np.log10(rmax), num = nbins)
+>>> print('rbins range from', rbins.min(), 'to', rbins.max(), 'Mpc')
 
 
 .. parsed-literal::
@@ -620,46 +582,34 @@ First select the radial bins in units of Mpc.
     rbins range from 0.1 to 5.0 Mpc
 
 
-.. code-block:: python
-
-    c.calc_nfw(rbins)    # calculate the profiles
-    
-    sigma = c.sigma_nfw  # access the profiles
-    deltasigma = c.deltasigma_nfw
+>>> c.calc_nfw(rbins)    # calculate the profiles
+>>> sigma = c.sigma_nfw  # access the profiles
+>>> deltasigma = c.deltasigma_nfw
 
 
-.. code-block:: python
-
-    fig = plt.figure(figsize=(12,5))
-    fig.suptitle('Centered NFW Cluster Profiles', size=30)
-    
-    first = fig.add_subplot(1,2,1)
-    second = fig.add_subplot(1,2,2)
-    
-    for rich, profile in zip(c.n200,deltasigma):
-        first.plot(rbins, profile, label='$N_{200}=$ '+str(rich))
-    first.set_xscale('log')
-    first.set_xlabel('$r\ [\mathrm{Mpc}]$', fontsize=20)
-    first.set_ylabel('$\Delta\Sigma(r)\ [\mathrm{M}_\mathrm{sun}/\mathrm{pc}^2]$', 
-                     fontsize=20)
-    first.set_xlim(rbins.min(), rbins.max())
-    first.legend(fontsize=20)
-    
-    
-    for rich, profile in zip(c.n200,sigma):
-        second.plot(rbins, profile, label='$N_{200}=$ '+str(rich))
-    second.set_xscale('log')
-    second.set_xlabel('$r\ [\mathrm{Mpc}]$', fontsize=20)
-    second.set_ylabel('$\Sigma(r)\ [\mathrm{M}_\mathrm{sun}/\mathrm{pc}^2]$', 
-                     fontsize=20)
-    second.set_xlim(0.05, 1.)
-    second.set_xlim(rbins.min(), rbins.max())
-    second.legend(fontsize=20)
-    
-    
-    fig.tight_layout()
-    plt.subplots_adjust(top=0.88)
-
+>>> fig = plt.figure(figsize=(12,5))
+>>> fig.suptitle('Centered NFW Cluster Profiles', size=30)
+>>> first = fig.add_subplot(1,2,1)
+>>> second = fig.add_subplot(1,2,2)
+>>> for rich, profile in zip(c.n200,deltasigma):
+>>>     first.plot(rbins, profile, label='$N_{200}=$ '+str(rich))
+>>> first.set_xscale('log')
+>>> first.set_xlabel('$r\ [\mathrm{Mpc}]$', fontsize=20)
+>>> ytitle = '$\Delta\Sigma(r)\ [\mathrm{M}_\mathrm{sun}/\mathrm{pc}^2]$'
+>>> first.set_ylabel(ytitle, fontsize=20)
+>>> first.set_xlim(rbins.min(), rbins.max())
+>>> first.legend(fontsize=20)
+>>> for rich, profile in zip(c.n200,sigma):
+>>>     second.plot(rbins, profile, label='$N_{200}=$ '+str(rich))
+>>> second.set_xscale('log')
+>>> second.set_xlabel('$r\ [\mathrm{Mpc}]$', fontsize=20)
+>>> ytitle = '$\Sigma(r)\ [\mathrm{M}_\mathrm{sun}/\mathrm{pc}^2]$'
+>>> second.set_ylabel(ytitle, fontsize=20)
+>>> second.set_xlim(0.05, 1.)
+>>> second.set_xlim(rbins.min(), rbins.max())
+>>> second.legend(fontsize=20)
+>>> fig.tight_layout()
+>>> plt.subplots_adjust(top=0.88)
 
 
 .. image:: demo_files/demo_26_0.png
@@ -700,50 +650,38 @@ et al 2015 <http://arxiv.org/abs/1409.3571>`__, `George et al
 To calculate the miscentered profiles, simply create an array of offsets
 in units of Mpc, and pass it to the calc\_nfw method:
 
-.. code-block:: python
-
-    offsets = np.array([0.1,0.1,0.1]) #same length as number of clusters
-    
-    c.calc_nfw(rbins, offsets=offsets)
-    
-    deltasigma_off = c.deltasigma_nfw
-    sigma_off = c.sigma_nfw
-
-.. code-block:: python
-
-    fig = plt.figure(figsize=(12,5))
-    fig.suptitle('Miscentered NFW Cluster Profiles', size=30)
-    
-    first = fig.add_subplot(1,2,1)
-    second = fig.add_subplot(1,2,2)
-    
-    for rich, profile in zip(c.n200,deltasigma_off):
-        first.plot(rbins, profile, label='$N_{200}=$ '+str(rich))
-    first.set_xscale('log')
-    first.set_xlabel('$r\ [\mathrm{Mpc}]$', fontsize=20)
-    ytitle = '$\Delta\Sigma^\mathrm{sm}(r)\ [\mathrm{M}_\mathrm{sun}/\mathrm{pc}^2]$'
-    first.set_ylabel(ytitle, fontsize=20)
-    first.set_xlim(rbins.min(), rbins.max())
-    first.legend(fontsize=20)
-    
-    
-    for rich, profile in zip(c.n200,sigma_off):
-        second.plot(rbins, profile, label='$N_{200}=$ '+str(rich))
-    second.set_xscale('log')
-    second.set_xlabel('$r\ [\mathrm{Mpc}]$', fontsize=20)
-    ytitle = '$\Sigma^\mathrm{sm}(r)\ [\mathrm{M}_\mathrm{sun}/\mathrm{pc}^2]$'
-    second.set_ylabel(ytitle, fontsize=20)
-    second.set_xlim(rbins.min(), rbins.max())
-    second.legend(fontsize=20)
-    
-    
-    fig.tight_layout()
-    plt.subplots_adjust(top=0.88)
+>>> offsets = np.array([0.1,0.1,0.1])  # same length as number of clusters    
+>>> c.calc_nfw(rbins, offsets=offsets)
+>>> deltasigma_off = c.deltasigma_nfw
+>>> sigma_off = c.sigma_nfw
 
 
+>>> fig = plt.figure(figsize=(12,5))
+>>> fig.suptitle('Miscentered NFW Cluster Profiles', size=30)
+>>> first = fig.add_subplot(1,2,1)
+>>> second = fig.add_subplot(1,2,2)
+>>> for rich, profile in zip(c.n200,deltasigma_off):
+>>>     first.plot(rbins, profile, label='$N_{200}=$ '+str(rich))
+>>> first.set_xscale('log')
+>>> first.set_xlabel('$r\ [\mathrm{Mpc}]$', fontsize=20)
+>>> ytitle = '$\Delta\Sigma^\mathrm{sm}(r)\ [\mathrm{M}_\mathrm{sun}/\mathrm{pc}^2]$'
+>>> first.set_ylabel(ytitle, fontsize=20)
+>>> first.set_xlim(rbins.min(), rbins.max())
+>>> first.legend(fontsize=20)
+>>> for rich, profile in zip(c.n200,sigma_off):
+>>>     second.plot(rbins, profile, label='$N_{200}=$ '+str(rich))
+>>> second.set_xscale('log')
+>>> second.set_xlabel('$r\ [\mathrm{Mpc}]$', fontsize=20)
+>>> ytitle = '$\Sigma^\mathrm{sm}(r)\ [\mathrm{M}_\mathrm{sun}/\mathrm{pc}^2]$'
+>>> second.set_ylabel(ytitle, fontsize=20)
+>>> second.set_xlim(rbins.min(), rbins.max())
+>>> second.legend(fontsize=20)    
+>>> fig.tight_layout()
+>>> plt.subplots_adjust(top=0.88)
 
 .. image:: demo_files/demo_29_0.png
 
+	   
 
 Advanced use: tuning the precision of the integrations
 ---------------------------------------------------------
@@ -753,9 +691,9 @@ uses the formulas given in `Wright & Brainerd
 2000 <http://adsabs.harvard.edu/abs/2000ApJ...534...34W>`__ for this.
 However, as outlined above, the calculation of the miscentered profiles
 requires a double integration for :math:`\Sigma^\mathrm{sm}(R)`, and
-there is a third integration for :math:`\Delta\Sigma^\mathrm{sm}(R)`.
+there is a third integration for :math:`\Delta\Sigma^\mathrm{sm}(R) =
+\overline{\Sigma^\mathrm{sm}}(< R) - \Sigma^\mathrm{sm}(R)`.
 
 For increased precision, you can adjust parameters specifying the number
 of bins to use in these integration (but note that this comes at the
-expense of increased computational time). See the
-`documentation <jesford.github.io/cluster-lensing>`__ for details.
+expense of increased computational time).
