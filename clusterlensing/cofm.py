@@ -13,7 +13,7 @@ Om_M = cosmo.Om0
 Om_L = 1. - Om_M
 
 
-def check_inputs(z, m):
+def _check_inputs(z, m):
     """Check inputs are arrays of same length or array and a scalar."""
     try:
         nz = len(z)
@@ -81,7 +81,7 @@ def c_Prada(z, m, h=h, Om_M=Om_M, Om_L=Om_L):
     423, Issue 4, pp. 3018-3030, 2012.
     """
 
-    z, m = check_inputs(z, m)
+    z, m = _check_inputs(z, m)
 
     # EQ 13
     x = (1. / (1. + z)) * (Om_L / Om_M)**(1. / 3.)
@@ -167,7 +167,7 @@ def c_DuttonMaccio(z, m, h=h):
     p.3359-3374, 2014.
     """
 
-    z, m = check_inputs(z, m)
+    z, m = _check_inputs(z, m)
 
     a = 0.52 + 0.385 * np.exp(-0.617 * (z**1.21))  # EQ 10
     b = -0.101 + 0.026 * z                         # EQ 11
@@ -211,7 +211,7 @@ def c_Duffy(z, m, h=h):
     -0.084,-0.47) in Table 1 of Duffy et al. (2008).
     """
 
-    z, m = check_inputs(z, m)
+    z, m = _check_inputs(z, m)
 
     M_pivot = 2.e12 / h  # [M_solar]
 
