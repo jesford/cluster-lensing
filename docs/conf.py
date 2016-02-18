@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# clusterlensing documentation build configuration file, created by
+# cluster-lensing documentation build configuration file, created by
 # sphinx-quickstart on Thu Jan 28 13:11:21 2016.
 #
 # This file is execfile()d with the current directory set to its
@@ -67,7 +67,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'clusterlensing'
+project = u'cluster-lensing'
 copyright = u'2016, Jes Ford'
 author = u'Jes Ford'
 
@@ -138,7 +138,7 @@ html_theme = 'alabaster' #see settings: https://pypi.python.org/pypi/alabaster
 #html_theme_options = {}
 html_theme_options = {
     'github_user': 'jesford',
-    'github_repo': 'clusterlensing',
+    'github_repo': 'cluster-lensing',
     'github_banner': 'true',
     'show_related': 'false',
     #'extra_nav_links': {#'Jupyter Notebook Demo': '',
@@ -240,7 +240,7 @@ html_sidebars = {
 #html_search_scorer = 'scorer.js'
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'clusterlensingdoc'
+htmlhelp_basename = 'cluster-lensingdoc'
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -262,7 +262,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  (master_doc, 'clusterlensing.tex', u'clusterlensing Documentation',
+  (master_doc, 'cluster-lensing.tex', u'cluster-lensing Documentation',
    u'Jes Ford', 'manual'),
 ]
 
@@ -292,7 +292,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'clusterlensing', u'clusterlensing Documentation',
+    (master_doc, 'cluster-lensing', u'cluster-lensing Documentation',
      [author], 1)
 ]
 
@@ -306,8 +306,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  (master_doc, 'clusterlensing', u'clusterlensing Documentation',
-   author, 'clusterlensing', 'One line description of project.',
+  (master_doc, 'cluster-lensing', u'cluster-lensing Documentation',
+   author, 'cluster-lensing', 'One line description of project.',
    'Miscellaneous'),
 ]
 
