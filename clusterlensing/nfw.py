@@ -121,7 +121,7 @@ class SurfaceMassDensity(object):
     p.1304-1318 (2015).
     """
     def __init__(self, rs, delta_c, rho_crit, offsets=None, rbins=None,
-                 numRoff=200, numTh=200, numRinner=20, factorRouter=3):
+                 numTh=200, numRoff=200, numRinner=20, factorRouter=3):
         if rbins is None:
             rmin, rmax = 0.1, 5.
             rbins = np.logspace(np.log10(rmin), np.log10(rmax), num=50)
