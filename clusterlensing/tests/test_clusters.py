@@ -258,9 +258,9 @@ def test_nfw_offset():
         assert_allclose(c.sigma_nfw[j].value, toy_data_sigma_off[i, j],
                         rtol=10**-4)
 
-    def _check_deltasigma(i,j):
+    def _check_deltasigma(i, j):
         assert_allclose(c.deltasigma_nfw[j].value,
-                        toy_data_deltasigma_off[i,j],
+                        toy_data_deltasigma_off[i, j],
                         rtol=10**-4)
 
     for i, n200 in enumerate(toy_data_n200[:-1]):

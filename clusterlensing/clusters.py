@@ -16,7 +16,6 @@ from __future__ import absolute_import, division, print_function
 import numpy as np
 import pandas as pd
 from astropy import units
-import os
 
 from clusterlensing.nfw import SurfaceMassDensity
 from clusterlensing import cofm

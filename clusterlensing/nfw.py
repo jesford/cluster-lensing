@@ -144,9 +144,9 @@ class SurfaceMassDensity(object):
         self._factorRouter = utils.check_units_and_type(factorRouter, None,
                                                         is_scalar=True)
         # check numbers of bins are all positive
-        if (numRoff <= 0) or (numTh <= 0) or (numRinner <= 0) \
-            or (factorRouter <= 0):
-             raise ValueError('Require numbers of bins > 0')
+        if (numRoff <= 0) or (numTh <= 0) or (numRinner <= 0) or \
+           (factorRouter <= 0):
+                raise ValueError('Require numbers of bins > 0')
 
         self._nbins = self._rbins.shape[0]
         self._nlens = self._rs.shape[0]
