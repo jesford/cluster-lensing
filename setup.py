@@ -6,18 +6,18 @@ except ImportError:
 
 DESCRIPTION = "Galaxy Cluster and Weak Lensing Tools"
 LONG_DESCRIPTION = """
-clusterlensing: galaxy cluster halo calculations
+cluster-lensing: galaxy cluster halo calculations
 ======================================================
 This package includes tools for calculating a variety of galaxy cluster properties, as well as mass-richness and mass-concentration scaling relations, and weak lensing profiles. These include surface mass density (Sigma) and differential surface mass density (DeltaSigma) for NFW halos, both with and without the effects of cluster miscentering.
-For more information, visit http://clusterlensing.readthedocs.org/
+For more information, visit http://jesford.github.io/cluster-lensing
 """
-NAME = "clusterlensing"
+NAME = "cluster-lensing"
 AUTHOR = "Jes Ford"
 AUTHOR_EMAIL = "jesford@uw.edu"
 MAINTAINER = "Jes Ford"
 MAINTAINER_EMAIL = "jesford@uw.edu"
-URL = 'http://github.com/jesford/clusterlensing'
-DOWNLOAD_URL = 'http://github.com/jesford/clusterlensing'
+URL = 'http://github.com/jesford/cluster-lensing'
+DOWNLOAD_URL = 'http://github.com/jesford/cluster-lensing'
 LICENSE = 'MIT'
 VERSION = '0.1.0'
 
