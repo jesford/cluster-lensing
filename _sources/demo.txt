@@ -592,18 +592,18 @@ First select the radial bins in units of Mpc.
 >>> first = fig.add_subplot(1,2,1)
 >>> second = fig.add_subplot(1,2,2)
 >>> for rich, profile in zip(c.n200,deltasigma):
->>>     first.plot(rbins, profile, label='$N_{200}=$ '+str(rich))
+>>>     first.plot(rbins, profile, label='\$N_{200}=\$ '+str(rich))
 >>> first.set_xscale('log')
->>> first.set_xlabel('$r\ [\mathrm{Mpc}]$', fontsize=20)
->>> ytitle = '$\Delta\Sigma(r)\ [\mathrm{M}_\mathrm{sun}/\mathrm{pc}^2]$'
+>>> first.set_xlabel('\$r\ [\mathrm{Mpc}]\$', fontsize=20)
+>>> ytitle = '\$\Delta\Sigma(r)\ [\mathrm{M}_\mathrm{sun}/\mathrm{pc}^2]\$'
 >>> first.set_ylabel(ytitle, fontsize=20)
 >>> first.set_xlim(rbins.min(), rbins.max())
 >>> first.legend(fontsize=20)
 >>> for rich, profile in zip(c.n200,sigma):
->>>     second.plot(rbins, profile, label='$N_{200}=$ '+str(rich))
+>>>     second.plot(rbins, profile, label='\$N_{200}=\$ '+str(rich))
 >>> second.set_xscale('log')
->>> second.set_xlabel('$r\ [\mathrm{Mpc}]$', fontsize=20)
->>> ytitle = '$\Sigma(r)\ [\mathrm{M}_\mathrm{sun}/\mathrm{pc}^2]$'
+>>> second.set_xlabel('\$r\ [\mathrm{Mpc}]\$', fontsize=20)
+>>> ytitle = '\$\Sigma(r)\ [\mathrm{M}_\mathrm{sun}/\mathrm{pc}^2]\$'
 >>> second.set_ylabel(ytitle, fontsize=20)
 >>> second.set_xlim(0.05, 1.)
 >>> second.set_xlim(rbins.min(), rbins.max())
@@ -655,24 +655,23 @@ in units of Mpc, and pass it to the calc\_nfw method:
 >>> deltasigma_off = c.deltasigma_nfw
 >>> sigma_off = c.sigma_nfw
 
-
 >>> fig = plt.figure(figsize=(12,5))
 >>> fig.suptitle('Miscentered NFW Cluster Profiles', size=30)
 >>> first = fig.add_subplot(1,2,1)
 >>> second = fig.add_subplot(1,2,2)
 >>> for rich, profile in zip(c.n200,deltasigma_off):
->>>     first.plot(rbins, profile, label='$N_{200}=$ '+str(rich))
+>>>     first.plot(rbins, profile, label='\$N_{200}=\$ '+str(rich))
 >>> first.set_xscale('log')
->>> first.set_xlabel('$r\ [\mathrm{Mpc}]$', fontsize=20)
->>> ytitle = '$\Delta\Sigma^\mathrm{sm}(r)\ [\mathrm{M}_\mathrm{sun}/\mathrm{pc}^2]$'
+>>> first.set_xlabel('\$r\ [\mathrm{Mpc}]\$', fontsize=20)
+>>> ytitle = '\$\Delta\Sigma^\mathrm{sm}(r)\ [\mathrm{M}_\mathrm{sun}/\mathrm{pc}^2]\$'
 >>> first.set_ylabel(ytitle, fontsize=20)
 >>> first.set_xlim(rbins.min(), rbins.max())
 >>> first.legend(fontsize=20)
 >>> for rich, profile in zip(c.n200,sigma_off):
->>>     second.plot(rbins, profile, label='$N_{200}=$ '+str(rich))
+>>>     second.plot(rbins, profile, label='\$N_{200}=\$ '+str(rich))
 >>> second.set_xscale('log')
->>> second.set_xlabel('$r\ [\mathrm{Mpc}]$', fontsize=20)
->>> ytitle = '$\Sigma^\mathrm{sm}(r)\ [\mathrm{M}_\mathrm{sun}/\mathrm{pc}^2]$'
+>>> second.set_xlabel('\$r\ [\mathrm{Mpc}]\$', fontsize=20)
+>>> ytitle = '\$\Sigma^\mathrm{sm}(r)\ [\mathrm{M}_\mathrm{sun}/\mathrm{pc}^2]\$'
 >>> second.set_ylabel(ytitle, fontsize=20)
 >>> second.set_xlim(rbins.min(), rbins.max())
 >>> second.legend(fontsize=20)    
