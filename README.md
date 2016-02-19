@@ -6,9 +6,11 @@ The full **cluster-lensing** documentation is [here](http://jesford.github.io/cl
 ###Installation
 **cluster-lensing** is a pure Python package that can be installed by
 running:
-```bash
-pip install cluster-lensing
 ```
+$ pip install cluster-lensing
+```
+This package runs on Python 2.7, and its dependencies include numpy,
+scipy, astropy, and pandas.
 
 ### Description
 **cluster-lensing** is a Python project for calculating a variety of galaxy cluster
