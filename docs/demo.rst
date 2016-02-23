@@ -640,7 +640,7 @@ where
 
 and
 
-:math:`r' = \sqrt{R^2 + R_\mathrm{off}^2 - R R_\mathrm{off} \cos{\theta}}`.
+:math:`r' = \sqrt{R^2 + R_\mathrm{off}^2 - 2 R R_\mathrm{off} \cos{\theta}}`.
 
 More details on the cluster miscentering problem can be found in `Ford
 et al 2015 <http://arxiv.org/abs/1409.3571>`__, `George et al
