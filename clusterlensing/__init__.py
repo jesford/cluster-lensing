@@ -3,4 +3,4 @@ from .nfw import SurfaceMassDensity    # noqa
 import cofm                            # noqa
 import halobias                        # noqa
 
-__version__ = '0.1.0'                  # noqa
+__version__ = '0.1.1-git'                  # noqa
