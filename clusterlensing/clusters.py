@@ -46,7 +46,7 @@ def calc_delta_c(c200):
     return (top / bottom)
 
 
-def richess_to_mass(richness, norm=2.7e13, slope=1.4):
+def richness_to_mass(richness, norm=2.7e13, slope=1.4):
     """Calculate mass from richness.
 
     Mass-richness relation assumed is:
@@ -71,13 +71,13 @@ def richess_to_mass(richness, norm=2.7e13, slope=1.4):
 
     See Also
     ----------
-    mass_to_richess : The inverse of this function.
+    mass_to_richness : The inverse of this function.
     """
     mass = norm * ((richness / 20.) ** slope)
     return mass
 
 
-def mass_to_richess(mass, norm=2.7e13, slope=1.4):
+def mass_to_richness(mass, norm=2.7e13, slope=1.4):
     """Calculate richness from mass.
 
     Mass-richness relation assumed is:
@@ -101,7 +101,7 @@ def mass_to_richess(mass, norm=2.7e13, slope=1.4):
 
     See Also
     ----------
-    richess_to_mass : The inverse of this function.
+    richness_to_mass : The inverse of this function.
     """
     richness = 20. * (mass / norm)**(1. / slope)
     return richness
@@ -285,8 +285,8 @@ class ClusterEnsemble(object):
     def _richness_to_mass(self):
         # Calculates M_200 for simple power-law scaling relation
         # (with default parameters from arXiv:1409.3571)
-        m200 = richess_to_mass(self._n200, norm=self._massrich_norm.value,
-                               slope=self._massrich_slope)
+        m200 = richness_to_mass(self._n200, norm=self._massrich_norm.value,
+                                slope=self._massrich_slope)
         self._m200 = m200 * units.Msun
         self._df['m200'] = pd.Series(self._m200, index=self._df.index)
         self._update_dependant_variables()
@@ -294,9 +294,9 @@ class ClusterEnsemble(object):
     def _mass_to_richness(self):
         # Calculates N_200 for simple power-law scaling relation.
         # Inverse of _richness_to_mass() function.
-        n200 = mass_to_richess(self._m200.value,
-                               norm=self._massrich_norm.value,
-                               slope=self._massrich_slope)
+        n200 = mass_to_richness(self._m200.value,
+                                norm=self._massrich_norm.value,
+                                slope=self._massrich_slope)
         # note: units cancel but n200 is still a Quantity
         self._n200 = n200
         self._df['n200'] = pd.Series(self._n200, index=self._df.index)
