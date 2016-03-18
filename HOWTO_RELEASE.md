@@ -16,6 +16,11 @@ Here's my step-by-step guide for cutting a new release of
 5. update ``README.md`` and `` demo.ipynb`` if necessary
 
 6. confirm all tests pass & flake8 gives no errors
+  ```
+  $ cd clusterlensing/
+  $ nosetests
+  $ flake8 --ignore N802,N806 `find . -name \*.py | grep -v setup.py | grep -v /doc/`
+  ```
 
 7. create a release tag; e.g.
    ```
@@ -27,7 +32,7 @@ Here's my step-by-step guide for cutting a new release of
   ```
   $ git push origin v0.1.1
   $ git push origin master
-```
+  ```
 
 9. confirm that CI tests pass on github
 
