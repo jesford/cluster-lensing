@@ -12,13 +12,15 @@ You can install this package by running:
 .. code:: bash
 	  
 	  $ pip install cluster-lensing
-	
+
+	  
 Upgrade to the newest version by running:
 
 .. code:: bash
 	  
 	  $ pip install cluster-lensing --upgrade
 
+	  
 Currently, **cluster-lensing** runs on Python 2.7, 3.4, and 3.5, and its dependencies include numpy, scipy, astropy, and pandas.
 	  
 	  
