@@ -13,6 +13,7 @@ You can install this package by running:
 
 	  $ pip install cluster-lensing
 
+
 Upgrade to the newest version by running:
 
 .. code:: bash
