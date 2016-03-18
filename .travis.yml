@@ -5,6 +5,8 @@ sudo: false
 
 python:
   - 2.7
+  - 3.4
+  - 3.5
 
 env:
   - CONDA_DEPS="pip flake8 nose coverage numpy scipy pandas astropy" PIP_DEPS="coveralls"
