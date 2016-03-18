@@ -1,3 +1,5 @@
+## v0.1.2-git (unreleased)
+
 ## v0.1.1 (18 Mar 2016) -- minor API update
 * fixed miss-spelling of "richness" in function names:
   - mass\_to\_richess() => mass\_to\_richness()

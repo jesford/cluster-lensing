@@ -53,8 +53,8 @@ Here's my step-by-step guide for cutting a new release of
 
 ## Post-release
 
-1. update version in ``clusterlensing/__init__.py`` to next version; e.g. '0.3-git'
+1. update version in ``setup.py`` to next version; e.g. '0.3-git'
 
-2. update version in ``docs/conf.py`` to the same (in two places)
+2. update version in ``clusterlensing/__init__.py`` to the same
 
-3. other version updates?
+3. update version in ``docs/conf.py`` to the same (in two places)
