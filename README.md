@@ -9,7 +9,7 @@ running:
 ```
 $ pip install cluster-lensing
 ```
-This package runs on Python 2.7, and its dependencies include numpy,
+This package runs on Python 2.7, 3.4, and 3.5, and its dependencies include numpy,
 scipy, astropy, and pandas.
 
 ### Description

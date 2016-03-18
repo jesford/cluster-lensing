@@ -19,7 +19,7 @@ MAINTAINER_EMAIL = "jesford@uw.edu"
 URL = 'http://github.com/jesford/cluster-lensing'
 DOWNLOAD_URL = 'http://github.com/jesford/cluster-lensing'
 LICENSE = 'MIT'
-VERSION = '0.1.1-git'
+VERSION = '0.1.1'
 
 setup(name=NAME,
     version=VERSION,
@@ -37,6 +37,8 @@ setup(name=NAME,
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
-        'Programming Language :: Python :: 2.7'
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5'],
         ]
      )
