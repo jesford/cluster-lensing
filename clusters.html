@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>clusters module &mdash; cluster-lensing 0.1.0 documentation</title>
+    <title>clusters module &mdash; cluster-lensing 0.1.1 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1.0',
+        VERSION:     '0.1.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="cluster-lensing 0.1.0 documentation" href="index.html" />
+    <link rel="top" title="cluster-lensing 0.1.1 documentation" href="index.html" />
     <link rel="up" title="&lt;no title&gt;" href="modules.html" />
     <link rel="prev" title="&lt;no title&gt;" href="modules.html" />
    
@@ -497,8 +497,8 @@ times the critical energy density of the universe at that z.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="clusterlensing.clusters.mass_to_richess">
-<code class="descclassname">clusterlensing.clusters.</code><code class="descname">mass_to_richess</code><span class="sig-paren">(</span><em>mass</em>, <em>norm=27000000000000.0</em>, <em>slope=1.4</em><span class="sig-paren">)</span><a class="headerlink" href="#clusterlensing.clusters.mass_to_richess" title="Permalink to this definition">¶</a></dt>
+<dt id="clusterlensing.clusters.mass_to_richness">
+<code class="descclassname">clusterlensing.clusters.</code><code class="descname">mass_to_richness</code><span class="sig-paren">(</span><em>mass</em>, <em>norm=27000000000000.0</em>, <em>slope=1.4</em><span class="sig-paren">)</span><a class="headerlink" href="#clusterlensing.clusters.mass_to_richness" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate richness from mass.</p>
 <p>Mass-richness relation assumed is:
 mass = norm * (richness / 20) ^ slope.</p>
@@ -533,15 +533,15 @@ to 1.4.</p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt><a class="reference internal" href="#clusterlensing.clusters.richess_to_mass" title="clusterlensing.clusters.richess_to_mass"><code class="xref py py-obj docutils literal"><span class="pre">richess_to_mass</span></code></a></dt>
+<dt><a class="reference internal" href="#clusterlensing.clusters.richness_to_mass" title="clusterlensing.clusters.richness_to_mass"><code class="xref py py-obj docutils literal"><span class="pre">richness_to_mass</span></code></a></dt>
 <dd>The inverse of this function.</dd>
 </dl>
 </div>
 </dd></dl>
 
 <dl class="function">
-<dt id="clusterlensing.clusters.richess_to_mass">
-<code class="descclassname">clusterlensing.clusters.</code><code class="descname">richess_to_mass</code><span class="sig-paren">(</span><em>richness</em>, <em>norm=27000000000000.0</em>, <em>slope=1.4</em><span class="sig-paren">)</span><a class="headerlink" href="#clusterlensing.clusters.richess_to_mass" title="Permalink to this definition">¶</a></dt>
+<dt id="clusterlensing.clusters.richness_to_mass">
+<code class="descclassname">clusterlensing.clusters.</code><code class="descname">richness_to_mass</code><span class="sig-paren">(</span><em>richness</em>, <em>norm=27000000000000.0</em>, <em>slope=1.4</em><span class="sig-paren">)</span><a class="headerlink" href="#clusterlensing.clusters.richness_to_mass" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate mass from richness.</p>
 <p>Mass-richness relation assumed is:
 mass = norm * (richness / 20) ^ slope.</p>
@@ -577,7 +577,7 @@ richness.</p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt><a class="reference internal" href="#clusterlensing.clusters.mass_to_richess" title="clusterlensing.clusters.mass_to_richess"><code class="xref py py-obj docutils literal"><span class="pre">mass_to_richess</span></code></a></dt>
+<dt><a class="reference internal" href="#clusterlensing.clusters.mass_to_richness" title="clusterlensing.clusters.mass_to_richness"><code class="xref py py-obj docutils literal"><span class="pre">mass_to_richness</span></code></a></dt>
 <dd>The inverse of this function.</dd>
 </dl>
 </div>
