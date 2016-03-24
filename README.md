@@ -1,6 +1,8 @@
 ## Galaxy Cluster and Weak Lensing Tools
 [![Build Status](https://travis-ci.org/jesford/cluster-lensing.svg?branch=master)](https://travis-ci.org/jesford/cluster-lensing)
 
+[![astropy](http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat)](http://www.astropy.org/)
+
 The full **cluster-lensing** documentation is [here](http://jesford.github.io/cluster-lensing).
 
 ###Installation
@@ -38,7 +40,7 @@ profiles for Sigma(r) and DeltaSigma(r), which are useful for fitting
 weak lensing shear or magnification profiles. Optionally, it will
 calculate the **miscentered** profiles, given an offset parameter
 describing the width of the 2D Gaussian miscentering offset
-distribution. See, for example, 
+distribution. See, for example,
 [Ford et al. 2015](http://arxiv.org/abs/1409.3571), for the
 miscentering formalism, and an example use case. All of the code you
 see in this repository (as well as the repositories linked below) is a
