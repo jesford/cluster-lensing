@@ -1,6 +1,6 @@
 ## Galaxy Cluster and Weak Lensing Tools
 [![Build Status](https://travis-ci.org/jesford/cluster-lensing.svg?branch=master)](https://travis-ci.org/jesford/cluster-lensing)
-
+[![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/jesford/cluster-lensing/blob/master/LICENSE.md)
 [![astropy](http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat)](http://www.astropy.org/)
 
 The full **cluster-lensing** documentation is [here](http://jesford.github.io/cluster-lensing).
