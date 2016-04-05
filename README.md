@@ -5,6 +5,8 @@
 
 The full **cluster-lensing** documentation is [here](http://jesford.github.io/cluster-lensing).
 
+Play with the demo notebook online: [![Binder](http://mybinder.org/badge.svg)](http://mybinder.org/repo/jesford/cluster-lensing)
+
 ###Installation
 **cluster-lensing** is a pure Python package that can be installed by
 running:
