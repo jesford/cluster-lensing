@@ -3,15 +3,23 @@
 [![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/jesford/cluster-lensing/blob/master/LICENSE.md)
 [![astropy](http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat)](http://www.astropy.org/)
 
-The full **cluster-lensing** documentation is [here](http://jesford.github.io/cluster-lensing).
+### Documentation
 
-Play with the demo notebook online: [![Binder](http://mybinder.org/badge.svg)](http://mybinder.org/repo/jesford/cluster-lensing)
+The full **cluster-lensing** documentation is online [here](http://jesford.github.io/cluster-lensing).
 
-###Installation
+I am starting to put together a brief software paper describing this package, which I plan to submit to a journal. You can see this paper in the making, and send me feedback if you like, by going [here](http://jesford.github.io/paper-on-cluster-lensing/).
+
+Try out the **cluster-lensing** package, no commitment (no downloads) necessary. You can play with the demo notebook online from here: [![Binder](http://mybinder.org/badge.svg)](http://mybinder.org/repo/jesford/cluster-lensing)
+
+### Installation
 **cluster-lensing** is a pure Python package that can be installed by
 running:
 ```
 $ pip install cluster-lensing
+```
+To upgrade to the newest version do:
+```
+$ pip install cluster-lensing --upgrade
 ```
 This package runs on Python 2.7, 3.4, and 3.5, and its dependencies include numpy,
 scipy, astropy, and pandas.
