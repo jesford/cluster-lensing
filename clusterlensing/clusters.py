@@ -16,6 +16,7 @@ from __future__ import absolute_import, division, print_function
 import numpy as np
 import pandas as pd
 from astropy import units
+import astropy.cosmology
 
 from clusterlensing.nfw import SurfaceMassDensity
 from clusterlensing import cofm
@@ -176,7 +177,8 @@ class ClusterEnsemble(object):
         Concentration-mass relation to use, default 'DuttonMaccio'. Other
         choices are 'Prada' and 'Duffy'.
     """
-    def __init__(self, redshifts, cosmology='Planck13', cm='DuttonMaccio'):
+    def __init__(self, redshifts, cosmology=astropy.cosmology.Planck13,
+                 cm='DuttonMaccio'):
         if type(redshifts) != np.ndarray:
             redshifts = np.array(redshifts)
         if redshifts.ndim != 1:
@@ -184,18 +186,11 @@ class ClusterEnsemble(object):
         if np.sum(redshifts < 0.) > 0:
             raise ValueError("Redshifts cannot be negative.")
 
-        if cosmology == 'Planck13':
-            from astropy.cosmology import Planck13 as cosmo
-        elif cosmology == 'WMAP9':
-            from astropy.cosmology import WMAP9 as cosmo
-        elif cosmology == 'WMAP7':
-            from astropy.cosmology import WMAP7 as cosmo
-        elif cosmology == 'WMAP5':
-            from astropy.cosmology import WMAP5 as cosmo
+        if hasattr(cosmology, 'h') and hasattr(cosmology, 'Om0'):
+            self._cosmo = cosmology
         else:
-            raise ValueError('Input cosmology must be one of: \
-                              Planck13, WMAP9, WMAP7, WMAP5.')
-        self._cosmo = cosmo
+            raise TypeError("Input cosmology must be an instance of \
+                             astropy.cosmology")
 
         if cm == 'DuttonMaccio':
             self._cm = 'DuttonMaccio'
@@ -210,11 +205,11 @@ class ClusterEnsemble(object):
         self.describe = "Ensemble of galaxy clusters and their properties."
         self.number = redshifts.shape[0]
         self._z = redshifts
-        self._rho_crit = cosmo.critical_density(self._z)
+        self._rho_crit = self._cosmo.critical_density(self._z)
         self._massrich_norm = 2.7 * (10**13) * units.Msun
         self._massrich_slope = 1.4
         self._df = pd.DataFrame(self._z, columns=['z'])
-        self._Dang_l = cosmo.angular_diameter_distance(self._z)
+        self._Dang_l = self._cosmo.angular_diameter_distance(self._z)
         self._m200 = None
         self._n200 = None
         self._r200 = None
