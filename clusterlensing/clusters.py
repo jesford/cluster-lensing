@@ -170,9 +170,9 @@ class ClusterEnsemble(object):
 
     Other Parameters
     ----------------
-    cosmology : str, optional
-        Cosmology to use in calculations, default 'Planck13'. Other choices
-        are 'WMAP9', 'WMAP7', and 'WMAP5'.
+    cosmology : astropy.cosmology instance, optional
+        Cosmology to use in calculations, default astropy.cosmology.Planck13.
+        Must be an instance of astropy.cosmology with 'h' and 'Om0' attributes.
     cm : str, optional
         Concentration-mass relation to use, default 'DuttonMaccio'. Other
         choices are 'Prada' and 'Duffy'.
