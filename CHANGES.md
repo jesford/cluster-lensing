@@ -1,4 +1,5 @@
 ## v0.1.2-git (unreleased)
+* clusters.ClusterEnsemble() accepts input cosmology as any astropy.cosmology object
 
 ## v0.1.1 (18 Mar 2016) -- minor API update
 * fixed miss-spelling of "richness" in function names:
