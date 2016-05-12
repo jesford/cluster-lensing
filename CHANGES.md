@@ -1,3 +1,5 @@
+## v0.1.3-git (unreleased)
+
 ## v0.1.2 (12 May 2016) -- expand cosmology options
 * clusters.ClusterEnsemble() accepts input cosmology as any astropy.cosmology object
 
