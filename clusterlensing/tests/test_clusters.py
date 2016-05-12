@@ -43,7 +43,7 @@ def test_initialization_wmap9():
     from astropy.cosmology import WMAP9 as wmap9
     c = ClusterEnsemble(toy_data_z, cosmology=wmap9)
     assert_equal(c.z, toy_data_z)
-    assert_allclose(c.Dang_l.value, [203.7027,  1681.5353])
+    assert_allclose(c.Dang_l.value, [203.7027, 1681.5353])
     assert_equal(c.number, 2)
 
 
