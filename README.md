@@ -2,6 +2,7 @@
 [![Build Status](https://travis-ci.org/jesford/cluster-lensing.svg?branch=master)](https://travis-ci.org/jesford/cluster-lensing)
 [![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/jesford/cluster-lensing/blob/master/LICENSE.md)
 [![astropy](http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat)](http://www.astropy.org/)
+[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.51370.svg)](http://dx.doi.org/10.5281/zenodo.51370)
 
 ### Documentation
 
@@ -63,3 +64,17 @@ This project has inherited code from the
 concentration-mass relationships and the
 [smd-nfw](https://github.com/jesford/smd-nfw) repository for
 calculating NFW halo profiles.
+
+If you use cluster-lensing in your research, please consider citing it. You can 
+use the following bibtex:
+```
+@misc{clusterlensing,
+  author       = {Jes Ford},
+  title        = {cluster-lensing: v0.1.2},
+  month        = may,
+  year         = 2016,
+  doi          = {10.5281/zenodo.51370},
+  url          = {http://dx.doi.org/10.5281/zenodo.51370},
+  publisher    = {Zenodo}
+}
+```
