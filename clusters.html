@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>clusters module &mdash; cluster-lensing 0.1.2-git documentation</title>
+    <title>clusters module &mdash; cluster-lensing 0.1.2 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1.2-git',
+        VERSION:     '0.1.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="cluster-lensing 0.1.2-git documentation" href="index.html" />
+    <link rel="top" title="cluster-lensing 0.1.2 documentation" href="index.html" />
     <link rel="up" title="&lt;no title&gt;" href="modules.html" />
     <link rel="prev" title="&lt;no title&gt;" href="modules.html" />
    
@@ -52,7 +52,7 @@ the full redshift, mass, and/or centroid offset distributions, and avoid
 fitting a single average mass at a single effective redshift.</p>
 <dl class="class">
 <dt id="clusterlensing.clusters.ClusterEnsemble">
-<em class="property">class </em><code class="descclassname">clusterlensing.clusters.</code><code class="descname">ClusterEnsemble</code><span class="sig-paren">(</span><em>redshifts</em>, <em>cosmology='Planck13'</em>, <em>cm='DuttonMaccio'</em><span class="sig-paren">)</span><a class="headerlink" href="#clusterlensing.clusters.ClusterEnsemble" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">clusterlensing.clusters.</code><code class="descname">ClusterEnsemble</code><span class="sig-paren">(</span><em>redshifts</em>, <em>cosmology=FlatLambdaCDM(name=&quot;Planck13&quot;</em>, <em>H0=67.8 km / (Mpc s)</em>, <em>Om0=0.307</em>, <em>Tcmb0=2.725 K</em>, <em>Neff=3.05</em>, <em>m_nu=[ 0.    0.    0.06] eV</em>, <em>Ob0=0.0483)</em>, <em>cm='DuttonMaccio'</em><span class="sig-paren">)</span><a class="headerlink" href="#clusterlensing.clusters.ClusterEnsemble" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Ensemble of galaxy clusters and their properties.</p>
 <p>The ClusterEnsemble object contains parameters and calculated
@@ -77,10 +77,10 @@ bins (and additional optional parameters) to the calc_nfw method.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
-<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first"><strong>cosmology</strong> : str, optional</p>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first"><strong>cosmology</strong> : astropy.cosmology instance, optional</p>
 <blockquote>
-<div><p>Cosmology to use in calculations, default &#8216;Planck13&#8217;. Other choices
-are &#8216;WMAP9&#8217;, &#8216;WMAP7&#8217;, and &#8216;WMAP5&#8217;.</p>
+<div><p>Cosmology to use in calculations, default astropy.cosmology.Planck13.
+Must be an instance of astropy.cosmology with &#8216;h&#8217; and &#8216;Om0&#8217; attributes.</p>
 </div></blockquote>
 <p><strong>cm</strong> : str, optional</p>
 <blockquote class="last">
