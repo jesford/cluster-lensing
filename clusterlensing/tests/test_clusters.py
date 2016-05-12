@@ -39,6 +39,20 @@ def test_initialization():
     assert_equal(c.number, 2)
 
 
+def test_initialization_wmap9():
+    from astropy.cosmology import WMAP9 as wmap9
+    c = ClusterEnsemble(toy_data_z, cosmology=wmap9)
+    assert_equal(c.z, toy_data_z)
+    assert_allclose(c.Dang_l.value, [203.7027,  1681.5353])
+    assert_equal(c.number, 2)
+
+
+def test_initialization_string_cosmology():
+    def use_string_cosmology():
+        ClusterEnsemble(toy_data_z, cosmology="WMAP9")
+    assert_raises(TypeError, use_string_cosmology)
+
+
 def test_update_richness():
     c = ClusterEnsemble(toy_data_z)
 
