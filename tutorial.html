@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Tutorial &mdash; cluster-lensing 0.1.2 documentation</title>
+    <title>Tutorial &mdash; cluster-lensing 0.1.3-git documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1.2',
+        VERSION:     '0.1.3-git',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,12 +24,12 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="cluster-lensing 0.1.2 documentation" href="index.html" />
+    <link rel="top" title="cluster-lensing 0.1.3-git documentation" href="index.html" />
     <link rel="next" title="Demo" href="demo.html" />
     <link rel="prev" title="Introduction" href="intro.html" />
    
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
   <body role="document">  
@@ -50,7 +50,7 @@ a handful of galaxy clusters. Lets say they are at redshifts <span class="math">
 \times 10^{15}\)</span>,  <span class="math">\(5 \times 10^{14}\)</span>, and <span class="math">\(2 \times
 10^{14} M_{\odot}\)</span>, respectively.</p>
 <p>After installing <code class="xref py py-obj docutils literal"><span class="pre">cluster-lensing</span></code>, all we have to do is:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">clusterlensing</span> <span class="kn">import</span> <span class="n">ClusterEnsemble</span>
 <span class="n">z</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">]</span>
 <span class="n">c</span> <span class="o">=</span> <span class="n">ClusterEnsemble</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
@@ -61,7 +61,7 @@ a handful of galaxy clusters. Lets say they are at redshifts <span class="math">
 </div>
 <p>Then the attribute <code class="xref py py-obj docutils literal"><span class="pre">c.deltasigma_nfw</span></code> will contain an array of
 <span class="math">\(\Delta\Sigma(r)\)</span> profiles, one for each of the three clusters:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">c</span><span class="o">.</span><span class="n">deltasigma_nfw</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">c</span><span class="o">.</span><span class="n">deltasigma_nfw</span>
 <span class="go">[[ 216.99031097  131.96892957   89.95900137   65.95785776   50.81725977</span>
 <span class="go">    40.57785901   33.28891018   27.89244619   23.77114581]</span>
 <span class="go"> [ 159.82908955   88.92279328   57.75958551   41.06296211   30.95764522</span>
@@ -76,7 +76,7 @@ centroid estimates. We can easily calculate the miscentered
 parameter to the <code class="xref py py-obj docutils literal"><span class="pre">calc_nfw()</span></code> function. The offsets are given in units
 of Mpc, just like the radius, and represent the width of a 2D Gaussian
 offset distribution.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">calc_nfw</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">offsets</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">])</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">calc_nfw</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">offsets</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">c</span><span class="o">.</span><span class="n">deltasigma_nfw</span>
 <span class="go">[[ 198.81572771  129.96652087   89.16550619   65.7334123    50.65140495</span>
 <span class="go">    40.49991719   33.22670747   27.85454194   23.73961746]</span>
@@ -111,6 +111,8 @@ check out the Demo page for all the details.</p>
 <iframe src="https://ghbtns.com/github-btn.html?user=jesford&repo=cluster-lensing&type=watch&count=true&size=large"
   allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
 </p>
+
+
 
 
 <h3>Navigation</h3>
@@ -154,8 +156,8 @@ check out the Demo page for all the details.</p>
       &copy;2016, Jes Ford.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
       
       |
       <a href="_sources/tutorial.txt"
