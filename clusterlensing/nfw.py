@@ -280,9 +280,10 @@ class SurfaceMassDensity(object):
     def deltasigma_nfw(self):
         """Calculate NFW differential surface mass density profile.
 
-        Generate the surface mass density profiles of each cluster halo,
-        assuming a spherical NFW model. Currently calculates centered
-        profiles ONLY; DOES NOT have the miscentering implemented.
+        Generate the differential surface mass density profiles of each cluster
+        halo, assuming a spherical NFW model. Optionally includes the effect of
+        cluster miscentering offsets, if the parent object was initialized
+        with offsets.
 
         Returns
         ----------
