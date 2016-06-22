@@ -1,3 +1,10 @@
 *.pyc
 *.ipynb
 .ipynb_checkpoints/
+.cache/
+build/
+c_option_clusters.py
+cluster_lensing.egg-info/
+dist/
+package_structure.md
+plots/
