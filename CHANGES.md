@@ -1,4 +1,6 @@
 ## v0.1.3-git (unreleased)
+* fixed docstring in clusters.ClusterEnsemble().deltasigma_nfw() to correctly
+state that it does do the miscentering calculation
 
 ## v0.1.2 (12 May 2016) -- expand cosmology options
 * clusters.ClusterEnsemble() accepts input cosmology as any astropy.cosmology object
