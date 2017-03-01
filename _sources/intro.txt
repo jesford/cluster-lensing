@@ -26,7 +26,7 @@ Currently, **cluster-lensing** runs on Python 2.7, 3.4, and 3.5, and its depende
 	  
 Support
 --------
-If you are having trouble using these tools, or have any questions, please don't hesitate to contact the author at jesford[at]uw.edu
+If you are having trouble using these tools, or have any questions, please don't hesitate to raise an issue on GitHub, or you can contact the author at jesfordphd[at]gmail.com
 
 License
 --------

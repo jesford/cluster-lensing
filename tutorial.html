@@ -28,11 +28,13 @@
     <link rel="next" title="Demo" href="demo.html" />
     <link rel="prev" title="Introduction" href="intro.html" />
    
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
@@ -61,7 +63,7 @@ a handful of galaxy clusters. Lets say they are at redshifts <span class="math">
 </div>
 <p>Then the attribute <code class="xref py py-obj docutils literal"><span class="pre">c.deltasigma_nfw</span></code> will contain an array of
 <span class="math">\(\Delta\Sigma(r)\)</span> profiles, one for each of the three clusters:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">c</span><span class="o">.</span><span class="n">deltasigma_nfw</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">c</span><span class="o">.</span><span class="n">deltasigma_nfw</span>
 <span class="go">[[ 216.99031097  131.96892957   89.95900137   65.95785776   50.81725977</span>
 <span class="go">    40.57785901   33.28891018   27.89244619   23.77114581]</span>
 <span class="go"> [ 159.82908955   88.92279328   57.75958551   41.06296211   30.95764522</span>
@@ -76,8 +78,8 @@ centroid estimates. We can easily calculate the miscentered
 parameter to the <code class="xref py py-obj docutils literal"><span class="pre">calc_nfw()</span></code> function. The offsets are given in units
 of Mpc, just like the radius, and represent the width of a 2D Gaussian
 offset distribution.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">calc_nfw</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">offsets</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">c</span><span class="o">.</span><span class="n">deltasigma_nfw</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">calc_nfw</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">offsets</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">c</span><span class="o">.</span><span class="n">deltasigma_nfw</span>
 <span class="go">[[ 198.81572771  129.96652087   89.16550619   65.7334123    50.65140495</span>
 <span class="go">    40.49991719   33.22670747   27.85454194   23.73961746]</span>
 <span class="go"> [ 146.78755133   88.37783273   57.34742622   40.97849669   30.88520548</span>
@@ -107,10 +109,12 @@ check out the Demo page for all the details.</p>
 
 
 
+
 <p>
-<iframe src="https://ghbtns.com/github-btn.html?user=jesford&repo=cluster-lensing&type=watch&count=true&size=large"
+<iframe src="https://ghbtns.com/github-btn.html?user=jesford&repo=cluster-lensing&type=watch&count=true&size=large&v=2"
   allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
 </p>
+
 
 
 
@@ -118,7 +122,7 @@ check out the Demo page for all the details.</p>
 <h3>Navigation</h3>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Tutorial</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="demo.html">Demo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clusters.html">clusters module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nfw.html">nfw module</a></li>
@@ -143,9 +147,6 @@ check out the Demo page for all the details.</p>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -156,8 +157,8 @@ check out the Demo page for all the details.</p>
       &copy;2016, Jes Ford.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
       
       |
       <a href="_sources/tutorial.txt"
